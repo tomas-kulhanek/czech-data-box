@@ -1,0 +1,62 @@
+{
+	"name": "tomas-kulhanek/czech-data-box",
+	"homepage": "https://tomaskulhanek.cz",
+	"description": "PHP library for connection to Integrated system of data box (ISDS) in Czech republic",
+	"keywords": [
+		"isds",
+		"datovky",
+		"czech"
+	],
+	"type": "library",
+	"support": {
+		"email": "jsem@tomaskulhanek.cz",
+		"issues": "https://gitlab.com/tomas-kulhanek/czechDataBox/issues",
+		"source": "https://gitlab.com/tomas-kulhanek/czechDataBox"
+	},
+	"license": [
+		"BSD-3-Clause",
+		"GPL-2.0",
+		"GPL-3.0"
+	],
+	"authors": [
+		{
+			"name": "Tomas Kulhanek",
+			"homepage": "https://tomaskulhanek.cz"
+		},
+		{
+			"name": "Vojtech Krupka"
+		}
+	],
+	"require": {
+		"php": ">=8.0",
+		"ext-xml": "*",
+		"ext-mbstring": "*",
+		"ext-curl": "*",
+		"ext-openssl": "*",
+		"ext-dom": "*",
+		"consistence-community/consistence": "^2.0",
+		"symfony/http-client": "^5.2",
+		"doctrine/collections": "^1.6",
+		"symfony/yaml": "^5.2",
+		"tomas-kulhanek/serializer": "^1.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"TomasKulhanek\\CzechDataBox\\": "src/"
+		}
+	},
+	"suggest": {
+		"ext-curl": "for comunication with czech databox servers"
+	},
+	"require-dev": {
+		"nette/tester": "^2.0",
+		"phpstan/phpstan": "^0.12.0",
+		"phpstan/phpstan-nette": "^0.12",
+		"symfony/console": "^5.2"
+	},
+	"archive": {
+		"exclude": [
+			"/tests"
+		]
+	}
+}

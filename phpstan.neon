@@ -1,0 +1,12 @@
+parameters:
+    excludes_analyse:
+    	- /tests/tmp/*
+    level: 8
+    paths:
+        - src
+    fileExtensions:
+    	- php
+
+includes:
+	- vendor/phpstan/phpstan-nette/extension.neon
+	- vendor/phpstan/phpstan-nette/rules.neon

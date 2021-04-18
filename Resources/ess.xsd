@@ -1,0 +1,1455 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--Created with Liquid XML Studio - 30 Day Trial Edition 7.0.4.795 (http://www.liquid-technologies.com)-->
+<!-- 
+Toto je návrh obecného přenosového formátu pro výměnu dat mezi systémy Spisových služeb.
+Tento návrh vznikl v rámci pracovní skupiny založené na základě memoranda:
+            M e m o r a n d u m o s p o l u p r á c i
+                             mezi
+             Ministerstvem vnitra České republiky
+               se sídlem Nad Štolou 3, Praha 7,
+             zastoupené náměstkem ministra vnitra
+                   Mgr. Zdeňkem Zajíčkem
+                              a
+     zástupci společností zabývajících se výrobou a vývojem
+                 programů spisových služeb
+při přípravě technické části prováděcí vyhlášky k zákonu č. 300/2008 Sb.,
+ o elektronických úkonech a autorizované konverzi dokumentů, z hlediska
+         propojení datových schránek a spisových služeb.
+
+Na tvorbě tohoto dokumentu se společně podíleli zástupci firem:
+         
+         AiP Safe s.r.o.
+         Asseco Czech Republic, a.s.
+         GORDIC, s.r.o.
+         ICZ a.s.
+         PilsCom, s.r.o.
+         SoftHouse, s.r.o.
+         Triada s.r.o.
+         VERA, s.r.o.
+
+	Navržené schéma ESS.XSD slouží to pro výměnu spisů a dokumentů mezi spisovými službami. 
+Ne-jedná se tedy o základní schéma pro komunikaci prostřednictvím IS DS. Lze jej využít 
+pro všechny možnosti elektronické výměny dat mezi spisovými službami. Vlastní schéma je 
+složeno z popisů typů typických pro elektronické spisové služby v rozsahu daném zákonnými 
+povinnosti evidence a běžný-mi zvyklostmi, a může tedy dále sloužit jako etalon typů pro 
+komunikaci mezi spisovými službami a dalšími agendami.
+-->
+<xsd:schema xmlns:tns="http://mvcr.cz/ess/v_1.0.0.0" xmlns:isds="http://isds.czechpoint.cz" elementFormDefault="qualified" targetNamespace="http://mvcr.cz/ess/v_1.0.0.0" id="ess" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="dmBaseTypes.xsd" namespace="http://isds.czechpoint.cz" />
+  <!-- Identifikator -->
+  <xsd:complexType name="tIdentifikator">
+    <xsd:annotation>
+      <xsd:documentation>Obecný interní identifikátor informačního systému. 
+Součástí informace obsažené v tomto prvku je i  určení, který informační systém tento identifikátor vytvořil.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="HodnotaID">
+        <xsd:annotation>
+          <xsd:documentation>Hodnota interního identifikátoru</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="50" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="1" maxOccurs="1" name="ZdrojID">
+        <xsd:annotation>
+          <xsd:documentation>Zdroj interního identifikátoru:
+
+Zde uvedený text by měl jednoznačně specifikovat hlavního správce ( zdroj ) uvedeného identifikátoru.
+
+Protože seznam všech možných zdrojů identifikátorů není dopředu známý, musí se tato hodnota uvádět jako otevřený text.
+Pro zajištění jednoznačnosti identifikace zdroje hodnot identifikátorů je nutné dodržovat konvenci pro vyskládání textu, určujícího zdroj identifikace.
+
+Doporučený standard identifikace:
+
+&lt;-- DiV OLD		
+fffff.pppppp.iiiii.ccccccc
+"firma.produkt.instalace.custum"
+
+kde fffff je jednoznačné jméno firmy dodavatele nebo jednoznačné označení organizace, která provozuje IS, který je zdrojem hodnoty identifikátoru.
+
+Kde pppppp je označení produktu v rámci kterého identifikátor vznikl.
+
+Kde iiiii je označení instalace ( lokality ) produktu. Může se jednat o identifikaci konkrétního zákazníka, kde je produk provozován.
+
+Kde ccccccc a případně další sekce oddělené tečkami si určuje výrobce nebo provozovatel systému produkujícího identifikátory sám.
+
+Při tvorbě textu popisujícího zdroj identifikátorů je nutné dodržet minimálně první sekci, to je sekci označenou "fffff". Ostatní sekce jsou již nepovinné.
+--&gt;
+
+pppp.aa.ccccccccc
+"původce.aplikace-agenda.číslo"	
+kde pppp je jednoznačné jméno původce, který identifikátor přidělil
+kde aa je označení informačního systému (spisován služba, lokální agenda, centrální agenda apod.), která identifikátor přidělila</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="50" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- Odkaz na elektronický soubor, který je uložen v jiné části přenášených dat -->
+  <xsd:complexType name="tFileLink">
+    <xsd:annotation>
+      <xsd:documentation>Datový typ, který popisuje odkaz na fyzické uložení souboru a také popisuje logické vazby mezi soubory.</xsd:documentation>
+    </xsd:annotation>
+    <!-- Typ souboru je zde musístěn opticky duplicitně. Položka typ je také uvedena ve schématu ISDS na které se většinou budeme tímto linkem odkazovat. 
+		Podle pravidel ISDS ale v poli souborů nesmí být více souborů s typem "main". Pokud ale budeme přenášet kompletní spis, potom k jednotlivým vloženým souborům budou 
+	    existovat soubory typu "main". Za celý spis tedy bude existovat několik souborů main. Pokud soubory budou uloženy v jednom poli ISDS schématu, potom by se tyto soubory s označenám "main"
+	    dostaly na stejnou úroveň a to je v rámci ISDS nepřípustné. Proto otypování souborů ponecháme v našem schématu. Při postoupení spisu bude v ISDS jeden dokument ( průvodní dopis ) označen atributem "main" a 
+	    vše ostatní budou pouhé přílohy. Dodatečný význam těmto přílohám vtiskne až naše schéma.
+	-->
+    <xsd:attribute name="dmFileMetaType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Logický typ souboru. Tímto typem se vyjadřuje role souboru ve vztahu k dokumentu nebo spisu a také role souborů k sobě navzájem.</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="main">
+            <xsd:annotation>
+              <xsd:documentation>Elektronický soubor je hlavním souborem ( obrazem ) dokumentu.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="enclosure">
+            <xsd:annotation>
+              <xsd:documentation>Elektronický soubor je přílohou dokumentu.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="signature">
+            <xsd:annotation>
+              <xsd:documentation>Elektronický soubor je elektronickým podpisem, elektronickou značkou, popř. časovým reazítkem jiného souboru.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="meta">
+            <xsd:annotation>
+              <xsd:documentation>Elektronický soubor obsahuje další metadata spojená s dokumentem a nebo souborem, na který je tento elektronický soubor s metadaty navázán.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="dmFileGuid" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation>Odkaz na FileGuid místo uložení binárního obrazu elektronického souboru. 
+
+Tento soubor, na který se odkazuje, musí být fyzicky uložen ve stejném, nebo nadřízeném souboru a musí být označen právě zde uvedeným FileGuid.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="dmUpFileGuid" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation>Odkaz na FileGuid místo uložení binárního obrazu nadřízeného elektronického souboru. 
+
+Tento soubor musí být fyzicky uložen ve stejném, nebo nadřízeném souboru.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="dmFileDescr" type="xsd:string" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Může nepovinně obsahovat popis souboru.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:complexType name="tFileLinksArray">
+    <xsd:annotation>
+      <xsd:documentation>Pole odkazů na místa obsahující binární obrazy soubory.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="unbounded" name="FileLink" type="tns:tFileLink" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- DokumentSpis -->
+  <xsd:group name="gSpolecneDokSpis">
+    <xsd:annotation>
+      <xsd:documentation>Skupina metadat společná jak pro popis dokumentu tak pro popis spisu.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <!-- Identifikator -->
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="Identifikator" type="tns:tIdentifikator">
+        <xsd:annotation>
+          <xsd:documentation>Identifikátor, nebo identifikátory, které jsou v rámci různých informačních systémů přiřazeny tomuto záznamu, tedy dokumentu nebo spisu.
+
+Nejčastěji bude uveden pouze jeden identifikátor.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Nazev">
+        <xsd:annotation>
+          <xsd:documentation>Krátká věc vystihující obsah dokumentu nebo spisu.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="100" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="Popis">
+        <xsd:annotation>
+          <xsd:documentation>Podrobný popis obsahu dokumentu nebo spisu.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="255" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="CisloJednaci">
+        <xsd:annotation>
+          <xsd:documentation>Položka "CisloJednaci" může obsahovat i obecnou značku dokumentu, např. číslo faktury atd..
+
+Nemusí se tedy jednat důsledně vždy pouze o ČJ.
+
+Může se jednat o označení dokumentu nebo spisu určitou značkou, která v textové podobě kombinuje různé číselné a jiné identifikační údaje zavedené agendou nebo organizací k systematickému označování dokumentů v rámci různých řad, knih nebo jiných evidencí.
+          </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="50" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="SpisovaZnacka">
+        <xsd:annotation>
+          <xsd:documentation>Položka vyjadřuje označení spisu.
+          </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="50" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="PodaciDenikPoradi">
+        <xsd:annotation>
+          <xsd:documentation>Pořadí v rámci roku (začíná od 1) a podacího deníku (či jiné evidenční pomůcky)</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:int">
+            <xsd:minInclusive value="1" />
+            <xsd:maxInclusive value="2147483647" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="PodaciDenikRok" type="xsd:gYear">
+        <xsd:annotation>
+          <xsd:documentation>Rok podacího deníku.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="PodaciDenik">
+        <xsd:annotation>
+          <xsd:documentation>Označení podacího deníku či jiné evidenční pomůcky ( většinou se pro označení využívá výstižná zkratka )</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="12" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="DatumCasVytvoreni" type="xsd:dateTime" />
+      <xsd:element minOccurs="0" name="TypDokumentu">
+        <xsd:annotation>
+          <xsd:documentation>Popis typu dokumentu</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="100" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="SpisovyPlan">
+        <xsd:annotation>
+          <xsd:documentation>Stručný popis/označení spisového a skartačního plánu</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="100" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="SpisovyZnak">
+        <xsd:annotation>
+          <xsd:documentation>Označení ukládacího znaku (330.0) nebo popis znaku spisového a  skartačního plánu</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="255" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" maxOccurs="1" name="SkartacniZnak">
+        <xsd:annotation>
+          <xsd:documentation>A-archivace, S-skartace, V-vytřídění na základě skartačního řízení</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:length value="1" />
+            <xsd:enumeration value="A" />
+            <xsd:enumeration value="S" />
+            <xsd:enumeration value="V" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="SkartacniLhuta">
+        <xsd:annotation>
+          <xsd:documentation>Skartační nebo archivační lhůta v letech</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:unsignedShort">
+            <xsd:minInclusive value="1" />
+            <xsd:maxInclusive value="999" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="Poznamka">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="255" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" maxOccurs="1" name="Zmocneni" type="tns:tZmocneni" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="SouvisejiciSubjekty" type="tns:tSouvisejiciSubjekty">
+        <xsd:annotation>
+          <xsd:documentation>Seznam subjektů, které nějak souvisí s dokumentem nebo spisem.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="DoplnujiciData">
+        <xsd:annotation>
+          <xsd:documentation>Jakákoliv další doprovodná data, která nejsou součástí této specifikace. Např. zde mohou být data potřebná pro výměnu informací s agendovým systémem.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:any minOccurs="0" maxOccurs="unbounded" processContents="skip" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:group>
+  <xsd:complexType name="tSpis">
+    <xsd:annotation>
+      <xsd:documentation>Metadata popisující spis.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:group ref="tns:gSpolecneDokSpis" />
+      <xsd:element name="VlozeneDokumenty" type="tns:tVlozeneDokumenty">
+        <xsd:annotation>
+          <xsd:documentation>Seznam vložených dokumentů ( sběrný arch spisu ).</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="tDokument">
+    <xsd:annotation>
+      <xsd:documentation>Metadata popisující dokument.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:group ref="tns:gSpolecneDokSpis" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="CjOdesilatel">
+        <xsd:annotation>
+          <xsd:documentation>číslo jednací podání, pod kterým byl dokument veden v systému spisové služby odesilatele (vaše značka)</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:length value="50" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="Vypraveni" type="tns:tZasilka">
+        <xsd:annotation>
+          <xsd:documentation>Informace o jednotlivých vypraveních dokumentu.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" maxOccurs="1" name="Doruceni" type="tns:tZasilka" />
+      <xsd:choice>
+        <xsd:element minOccurs="0" maxOccurs="1" name="Soubory" type="isds:tFilesArray">
+          <xsd:annotation>
+            <xsd:documentation>Kolekce souborů, které jsou spojeny s dokumentem nebo spisem. 
+
+Tato kolekce obsahuje jak samotné binární obrazy jednotlivých souborů, tak popis jednotlivých souborů, jejich logických vazeb a typů, dale popis jejich fyzických formátů, kontrolní součty atd..
+</xsd:documentation>
+          </xsd:annotation>
+        </xsd:element>
+        <xsd:element name="OdkazyNaSoubory" type="tns:tFileLinksArray">
+          <xsd:annotation>
+            <xsd:documentation>Kolekce odkazů na soubory, které jsou spojeny s dokumentem nebo spisem. 
+
+Tato kolekce obsahuje obrazy na jednotlivé soubory, popis jednotlivých tsouborů, jejich logických vazeb a typů.
+
+Na soubory je odkazováno prostřednictvím uvedené hodnoty atributu dmFileGuid, který se musí shodovat se stejnou hodnotou atributu dmFileGuid uvedenou u skutečného uložení binárního obrazu elektronického souboru a to v tomto schématu a nebo ve schématu nadřízeném. Tedy ve schématu, ve kterém je toto schéma uloženo.</xsd:documentation>
+          </xsd:annotation>
+        </xsd:element>
+      </xsd:choice>
+      <xsd:sequence>
+        <xsd:element minOccurs="0" maxOccurs="unbounded" name="Souvisejici" type="tns:tSouvisejiciDokument" />
+      </xsd:sequence>
+    </xsd:sequence>
+    <xsd:attribute name="DokumentGuid" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation>V rámci jednoho přenosového souboru unikátní identifikátor dokumentu. Slouží pouze pro vyjádření vzájemné souvislosti jednotlivých dokumentů. 
+
+Hodnota tohoto atributu může být použita pouze v elementu SouvisejiciDokumentGuid</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+  <!-- Zmocneni -->
+  <xsd:complexType name="tZmocneni">
+    <xsd:annotation>
+      <xsd:documentation>!!!! Zmocnění budeme muset přepracovat a to na základě schématu, které dodá Deltax, tak aby tento prvek byl shodný s jejich. !!!!
+
+Určuje právní normu, podle které je daná věc vyřizována</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="LegalTitleLaw">
+        <xsd:annotation>
+          <xsd:documentation>číslo zákona</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="1" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="LegalTitleYear">
+        <xsd:annotation>
+          <xsd:documentation>rok vydání</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="1900" />
+            <xsd:totalDigits value="4" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="LegalTitleSect" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>paragraf v zákoně</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="LegalTitlePar" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>odstavec v paragrafu</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="LegalTitlePoint" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>písmeno v odstavci</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- Subjekt (complexType)-->
+  <xsd:complexType name="tSubjekt">
+    <xsd:annotation>
+      <xsd:documentation>Metadata obecného subjektu.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <!-- Identifikator -->
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="Identifikator" type="tns:tIdentifikator" />
+      <!-- TypSubjektu -->
+      <xsd:element minOccurs="1" maxOccurs="1" name="TypSubjektu">
+        <xsd:annotation>
+          <xsd:documentation>Typ subjektu vyjadřuje právní forma subjektu a případný způsob zastoupení tohoto subjektu.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Neurceno">
+              <xsd:annotation>
+                <xsd:documentation>
+                  Neurčeno slouží pouze pro případy, kdy není právní forma subjektu známa.
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="Fyzicka" />
+            <xsd:enumeration value="Osvc">
+              <xsd:annotation>
+                <xsd:documentation>
+                  Jedná se o záznam typu "Fyzicka", která vystupuje ve věci svého podnikání.
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="Pravnicka" />
+            <xsd:enumeration value="Zamestnanec">
+              <xsd:annotation>
+                <xsd:documentation>
+                  Jedná se o záznam typu "Pravnicka", kterou ale zastupuje jeden konkrétní zaměstnanec.
+                  Při zadání tohoto typu záznamu se očekává vyplnění položek "Jmeno", "Prijmeni", "FunkceUtvarIdentifikator", "FunkceUtvarPopis"
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="Utvar">
+              <xsd:annotation>
+                <xsd:documentation>
+                  Jedná se o záznam typu "Pravnicka", u kterého je ale upřesněn jeden konkrétní útvar organizace.
+                  Při zadání tohoto typu záznamu se očekává vyplnění položek "FunkceUtvarIdentifikator", "FunkceUtvarPopis"
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:enumeration>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <!-- ObchodniNazev -->
+      <xsd:element minOccurs="0" maxOccurs="1" name="ObchodniNazev">
+        <xsd:annotation>
+          <xsd:documentation>Element se neuvádí pouze v případě že TypSubjektu="Fyzicka".</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="255" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <!-- IČO -->
+      <xsd:element minOccurs="0" maxOccurs="1" name="IC">
+        <xsd:annotation>
+          <xsd:documentation>IČO se uvádí, pokud je subjektu IČO přiděleno a je v době pořízení záznamu známé.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:length value="8" />
+            <xsd:pattern value="[0-9]{0,8}" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <!-- DatumNarozeni -->
+      <xsd:element minOccurs="0" maxOccurs="1" name="DatumNarozeni" type="xsd:date">
+        <xsd:annotation>
+          <xsd:documentation>
+            Datum narození.
+            Element se uvádí pouze v případě že TypSubjektu="Fyzicka" nebo TypSubjektu="Osvc" a to pouze v případě, že je nutné odlišit dvě osoby stejného jména a stejného trvalého bydliště.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <!-- MistoNarozeni -->
+      <xsd:element minOccurs="0" maxOccurs="1" name="MistoNarozeni">
+        <xsd:annotation>
+          <xsd:documentation>
+            Místo narození.
+            Element se uvádí pouze v případě že TypSubjektu="Fyzicka" nebo TypSubjektu="Osvc" a to pouze v případě, že je nutné odlišit dvě osoby stejného jména a stejného trvalého bydliště.
+          </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="48" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <!-- Jmeno -->
+      <xsd:element minOccurs="0" maxOccurs="1" name="Jmeno">
+        <xsd:annotation>
+          <xsd:documentation>Element se neuvádí v případě TypSubjektu="Pravnicka" a value="Utvar".</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="24" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <!-- Prijmeni -->
+      <xsd:element minOccurs="0" maxOccurs="1" name="Prijmeni">
+        <xsd:annotation>
+          <xsd:documentation>Element se neuvádí v případě že TypSubjektu="Pravnicka" a value="Utvar".</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="35" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <!-- Osloveni -->
+      <xsd:element minOccurs="0" maxOccurs="1" name="Osloveni">
+        <xsd:annotation>
+          <xsd:documentation>Element se neuvádí v případě že TypSubjektu="Pravnicka" a value="Utvar".</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="50" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <!-- TitulPred -->
+      <xsd:element minOccurs="0" maxOccurs="1" name="TitulPred">
+        <xsd:annotation>
+          <xsd:documentation>Element se neuvádí v případě že TypSubjektu="Pravnicka" a value="Utvar".</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="35" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <!-- TitulZa -->
+      <xsd:element minOccurs="0" maxOccurs="1" name="TitulZa">
+        <xsd:annotation>
+          <xsd:documentation>Element se neuvádí v případě že TypSubjektu="Pravnicka" a value="Utvar".</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="10" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <!-- FunkceUtvarPopis -->
+      <xsd:element minOccurs="0" maxOccurs="1" name="FunkceUtvarPopis">
+        <xsd:annotation>
+          <xsd:documentation>Element se uvádí pouze v případě že TypSubjektu="Pravnicka" a value="Utvar".</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="100" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <!-- FunkceUtvarIdentifikator -->
+      <xsd:element minOccurs="0" maxOccurs="1" name="FunkceUtvarIdentifikator">
+        <xsd:annotation>
+          <xsd:documentation>Element se uvádí pouze v případě že TypSubjektu="Pravnicka" a value="Utvar".</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="100" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <!-- Poznamka -->
+      <xsd:element minOccurs="0" maxOccurs="1" name="Poznamka">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="255" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <!-- Adresy -->
+      <xsd:element minOccurs="0" maxOccurs="1" name="Adresy" type="tns:tAdresy" />
+      <!-- DoplnujiciData -->
+      <xsd:element minOccurs="0" maxOccurs="1" name="DoplnujiciData">
+        <xsd:annotation>
+          <xsd:documentation>Jakákoliv další doprovodná data, která nejsou součástí této specifikace.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:any minOccurs="0" maxOccurs="unbounded" processContents="skip" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- AdresaPostovni -->
+  <xsd:complexType name="tAdresaPostovni">
+    <xsd:annotation>
+      <xsd:documentation>Metadata poštovní adresy ( pro doručování fyzických zásilek )</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="Identifikator" type="tns:tIdentifikator">
+        <xsd:annotation>
+          <xsd:documentation>Identifikátor adresy</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" maxOccurs="1" name="Obec">
+        <xsd:annotation>
+          <xsd:documentation>Název obce</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="48" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="CastObce">
+        <xsd:annotation>
+          <xsd:documentation>Název části obce</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="48" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="MestskaCast">
+        <xsd:annotation>
+          <xsd:documentation>Název městské části</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="48" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="Ulice">
+        <xsd:annotation>
+          <xsd:documentation>Název ulice</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="48" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="EvidencniCislo">
+        <xsd:annotation>
+          <xsd:documentation>Evidenční číslo</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="4" />
+            <xsd:pattern value="[0-9]{0,4}" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="OrientacniCislo">
+        <xsd:annotation>
+          <xsd:documentation>Orientační číslo</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="6" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="PopisneCislo">
+        <xsd:annotation>
+          <xsd:documentation>Popisné číslo</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:pattern value="[0-9]{0,4}" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" maxOccurs="1" name="Psc">
+        <xsd:annotation>
+          <xsd:documentation>Poštovní směrovací číslo</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="10" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <!-- Návrh: Do popisu uvést, že přípustné hodnoty státu jsou pouze na základě číselníku xxxxx 
+      ( doplnit libovolný, dnes užívaný číselník států např. ISVS AAA nebo jiný ) -->
+      <xsd:element minOccurs="0" name="Zeme">
+        <xsd:annotation>
+          <xsd:documentation>Kód zkratky státu dle číselníku ČSÚ</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:minLength value="2" />
+            <xsd:maxLength value="3" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="RuianVazba">
+        <xsd:annotation>
+          <xsd:documentation>Registr územní identifikace,  adres a nemovitostí (zkratka „RUIAN“)</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="100" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="Poznamka">
+        <xsd:annotation>
+          <xsd:documentation>Poznámka</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="255" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="POBOX">
+        <xsd:annotation>
+          <xsd:documentation>POBOX</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="10" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" maxOccurs="1" name="TypAdresy">
+        <xsd:annotation>
+          <xsd:documentation>Typ poštovní adresy a to ve vztahu k subjektu.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Neurceno" />
+            <xsd:enumeration value="Dorucovaci" />
+            <xsd:enumeration value="TrvaleBydliste" />
+            <xsd:enumeration value="PrechodneBydliste" />
+            <xsd:enumeration value="SidloFirmy" />
+            <xsd:enumeration value="PobockaFirmy" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="DodaciPosta" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>Název dodací pošty</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="Okres">
+        <xsd:annotation>
+          <xsd:documentation>Název okresu</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="48" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- AdresaDS -->
+  <xsd:complexType name="tAdresaDS">
+    <xsd:annotation>
+      <xsd:documentation>Metadata identifikátoru datové schránky</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="IdDb" type="isds:tIdDb">
+        <xsd:annotation>
+          <xsd:documentation>Id datové schránky</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" maxOccurs="1" name="OrgUnitNum" type="xsd:integer">
+        <xsd:annotation>
+          <xsd:documentation>Organizační jednotka hodnotou z číselníku</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" maxOccurs="1" name="OrgUnit" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>Organizační jednotka slovně.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- AdresaElektronicka -->
+  <xsd:complexType name="tAdresaElektronicka">
+    <xsd:annotation>
+      <xsd:documentation>Metadata elektronické adresy ( mail, fax, rep, .. )</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="Identifikator" type="tns:tIdentifikator" />
+      <xsd:element name="Typ">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="tel" />
+            <xsd:enumeration value="fax" />
+            <xsd:enumeration value="mail" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="Kontakt">
+        <xsd:annotation>
+          <xsd:documentation>Hodnota elektronické adresy, např. telefonní číslo, nebo email adresa.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="254" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="tAdresa">
+    <xsd:annotation>
+      <xsd:documentation>Při procesu vypravení je nutné jednoznačně určit jednu adresu, na kterou bylo vypraveno. 
+Přitom podle použitého způsobu vypravení se formát adresy výrazně odlišuje. Proto je zaveden tento prvek, který z možných formátů  jednoznačně určuje právě jeden formát a jednu adresu.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:choice>
+      <xsd:element minOccurs="1" maxOccurs="1" name="AdresaPostovni" type="tns:tAdresaPostovni">
+        <xsd:annotation>
+          <xsd:documentation>Adresa pro dodání fyzické zásilky a to prostředky fyzického světa.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="1" maxOccurs="1" name="AdresaDS" type="tns:tAdresaDS">
+        <xsd:annotation>
+          <xsd:documentation>Adresa pro realizaci elektronicého doručení prostřednictvím systémem ISDS.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="1" maxOccurs="1" name="AdresaElektronicka" type="tns:tAdresaElektronicka">
+        <xsd:annotation>
+          <xsd:documentation>Adresa pro realizaci elektronicého doručení jiného než systémem ISDS.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:choice>
+  </xsd:complexType>
+  <!-- Adresy -->
+  <xsd:complexType name="tAdresy">
+    <xsd:annotation>
+      <xsd:documentation>Adresy které jsou spojeny s jedním subjektem. 
+
+Tyto adresy slouží k určení (popisu) subjektu. 
+
+Subjekt, např. v systémech spisových služeb, může být popsán velmi neúplnými informacemi. Např. již komunikace se subjektem s pomocí mailu vynucuje zaznamenat popis takového subjektu do systému ale přitom subjekt lze identifikovat pouze na základě mailové adresy. Podobně neúplné informace je nutné zaznamenávat u papírové korespondence atd..</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="AdresaPostovni" type="tns:tAdresaPostovni" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="AdresaDS" type="tns:tAdresaDS" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="AdresaElektronicka" type="tns:tAdresaElektronicka" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="tAdresat">
+    <xsd:annotation>
+      <xsd:documentation>Popis adresáta jako subjektu, jeho identifikačních atributů, jeho známých adres a jedné aktuálně použité adresy ( použité při procesu vypravení nebo častěji doručení zásilky ).</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="Subjekt" type="tns:tSubjekt">
+        <xsd:annotation>
+          <xsd:documentation>Popis subjektu, kterému je doručováno. Informace zde uvedené nejsou doručovací adresou. Slouží pouze pro popis subjektu.
+
+Tato část nemusí být vyplněna, protože např. při komunikaci mailem nemusí být přesný popis subjektu znám.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="1" maxOccurs="1" name="Adresa" type="tns:tAdresa">
+        <xsd:annotation>
+          <xsd:documentation>Adresa, na kterou je doručováno. Musí být zadána právě jedna adresa ze zde uvedeného výběru možných způsobů adresování.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="tZasilkaInfo">
+    <xsd:annotation>
+      <xsd:documentation>Popis parametrů zásilky. Druh, způsob zacházení, datum vypravení, stav doručení atd..</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="1" name="TextAdresy">
+        <xsd:annotation>
+          <xsd:documentation>TextAdresy je nepovinná část, která umožňuje přenést z jednoho systému do druhého požadavek, jak má být vytištěna obálková adresa. Formátování tisku obálkové adresy nemusí přesně odpovídat strukturovanému popisu doručovací adresy.
+
+Údaje zadané v strukturované části doručovací adresy mají přednost před údaji zadanými v této části. Tato část je spíše doplňkovou informací ke strukturované formě adresy a slouží pouze pro řízení tisku obálky, ne pro strojní zpracování dat o subjetku a jeho doručovací adrese.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="1" name="AdresaRadek1" nillable="true">
+              <xsd:annotation>
+                <xsd:documentation>První řádek zásilkové adresy.
+
+Většinou oslovení</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <xsd:minLength value="0" />
+                  <xsd:maxLength value="50" />
+                  <xsd:whiteSpace value="collapse" />
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="1" name="AdresaRadek2" nillable="true">
+              <xsd:annotation>
+                <xsd:documentation>Druhý řádek zásilkové adresy.
+
+Většinou funkce nebo konkrétní osoba ( u firem nebo organizací )</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <xsd:minLength value="0" />
+                  <xsd:maxLength value="50" />
+                  <xsd:whiteSpace value="collapse" />
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="1" name="AdresaRadek3" nillable="true">
+              <xsd:annotation>
+                <xsd:documentation>Třetí řádek zásilkové adresy.
+
+Většinou obchodní jméno nebo jméno a příjmení.</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <xsd:minLength value="0" />
+                  <xsd:maxLength value="50" />
+                  <xsd:whiteSpace value="collapse" />
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="1" name="AdresaRadek4" nillable="true">
+              <xsd:annotation>
+                <xsd:documentation>Čtvrtý řádek zásilkové adresy.
+
+Většinou ulice.</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <xsd:minLength value="0" />
+                  <xsd:maxLength value="50" />
+                  <xsd:whiteSpace value="collapse" />
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="1" name="AdresaRadek5" nillable="true">
+              <xsd:annotation>
+                <xsd:documentation>Pátý řádek zásilkové adresy.
+
+Většinou částo obce</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <xsd:minLength value="0" />
+                  <xsd:maxLength value="50" />
+                  <xsd:whiteSpace value="collapse" />
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="1" name="AdresaRadek6" nillable="true">
+              <xsd:annotation>
+                <xsd:documentation>Šestý řádek zásilkové adresy.
+
+Většinou město.</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <xsd:minLength value="0" />
+                  <xsd:maxLength value="50" />
+                  <xsd:whiteSpace value="collapse" />
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="1" name="AdresaRadek7" nillable="true">
+              <xsd:annotation>
+                <xsd:documentation>Sedmý řádek zásilkové adresy.
+
+Většinou PSČ</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <xsd:minLength value="0" />
+                  <xsd:maxLength value="50" />
+                  <xsd:whiteSpace value="collapse" />
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="1" name="AdresaRadek8" nillable="true">
+              <xsd:annotation>
+                <xsd:documentation>Osmý řádek zásilkové adresy.
+
+Většinou stát</xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <xsd:minLength value="0" />
+                  <xsd:maxLength value="50" />
+                  <xsd:whiteSpace value="collapse" />
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <!-- ZpusobManipulace -->
+      <xsd:choice minOccurs="0" maxOccurs="1">
+        <xsd:element minOccurs="1" maxOccurs="1" name="ZpusobManipulaceId">
+          <xsd:annotation>
+            <xsd:documentation>ZpusobManipulace vyjadřuje, jakým způsobem byl dokumentu doručen.</xsd:documentation>
+          </xsd:annotation>
+          <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+              <xsd:enumeration value="Posta" />
+              <xsd:enumeration value="Osobne" />
+              <xsd:enumeration value="VerejnaVyhlaska" />
+              <xsd:enumeration value="DetasovanaPosta" />
+              <xsd:enumeration value="Kuryr" />
+              <xsd:enumeration value="DorucovaciSluzba" />
+              <xsd:enumeration value="ElektronickaPosta" />
+              <xsd:enumeration value="Fax" />
+              <xsd:enumeration value="DalnopisTelegram" />
+              <xsd:enumeration value="Telefon" />
+              <xsd:enumeration value="UstneDoProtokolu" />
+              <xsd:enumeration value="EPodatelnaNosic" />
+              <xsd:enumeration value="EPodatelnaWeb" />
+              <xsd:enumeration value="EPodatelnaMail" />
+              <xsd:enumeration value="EPodatelnaMailElPodpis" />
+              <xsd:enumeration value="Rep" />
+              <xsd:enumeration value="DatovaSchranka" />
+            </xsd:restriction>
+          </xsd:simpleType>
+        </xsd:element>
+        <xsd:element minOccurs="1" maxOccurs="1" name="ZpusobManipulaceText" type="xsd:string">
+          <xsd:annotation>
+            <xsd:documentation>
+              Pojmenování způsobu manipulace.
+              Tento prvek se použije pouze v případě, že nelze použít jednu z možností uvedenou ve výčtu možných hodnot položky "ZpusobManipulaceId".
+            </xsd:documentation>
+          </xsd:annotation>
+        </xsd:element>
+      </xsd:choice>
+      <!-- ZpusobZachazeni -->
+      <xsd:choice minOccurs="0" maxOccurs="1">
+        <xsd:element minOccurs="1" maxOccurs="1" name="ZpusobZachazeniId">
+          <xsd:annotation>
+            <xsd:documentation>ZpusobZachazeni vyjadřuje způsob zacházení se zásilkou nesoucí daný dokument</xsd:documentation>
+          </xsd:annotation>
+          <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+              <xsd:enumeration value="BezDoplnkoveSluzby" />
+              <xsd:enumeration value="Dodejka" />
+              <xsd:enumeration value="DodejkaModra" />
+              <xsd:enumeration value="DodejkaCervena" />
+              <xsd:enumeration value="Dodejka3D" />
+              <xsd:enumeration value="DodejkaModra3D" />
+              <xsd:enumeration value="DodejkaCervena3D" />
+              <xsd:enumeration value="Dodejka10D" />
+              <xsd:enumeration value="DodejkaModra10D" />
+              <xsd:enumeration value="DodejkaCervena10D" />
+              <xsd:enumeration value="Dodejka1M" />
+              <xsd:enumeration value="DodejkaModra1M" />
+              <xsd:enumeration value="DodejkaCervena1M" />
+            </xsd:restriction>
+          </xsd:simpleType>
+        </xsd:element>
+        <xsd:element minOccurs="1" maxOccurs="1" name="ZpusobZachazeniText" type="xsd:string">
+          <xsd:annotation>
+            <xsd:documentation>
+              Pojmenování způsobu zacházení se zásilkou.
+              Tento prvek se použije pouze v případě, že nelze použít jednu z možností uvedenou ve výčtu možných hodnot položky "ZpusobZachazeniId".
+            </xsd:documentation>
+          </xsd:annotation>
+        </xsd:element>
+      </xsd:choice>
+      <!-- DruhZasilky -->
+      <xsd:choice minOccurs="0" maxOccurs="1">
+        <xsd:element minOccurs="1" maxOccurs="1" name="DruhZasilkyId">
+          <xsd:annotation>
+            <xsd:documentation>DruhZasilky vyjadřuje jakým druhem zásilky byl daný dokument doručen</xsd:documentation>
+          </xsd:annotation>
+          <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+              <xsd:enumeration value="Balik" />
+              <xsd:enumeration value="CennePsani" />
+              <xsd:enumeration value="CennyBalik" />
+              <xsd:enumeration value="Psani" />
+              <xsd:enumeration value="SlepeckaZasilka" />
+              <xsd:enumeration value="PsaniStandard">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Nelze použít jiný ZpusobZachazeni než OBYCEJNA.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:enumeration>
+              <!-- DOPORUCENA ZASILKA - STANDARD -->
+              <xsd:enumeration value="DoporucenaZasilkaStandard" />
+            </xsd:restriction>
+          </xsd:simpleType>
+        </xsd:element>
+        <xsd:element minOccurs="1" maxOccurs="1" name="DruhZasilkyText" type="xsd:string">
+          <xsd:annotation>
+            <xsd:documentation>
+              Pojmenování způsobu zacházení se zásilkou.
+              Tento prvek se použije pouze v případě, že nelze použít jednu z možností uvedenou ve výčtu možných hodnot položky "DruhZasilkyId".
+            </xsd:documentation>
+          </xsd:annotation>
+        </xsd:element>
+      </xsd:choice>
+      <xsd:element minOccurs="0" maxOccurs="1" name="DatumVypraveni" type="xsd:date" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="Vaha">
+        <xsd:annotation>
+          <xsd:documentation>Váha zásilky</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:decimal">
+            <xsd:totalDigits value="5" />
+            <xsd:fractionDigits value="3" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" maxOccurs="1" name="Poplatek">
+        <xsd:annotation>
+          <xsd:documentation>Poplatek za odeslání zásilky</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:decimal">
+            <xsd:totalDigits value="7" />
+            <xsd:fractionDigits value="2" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" maxOccurs="1" name="PodaciCislo">
+        <xsd:annotation>
+          <xsd:documentation>Podací číslo pošty, která písemnost přijala.
+									</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:minLength value="0" />
+            <xsd:maxLength value="30" />
+            <xsd:whiteSpace value="collapse" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" maxOccurs="1" name="IdZasilky">
+        <xsd:annotation>
+          <xsd:documentation>Pro snadnější dohledání zásilky při, např. návratu doručenky, bývají obálky opatřeny textem, který slouží pro identifikaci zásilky. </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:minLength value="0" />
+            <xsd:maxLength value="30" />
+            <xsd:whiteSpace value="collapse" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" maxOccurs="1" name="StavZasilky">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:whiteSpace value="collapse" />
+            <xsd:enumeration value="nevypraveno">
+              <xsd:annotation>
+                <xsd:documentation>
+													Nevypraveno.
+												</xsd:documentation>
+              </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="vypraveno">
+              <xsd:annotation>
+                <xsd:documentation>
+													Vypraveno.
+												</xsd:documentation>
+              </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="doruceno">
+              <xsd:annotation>
+                <xsd:documentation>
+													Doručeno.
+												</xsd:documentation>
+              </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="vraceno-jiny-duvod-overeno">
+              <xsd:annotation>
+                <xsd:documentation>
+													Vráceno - jiný důvod (ověřeno).
+												</xsd:documentation>
+              </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="vraceno-jiny-duvod-neovereno">
+              <xsd:annotation>
+                <xsd:documentation>
+													Vráceno - jiný důvod (neověřeno).
+												</xsd:documentation>
+              </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="vraceno-adresat-neznamy">
+              <xsd:annotation>
+                <xsd:documentation>
+													Vráceno - adresát neznámý.
+												</xsd:documentation>
+              </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="vraceno-adresat-se-odstehoval">
+              <xsd:annotation>
+                <xsd:documentation>
+													Vráceno - adresát se odstěhoval bez udání adresy.
+												</xsd:documentation>
+              </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="vraceno-neprijato">
+              <xsd:annotation>
+                <xsd:documentation>
+													Vráceno - nepřijato.
+												</xsd:documentation>
+              </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="vraceno-nevyzadano">
+              <xsd:annotation>
+                <xsd:documentation>
+													Vráceno - nevyžádáno.
+												</xsd:documentation>
+              </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="nedoruceno-zpracovano">
+              <xsd:annotation>
+                <xsd:documentation>
+													Nedoručeno - zpracováno.
+												</xsd:documentation>
+              </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="vraceno-adresa-nedostatecna">
+              <xsd:annotation>
+                <xsd:documentation>
+													Vráceno - adresa nedostatečná.
+												</xsd:documentation>
+              </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="stornovano">
+              <xsd:annotation>
+                <xsd:documentation>
+													Stornováno.
+												</xsd:documentation>
+              </xsd:annotation>
+            </xsd:enumeration>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="0" maxOccurs="1" name="Poznamka" type="xsd:string" />
+      <xsd:element minOccurs="0" maxOccurs="1" name="DatumDoruceni" type="xsd:date" />
+      <xsd:choice>
+        <xsd:element minOccurs="0" maxOccurs="1" name="Soubory" type="isds:tFilesArray">
+          <xsd:annotation>
+            <xsd:documentation>Kolekce souborů, které jsou spojeny s dokumentem nebo spisem. 
+
+Tato kolekce obsahuje jak samotné binární obrazy jednotlivých souborů, tak popis jednotlivých souborů, jejich logických vazeb a typů, dale popis jejich fyzických formátů, kontrolní součty atd..
+</xsd:documentation>
+          </xsd:annotation>
+        </xsd:element>
+        <xsd:element minOccurs="0" maxOccurs="1" name="OdkazyNaSoubory" type="tns:tFileLinksArray">
+          <xsd:annotation>
+            <xsd:documentation>Kolekce odkazů na soubory, které jsou spojeny s dokumentem nebo spisem. 
+
+Tato kolekce obsahuje obrazy na jednotlivé soubory, popis jednotlivých tsouborů, jejich logických vazeb a typů.
+
+Na soubory je odkazováno prostřednictvím uvedené hodnoty atributu dmFileGuid, který se musí shodovat se stejnou hodnotou atributu dmFileGuid uvedenou u skutečného uložení binárního obrazu elektronického souboru a to v tomto schématu a nebo ve schématu nadřízeném. Tedy ve schématu, ve kterém je toto schéma uloženo.</xsd:documentation>
+          </xsd:annotation>
+        </xsd:element>
+      </xsd:choice>
+      <xsd:element minOccurs="0" maxOccurs="1" name="dmID" type="isds:tIdDm">
+        <xsd:annotation>
+          <xsd:documentation>ID datové zprávy</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- Zasilka -->
+  <xsd:complexType name="tZasilka">
+    <xsd:annotation>
+      <xsd:documentation>Komplexní popis jedné zásilky, obsahuje odesilatele a další popisné parametry zásilky.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <!-- Odesilatel - v rámci ISDS musí být pouze jeden  -->
+      <xsd:element minOccurs="0" maxOccurs="1" name="Odesilatel" type="tns:tAdresat">
+        <xsd:annotation>
+          <xsd:documentation>Popis subjetku, který odeslal - vypravil zásilku.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <!-- Adresat - může být větší počet cílových adresátů -->
+      <xsd:element minOccurs="0" maxOccurs="1" name="Adresat" type="tns:tAdresat">
+        <xsd:annotation>
+          <xsd:documentation>Popis subjetku, který je uveden jako adresát zásilky.
+</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="1" maxOccurs="1" name="ZasilkaInfo" type="tns:tZasilkaInfo" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- Souvisejici subjekty -->
+  <xsd:complexType name="tSouvisejiciSubjekt">
+    <xsd:annotation>
+      <xsd:documentation>Matadata souvisejících subjektů (typický příklad jsou subjekty správního řízení např. účastníci, dotčené orgány a další subjekty)</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="Subjekt" type="tns:tSubjekt" />
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="Duvodvazby">
+        <xsd:annotation>
+          <xsd:documentation>Text důvodu vazby subjektu na dokument nebo spis.
+
+Bylo by vhodné vytvořit číselník důvodů, ale v tomto okamžiku je to patrně nereálné zmapovat a vytvořit nad takovým číselníkem širší dohodu.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="255" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="tSouvisejiciSubjekty">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="SouvisejiciSubjekt" type="tns:tSouvisejiciSubjekt" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="tSouvisejiciDokument">
+    <xsd:annotation>
+      <xsd:documentation>Výčet odkazů na dokumenty související s řešením problematiky daného dokumentu, primárně vyřizující odpověď.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="DokumentGuid" type="xsd:string" />
+      <xsd:element name="DuvodId">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="odpoved" />
+            <xsd:enumeration value="souvisejici" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="DuvodText" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="tVlozenyDokument">
+    <xsd:annotation>
+      <xsd:documentation>Datový typ popisující jeden dokument vložený do spisu.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="1" maxOccurs="1" name="Dokument" type="tns:tDokument">
+        <xsd:annotation>
+          <xsd:documentation>Popis samotného dokumentu vloženého ve spisu.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="1" maxOccurs="1" name="PoradiVeSpisu">
+        <xsd:annotation>
+          <xsd:documentation>Pořadí, v jakém byl dokument vložen do spisu. Začíná vždy od 1.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:int">
+            <xsd:minInclusive value="1" />
+            <xsd:maxInclusive value="2147483647" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element minOccurs="1" maxOccurs="1" name="StavZarazeniDoSpisu">
+        <xsd:annotation>
+          <xsd:documentation>Výčtový typ, který určuje, zda je dokument aktuálně vložen do spisu.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Vlozen" />
+            <xsd:enumeration value="Vyjmut" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="tVlozeneDokumenty">
+    <xsd:annotation>
+      <xsd:documentation>Datový typ popisující pole dokumentů vložený do spisu.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element minOccurs="0" maxOccurs="unbounded" name="VlozenyDokument" type="tns:tVlozenyDokument" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- DokumentSpis -->
+  <xsd:element name="Dokumenty">
+    <xsd:annotation>
+      <xsd:documentation>Seznam přenášených dokumentů.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element minOccurs="1" maxOccurs="unbounded" name="Dokument" type="tns:tDokument" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Spisy">
+    <xsd:annotation>
+      <xsd:documentation>Seznam přenášených spisů.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element minOccurs="1" maxOccurs="unbounded" name="Spis" type="tns:tSpis" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Soubory" type="isds:tFilesArray">
+    <xsd:annotation>
+      <xsd:documentation>Kolekce souborů, která může být následně využita z dokumentů, spisů a zásilek pro zadání odkazů na  jednotlivé elektronické soubory.</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <!-- DoplnujiciData -->
+  <xsd:element name="DoplnujiciData">
+    <xsd:annotation>
+      <xsd:documentation>Jakákoliv další doprovodná data, která nejsou součástí této specifikace.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:any minOccurs="0" maxOccurs="unbounded" processContents="skip" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

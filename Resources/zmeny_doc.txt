@@ -1,0 +1,481 @@
+V?T?? ZM?NY POPISU WS
+=====================
+
+Datum nasazen?: TEST 27.11.2010, PRODUKCE: 18.12.2010
+verze WSDL a XSD: 2.10
+-------------------------
+
+WS pro vyhled?v?n?:
+1) nov? WS GetDataBoxList - sta?en? seznamu datov?ch schr?nek 
+
+WS pro zpr?vy:
+1) nov? WS GetMessageStateChanges - sta?en? seznamu odeslan?ch zpr?v, u kter?ch do?lo ke zm?n? stavu 
+2) event EV0 u doru?enky, texty event?
+3) omezen? p??stup do znep??stupn?n? schr?nky
+7) SDZ 7 - 10
+
+Datum nasazen?: TEST 18.12.2010, PRODUKCE: 5.2.2011
+verze WSDL a XSD: 2.11
+---------------------------
+WS pro vyhled?v?n?:
+1) nov? seznam zkratek st?t?
+
+WS pro zpr?vy:
+1) nov? WS GetMessageAuthor
+2) zm?na Create[Multiple]Message 
+3) nov? eventy u doru?enky
+4) nov? p??pony a MIME typy
+
+
+Datum nasazen?: PRODUKCE: 5.2.2011
+verze WSDL a XSD: 2.11
+---------------------------
+omezen? v GetOwnerInfoFromLogin
+nov? texty v dodejce a doru?ence
+
+WS pro zpr?vy:
+
+
+Datum nasazen?: PRODUKCE: 16.4.2011
+verze WSDL a XSD: 2.11
+---------------------------
+- p?id?ny informace o URL na testovac?m prost?ed?
+WS pro zpr?vy:
+1) ?asov? raz?tko do podpisu zpr?vy
+
+
+Datum nasazen?: PRODUKCE: 15.5.2011
+verze WSDL a XSD: 2.12
+---------------------------
+- p?id?ny informace o likvid?torech
+- p?id?na informace o nov? syst?mov? DZ typu 11
+
+
+Datum nasazen?: 30.7.2011 (verze 2.20)
+verze WSDL a XSD: 2.12
+---------------------------
+- p?id?na informace o schr?nk?ch pro da?ov? poradce
+- opravy a formulace
+
+
+Datum nasazen?: 17.9.2011 (verze 2.21)
+verze WSDL a XSD: 2.13
+---------------------------
+- p?id?n popis WS se statistikou zpr?v
+- dopln?n? popisu XML struktury syst?mov?ch zpr?v
+
+
+Datum nasazen?: 16.10.2011   (ve?ejn? test 17.9.)
+verze WSDL a XSD: 2.14
+-----------------------------
+- zm?na hesla pro ??ty s OTP p?ihla?ov?n?m
+
+
+Datum nasazen?:  27.11.2010  (ve?ejn? test 16.10.)
+verze WSDL a XSD: 2.15
+-----------------------------
+- zm?ny v doru?ov?n? PDZ
+- nov? podtypy PDZ   (inicia?n? a odpov?dn? zpr?vy, dotovan? zpr?vy)   
+- zp?esn?n? v?b?ru zpr?v do seznamu do?l?ch
+
+
+Verze 2.25
+Datum nasazen?: 28.1.2012 
+verze WSDL a XSD: 2.15
+--------------------------------
+- zp?esn?n? popisu PDZInfo (kap. 1.5 - Vyhled?v?n?)
+- zaveden? dotovan?ch inicia?n?ch zpr?v, nov? podtypy PDZ (kap. 1.15 a dal?? - Zpr?vy)
+- zp?esn?n? popisu nakl?d?n? s lh?tou 90 dn? pro smaz?n? zpr?v (kap. 1.4 - Zpr?vy)
+
+
+Verze 2.26
+Datum nasazen?: 17.3.2012 
+verze WSDL a XSD: 2.15
+--------------------------------
+- informace o zaveden? chyby p?i dlouhotrvaj?c?m doru?ov?n? (kap. 1.5 - Zpr?vy)
+- zp?esn?n? popisu ov??ov?n? zpr?v po zaveden? CAdES archivace (kap. 2.3.1 - Zpr?vy)
+
+   
+Verze 2.27
+Datum nasazen?: 21.4.2012 
+verze WSDL a XSD: 2.15
+--------------------------------
+- zm?ny v znep??stupnov?n? schr?nek p?i p?eru?en? ?innosti (kap. 2.9 a 2.11 - Schr?nky)
+
+
+Verze 2.28
+Datum nasazen?: -- (na TEST 25.6.2012)
+verze WSDL a XSD: 2.16
+--------------------------------
+- zaveden? WS EraseMessage (kap. 1.16 a 2.10 - Zpr?vy)
+- zru?en? opr?vn?n? schr?nkov?ho u?ivatele PRIVIL_READ_VAULT (kap. 1.3 - Zpr?vy)
+
+
+Verze 2.32 
+Datum nasazen?: 20.10.2012 (na TEST 7.10.2012)
+verze WSDL a XSD: 2.17
+--------------------------------
+- zaveden? WS Re-signISDSDocument (kap. 1.17 a 2.3.3 - Zpr?vy)
+   
+Verze 2.35
+Datum nasazen?: 20.4.2013 (na TEST 18.11.2012)
+verze WSDL a XSD: 2.18
+--------------------------------
+- zaveden? WS DataBoxCreditInfo (kap. 1.6 - Vyhled?v?n?)
+- ?prava WS PDZInfo (kap. 1.6 - Vyhled?v?n?)
+- zaveden? kreditn?ch PDZ
+- zaveden? kreditn?ho datov?ch trezor?
+
+
+Verze 2.37
+Datum nasazen?: 25.1.2014 
+verze WSDL a XSD: 2.18a
+--------------------------------
+- P?ev?n? jen drobn? formula?n? ?pravy a zp?esn?n?
+- pojem Syst?mov? datov? zpr?va -> Syst?mov? zpr?va
+Manipulace se zpr?vami:
+- nahrazen? informac? o napojen? na ISEO na ROS
+- odstran?n? popisu syst?mov? zpr?vy typu 11
+- zp?esn?n? popisu raz?tek (CAdES)
+- zp?esn?n? popisu parametr? pro WS na z?sk?n? seznamu zpr?v 
+Spr?va schr?nek:
+- odstran?n? popisu nepou??van? WS CreateDataBoxPFOInfo
+
+
+Verze 2.38      (pouze pro VT)
+Datum nasazen? na Ve?ejn? test: 13.4.2014
+verze WSDL a XSD: 2.18a
+--------------------------------
+Manipulace se zpr?vami:
+- zaveden? nov? verze ?asov?ch raz?tek v CAdES podpisu sta?en? DZ (kap. 2.4.2.2)
+
+
+Verze 2.39       (verze pro TEST a PROD se li??)
+Datum nasazen? na Ve?ejn? test: (??dn? viditeln? zm?na)
+Datum nasazen? na Produkci: 1.6.2014 (??dn? viditeln? zm?na) 
+verze WSDL a XSD: 2.18a
+--------------------------------
+Manipulace se zpr?vami:
+- zp?esn?n? popisu pou??v?n? aributu dmFileMetaType v kap. 2.1
+
+
+Verze 2.40 (sjednocuje VT a PROD) 
+Datum platnosti: 13.9.2014
+verze WSDL a XSD: 2.18a
+--------------------------------
+Manipulace se zpr?vami:
+- zaveden? nov? verze ?asov?ch raz?tek v CAdES podpisu sta?en? DZ (kap. 2.4.2.2)
+
+
+Verze 2.41 (stejn? pro VT i PROD)
+Datum platnosti: 13.12.2014
+verze WSDL a XSD: 2.19
+---------------------------------
+Manipulace se zpr?vami:
+- jen popis zm?n
+Vyhled?v?n?:
+- zaveden? WS ISDSSearch2
+Spr?va schr?nek:
+- povolen? SetOpenAddressing a ClearOpenAddressing pro schr?nkov? u?ivatele
+
+
+Verze 2.42 (pro PROD)
+Datum platnosti: 12.4.2014
+verze WSDL a XSD: 2.19
+---------------------------------
+Manipulace se zpr?vami:
+- jen drobn? ?pravy
+Vyhled?v?n?:
+- popis GetDataBoxList s parametrem POA
+Spr?va schr?nek:
+- odstran?n? WS NewAccessData z ve?ejn? dokumentace, ?pravy kv?li ROS 
+
+
+Verze 2.43 (pro TEST)
+Datum platnosti: 12.4.2015
+verze WSDL a XSD: 2.19
+---------------------------------
+Zm?ny v pou??v?n? rodn?ho p??jmen? na r?zn?ch m?stech
+- Vyhled?v?n?
+- P??stup
+
+ 
+Verze 2.44 (pro PROD)  
+Datum platnosti: 12.6.2015
+verze WSDL a XSD: 2.19
+---------------------------------
+Zm?ny v pou??v?n? rodn?ho p??jmen? na r?zn?ch m?stech
+- Vyhled?v?n?
+- P??stup
+Upozorn?n? na omezov?n? nadm?rn?ho provozu
+ - Maniupulace se zpr?vami, nov? kap. 1.7
+
+
+Verze 2.45 (pro PROD i TEST)  
+Datum platnosti: 8.8.2015
+verze WSDL a XSD: 2.20
+---------------------------------
+P?id?ny doporu?en? postupy p?i zpracov?n? velk?ho po?tu zpr?v
+- Manipulace se zpr?vami, nov? kap. 1.8
+Zm?na v maz?n? nedoru?en?ch PDZ
+- Manipulace se zpr?vami, kap. 1.5, kap. 1.9.1 
+Nov? slu?ba pro zji?t?n? stavu schr?nky v minulosti
+- Vyhled?v?n?, nov? kap. 2.7 
+
+
+Verze 2.46 (pro PROD i TEST)   
+Datum platnosti: 12.9.2015
+verze WSDL a XSD: 2.20
+---------------------------------
+Zp?esn?n? popisu u MessageEnvelopeDownload
+- Manipulace se zpr?vami, kap. 2.4.4
+Zp?esn?n? popisu pr?v u GetDataBoxList a GetDataBoxActivityStatus
+- Vyhled?v?n?, kap. 2.4 a 2.7 
+
+
+Verze 2.47    
+Datum platnosti PROD: 11.10.2015; pro TEST od 23.9.2015
+verze WSDL a XSD: 2.21
+---------------------------------
+Nov? slu?ba pro pro zji?t?n? informac? o dr?itel schr?nky FO FindPersonalDataBox
+- Vyhled?v?n?, nov? kap. 2.3
+Nov? XML podoba syst?mov? zpr?vy ?. 3
+- Manipulace se zpr?vami, kap. 1.9.1.1  
+
+                                          
+Verze 2.48    
+Datum platnosti PROD: 8.11.2015; pro TEST od 8.11.2015
+verze WSDL a XSD: 2.22
+---------------------------------                
+P?id?na hodnota OVM_MAIN parametru searchScope u slu?by ISDSSearch2
+- Vyhled?v?n?, nov? kap. 2.2
+Dopln?no vysv?tlen? k mo?n?m pr?zdn?m adresn?m element?m u popis? nalezen?ch schr?nek typu FO
+- Vyhled?v?n?, kap. 2.1, 2.2, 2.3
+Zp?esn?n? hodnoty parametru dmMessageStatus u sta?en? doru?enky
+- Manipulace se zpr?vami, kap. 2.7.1  
+Zapnut? emailov?ch notifikac? p?i vytvo?en? schr?nky
+- Spr?va schr?nek, kap. 2.1
+
+
+Verze 2.49    
+Datum platnosti PROD: 7.2.2016
+verze WSDL a XSD: 2.23
+---------------------------------                
+Pops?na z?m?na znak? na vstupu WS
+- Manipulace se zpr?vami, kap. 1.3.2
+Zm?na limitu p??loh na 20 MB
+- Manipulace se zpr?vami, kap. 2.1
+Roz???en? adresn?ch element? na vstupu WS pro spr?vu schr?nek
+- Spr?va schr?nek
+
+
+Verze 2.50  (pouze TEST)  
+Datum platnosti TEST: 7.2.2016
+verze WSDL a XSD: 2.23
+---------------------------------                
+Zm?na v doru?ov?n? dodan?ch zpr?v
+- Manipulace se zpr?vami
+ 
+                                       
+Verze 2.51    
+Datum platnosti TEST i PROD: 10.4.2016
+verze WSDL a XSD: 2.24
+---------------------------------                
+Zm?na v doru?ov?n? dodan?ch zpr?v
+- Manipulace se zpr?vami, kap. 1.6 
+Nov? syst?mov? zpr?va  
+- Manipulace se zpr?vami, kap. 1.9.1  
+Nov? slu?ba DTInfo 
+-  Vyhled?v?n?, kap. 2.8
+Zp?esn?n? d?lky n?kter?ch pol? v opisu schr?nky
+- Spr?va schr?nek, kap. 1.6.1                                        
+
+
+Verze 2.52    
+Datum platnosti TEST i PROD: 15.5.2016
+verze WSDL a XSD: 2.24
+---------------------------------                
+Zv?t?en? intervalu pro vyhled?n? kreditn?ch transakc?
+- Vyhled?v?n?, kap. 2.7
+Zp?esn?n? popisu, co je zpr?va, co je ZFO apod.
+- Manipulace se zpr?vami, kap. 2.4.2, 2.4.3, 2.7.2
+
+
+Verze 2.53    
+Datum platnosti pro TEST i PROD: 5.6.2016
+verze WSDL a XSD: 2.24
+---------------------------------
+Omezen? po?tu p??loh datov? zpr?vy 
+- Manipulace se zpr?vami, kap. 2.1 
+                
+
+Verze 2.54    
+Datum platnosti pro TEST i PROD: 11.9.2016
+verze WSDL a XSD: 2.25
+---------------------------------
+Lep?? vyhled?v?n? schr?nek osob s druh?m k?estn?m jm?nem (FindDataBox)
+- Vyhled?v?n?, kap. 2.1
+Nov? WS PDZSendInfo
+- Vyhled?v?n?, kap. 2.7                
+Popis algoritmu v?po?tu kontroln?ho znaku ID schr?nky
+-  Manipulace se zpr?vami, kap. 1.3.3.1
+
+
+Verze 2.55    
+Datum platnosti pro TEST i PROD: 4.12.2016
+verze WSDL a XSD: 2.25
+---------------------------------
+Jen textov? ?pravy a zp?esn?n? 
+-  Manipulace se zpr?vami, kap. 1.3.3.1
+
+
+Verze 2.56    
+Datum platnosti pro TEST i PROD: 5.3.2017
+verze WSDL a XSD: 2.26
+---------------------------------
+P?id?n? intern?ho opr?vn?n? PRIVIL_AUDITOR
+- Spr?va schr?nek, P??loha A + mnoho m?st 
+P?id?n? nov?ho typu schr?nky PFO_AUDITOR
+- Spr?va schr?nek, Vyhled?v?n?
+P?id?n? nov?ch typ? u?ivatel? Opatrovn?k PO a Nucen? spr?vce
+- Spr?va schr?nek, WS souvisej?c? s p??stupem
+Zat??d?n? zpr?vy odm?tnut? antivirem v seznamu odeslan?ch 
+- Manipulace se zpr?vami, kap. 2.8.2
+Nov? ud?lost dodejky EV8 pro zpr?vy ve stavu 3
+- Manipulace se zpr?vami, kap. 2.7.1
+
+
+Verze 2.57
+Datum platnosti pro TEST i PROD: 4.6.2017
+verze WSDL a XSD: 2.26
+---------------------------------
+FindDataBox vrac? nov? stav 0009
+- Vyhled?v?n?, kap. 2.1
+
+
+Verze 2.58    
+Datum platnosti pro TEST: 5.7.2017, platnost pro PROD: 10.9.2017
+verze WSDL a XSD: 2.27
+---------------------------------
+Zaveden? nov?ch typ? schr?nek OVM_PO (16), OVM_PFO (15), OVM_FO (14), zru?en? typ? PO_ZAK (konverze na PO), OVM_NOTAR a OVM_EXEKUT (konverze na OVM_PFO);
+- r?zn? m?sta dokuemtace
+Zru?en? povy?ov?n? schr?nek na OVM podle p?vodn?ho ? 5a: ji? neexistuj? pov??en? neOVM schr?nky, st?vaj?c? byly konvertov?ny
+- Manipulace se zpr?vami, kap. 2.1 a dal??
+Zm?ny v konverzi znak? na vstupu webov?ch slu?eb
+- Manipulace se zpr?vami, kap. 1.3.4
+Zm?ny ve vyhled?v?n? schr?nek po zaveden? nov?ch typ? (FindDataBox i ISDSSerch2) 
+? Vyhled?v?n? kap. 2.1, 2.2 a dal??
+
+
+Verze 2.59
+Datum platnosti pro TEST i PROD: 10.9.2017
+verze WSDL a XSD: 2.27
+---------------------------------
+Volba placen? PDZ
+- Manipulace se zpr?vami, kap. 2.1
+
+==================================================================================================
+ISDS 2018+
+==================================================================================================
+
+Verze 2.60
+Datum platnosti pro TEST i PROD: 2.2. 2018
+verze WSDL a XSD: 2.27
+---------------------------------
+ozna?en? klas. zna?kou Ve?ejn? dokument
+
+Zru?en? slu?eb pro nastaven? povy?ov?n?
+- Spr?va schr?nek
+P?id?n? hodnot identifier a registryCode pro GetOwnerInfoFromLogin
+- WS souvisej?c? s p??stupem
+Zp?esn?n? popisu slu?by pro sta?en? doru?enky a dal?? formula?n? a terminologick? ?pravy 
+- Manipulace se zpr?vami
+Samostatn? kap. o p??stupu do znep??stupn?n? schr?nky
+- Manipulace se zpr?vami, kap. 1.6
+Kapitola s odkazem na ve?ejn? rozhran? aplikace Seznam datov?ch schr?nek
+- Vyhled?v?n? schr?nek
+
+Verze 2.61
+Datum platnosti pro TEST 13.5.2018; 
+verze WSDL a XSD: 2.28
+---------------------------------
+P?id?n? popisu slu?by GetDataBoxUsers2
+- WS pro spr?vu schr?nek
+
+Verze 2.62
+Datum platnosti - jen intern? zm?na
+verze WSDL a XSD: 2.28
+---------------------------------
+P?ejmenov?n? soubor? a odkaz? na n?.
+
+Verze 2.63
+Datum platnosti pro TEST 15.7.2018; pro PROD 2.9.2018
+verze WSDL a XSD: 2.28  (2.29 pro CzP)
+---------------------------------
+Zp?esn?n? formulac? u CAdES podpis?
+- Manipulace se zpr?vami, kap. 2.4.2
+Popis maz?n? zpr?v po 3 letech, kap. 1.7
+- Manipulace se zpr?vami 
+
+
+Verze 2.64
+Datum platnosti pro TEST 6.9.2018;   
+verze WSDL a XSD: 2.31
+---------------------------------
+Velk? zm?na ve struktu?e pro popis schr?nky (OwnerInfo) a u?ivatele (UserInfo)
+- Vyhled?v?n? schr?nek
+- Spr?va schr?nek
+- P??stup 
+Star? verze slu?eb z?st?vaj? platn?, jen nejsou obsa?eny v p??ru?k?ch. 
+Zm?ny jsou pops?ny v rozeslan? informaci pro v?voj??e ze z??? 2018.
+
+
+Verze 2.65
+Datum platnosti pro TEST i PROD 4.11.2018;   
+verze WSDL a XSD: 2.31
+---------------------------------
+Zm?ny ve struktur?ch WS p?eneseny z prost?ed? TESTu i do produk?n?ho prost?ed?.
+
+
+Verze 2.66
+Datum platnosti pro TEST 21.11.2018, pro PROD 20.1.2019;   
+verze WSDL a XSD: 2.31
+---------------------------------
+P?id?n? CSV mezi povolen? form?ty p??loh datov? zpr?vy.
+- Manipulace se zpr?vami, kap. 3
+Povolen? mezery v hesle zad?van?m webovou slu?bou ChangeISDSPassword
+- P??stup, kap.1.9
+Nahrazen? UserID z textu XML p??loh syst?mov?ch zpr?v elementem a hodnotou IsdsID 
+- Manipulace se zpr?vami, kap. 1.11.1.1
+
+Verze 2.67
+Datum platnosti pro TEST i PROD 3.3.2019;   
+verze WSDL a XSD: 2.31
+---------------------------------
+P?id?n? JSON mezi povolen? form?ty p??loh datov? zpr?vy.
+- Manipulace se zpr?vami, kap. 3
+Z?kaz editace referen?n?ch ?daj? ztoto?n?n?ch u?ivatel?
+- Spr?va schr?nek, kap. 2.6
+Zp?esn?n? popisu ftx. vyhled?v?n?
+- Vyhled?v?n? schr?nek, kap. 2.2
+Plus mnoh? drobn? ?pravy a zp?esn?n?, v?etn? aktualizace p??klad?
+
+Verze 2.68
+Datum platnosti pro TEST 5.5.2019   
+verze WSDL a XSD: 2.31
+---------------------------------
+Zm?na v ozna?ov?n? stavu 7 u odeslan?ch zpr?v
+- Manipulace se zpr?vami
+
+Verze 2.67a (2.68 pro WS_vyhledavani_schranek.pdf)
+Datum platnosti pro PROD 15.6.2019;
+verze WSDL a XSD: 2.31
+---------------------------------
+Zm?na loga  (2.67a) - obsahov? shodn? s 2.67
+Dopln?no, kdy se vrac? hodnota adCode (k?d adresn?ho m?sta RUIAN) u FindDataBox2, jedin? zm?na proti verzi na TESTU, zm?na v ozna?ov?n? stavu 7 ne PROD nen? dosud nasazena
+- Vyhled?v?n? schr?nek, kap. 2.1  (2.68 - nov?j?? ne? 2.67)
+   
+   
+
+
+
