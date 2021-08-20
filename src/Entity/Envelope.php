@@ -254,17 +254,6 @@ class Envelope
         return $this;
     }
 
-    public function getRecipientId(): ?string
-    {
-        return $this->recipientId;
-    }
-
-    public function setRecipientId(string $recipientId): Envelope
-    {
-        $this->recipientId = $recipientId;
-        return $this;
-    }
-
     public function getRecipientOrgUnit(): ?string
     {
         return $this->recipientOrgUnit;
@@ -284,17 +273,6 @@ class Envelope
     public function setRecipientOrgUnitNum(?int $recipientOrgUnitNum): Envelope
     {
         $this->recipientOrgUnitNum = $recipientOrgUnitNum;
-        return $this;
-    }
-
-    public function getToHands(): ?string
-    {
-        return $this->toHands;
-    }
-
-    public function setToHands(?string $toHands): Envelope
-    {
-        $this->toHands = $toHands;
         return $this;
     }
 

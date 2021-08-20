@@ -24,14 +24,6 @@ trait DataMessageEnvelopeSub
     protected ?int $senderOrgUnitNum = null;
 
     /**
-     * @Serializer\SkipWhenEmpty()
-     * @Serializer\Type("string")
-     * @Serializer\SerializedName("p:dbIDRecipient")
-     * @Serializer\XmlElement(cdata=false)
-     */
-    protected ?string $recipientId = null;
-
-    /**
      * @Serializer\Type("string")
      * @Serializer\SkipWhenEmpty
      * @Serializer\SerializedName("p:dmRecipientOrgUnit")
@@ -46,14 +38,6 @@ trait DataMessageEnvelopeSub
      * @Serializer\XmlElement(cdata=false)
      */
     protected ?int $recipientOrgUnitNum = null;
-
-    /**
-     * @Serializer\Type("string")
-     * @Serializer\SkipWhenEmpty
-     * @Serializer\SerializedName("p:dmToHands")
-     * @Serializer\XmlElement(cdata=false)
-     */
-    protected ?string $toHands = null;
 
     /**
      * @Serializer\Type("string")
@@ -173,17 +157,6 @@ trait DataMessageEnvelopeSub
         return $this;
     }
 
-    public function getRecipientId(): ?string
-    {
-        return $this->recipientId;
-    }
-
-    public function setRecipientId(string $recipientId): self
-    {
-        $this->recipientId = $recipientId;
-        return $this;
-    }
-
     public function getRecipientOrgUnit(): ?string
     {
         return $this->recipientOrgUnit;
@@ -203,17 +176,6 @@ trait DataMessageEnvelopeSub
     public function setRecipientOrgUnitNum(?int $recipientOrgUnitNum): self
     {
         $this->recipientOrgUnitNum = $recipientOrgUnitNum;
-        return $this;
-    }
-
-    public function getToHands(): ?string
-    {
-        return $this->toHands;
-    }
-
-    public function setToHands(?string $toHands): self
-    {
-        $this->toHands = $toHands;
         return $this;
     }
 

@@ -18,6 +18,22 @@ trait DataMessageEnvelope
     protected string $senderId;
 
     /**
+     * @Serializer\SkipWhenEmpty()
+     * @Serializer\Type("string")
+     * @Serializer\SerializedName("p:dbIDRecipient")
+     * @Serializer\XmlElement(cdata=false)
+     */
+    protected ?string $recipientId = null;
+
+    /**
+     * @Serializer\Type("string")
+     * @Serializer\SkipWhenEmpty
+     * @Serializer\SerializedName("p:dmToHands")
+     * @Serializer\XmlElement(cdata=false)
+     */
+    protected ?string $toHands = null;
+
+    /**
      * @Serializer\Type("string")
      * @Serializer\SerializedName("p:dmSender")
      * @Serializer\XmlElement(cdata=false)
@@ -137,6 +153,26 @@ trait DataMessageEnvelope
     {
         $this->ambiguousRecipient = $ambiguousRecipient;
         return $this;
+    }
+
+    public function getRecipientId(): ?string
+    {
+        return $this->recipientId;
+    }
+
+    public function setRecipientId(?string $recipientId): void
+    {
+        $this->recipientId = $recipientId;
+    }
+
+    public function getToHands(): ?string
+    {
+        return $this->toHands;
+    }
+
+    public function setToHands(?string $toHands): void
+    {
+        $this->toHands = $toHands;
     }
 
 }
