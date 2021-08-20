@@ -10,8 +10,8 @@
 	"type": "library",
 	"support": {
 		"email": "jsem@tomaskulhanek.cz",
-		"issues": "https://gitlab.com/tomas-kulhanek/czechDataBox/issues",
-		"source": "https://gitlab.com/tomas-kulhanek/czechDataBox"
+		"issues": "https://github.com/tomas-kulhanek/czech-data-box/issues",
+		"source": "https://github.com/tomas-kulhanek/czech-data-box"
 	},
 	"license": [
 		"BSD-3-Clause",
@@ -34,7 +34,6 @@
 		"ext-curl": "*",
 		"ext-openssl": "*",
 		"ext-dom": "*",
-		"consistence-community/consistence": "^2.0",
 		"symfony/http-client": "^5.2",
 		"doctrine/collections": "^1.6",
 		"symfony/yaml": "^5.2",

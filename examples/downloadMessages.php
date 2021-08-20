@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
+
+/** @var \TomasKulhanek\CzechDataBox\Connector\Account $account */
 require_once __DIR__ . '/credentials.php';
-$console->writeln(sprintf('Komunikovat bude probihat vuci %s za datovou schranku s id %s typu %s ', ($account->getPortalType()->equalsValue(\TomasKulhanek\CzechDataBox\Enum\PortalTypeEnum::MOJEDATOVASCHRANKA) ? 'mojedatovaschranka.cz' : 'czebox.cz'), ISDS_ID, $type));
+$console->writeln(sprintf('Komunikovat bude probihat vuci %s za datovou schranku s id %s ', ($account->isProduction() ? 'mojedatovaschranka.cz' : 'czebox.cz'), $account->getDataBoxId()));
 
 
 $messageStatus = new \TomasKulhanek\CzechDataBox\Request\GetMessageStateChanges();

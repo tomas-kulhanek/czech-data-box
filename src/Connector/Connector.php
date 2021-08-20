@@ -6,9 +6,6 @@ use DOMDocument;
 use DOMElement;
 use DOMNodeList;
 use DOMXPath;
-use TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum;
-use TomasKulhanek\CzechDataBox\Enum\PortalTypeEnum;
-use TomasKulhanek\CzechDataBox\Enum\ServiceTypeEnum;
 use TomasKulhanek\CzechDataBox\Exception\ConnectionException;
 use TomasKulhanek\CzechDataBox\Exception\FileSystemException;
 use TomasKulhanek\CzechDataBox\Exception\MissingRequiredField;
@@ -23,6 +20,12 @@ use Throwable;
 abstract class Connector
 {
 
+    public const OPERATIONS = 0;
+    public const INFO = 1;
+    public const SEARCH = 2;
+    public const SUPPLEMENTARY = 3;
+    public const ACCESS = 5;
+    
     private HttpClientInterface $httpClient;
 
     private SerializerInterface $serializer;
@@ -33,48 +36,47 @@ abstract class Connector
         $this->serializer = $serializer;
     }
 
-    private function getServiceDomain(PortalTypeEnum $portalType): string
+    private function getServiceDomain(bool $isProduction): string
     {
-        if ($portalType->equalsValue(PortalTypeEnum::MOJEDATOVASCHRANKA)) {
+        if ($isProduction) {
             return 'mojedatovaschranka.cz';
         }
         return 'czebox.cz';
     }
 
-    private function getServiceUrl(ServiceTypeEnum $serviceTypeEnum): ?string
+    private function getServiceUrl(int $serviceType): ?string
     {
-        if (in_array($serviceTypeEnum->getValue(), [ServiceTypeEnum::SUPPLEMENTARY, ServiceTypeEnum::ACCESS])) {
+        if (in_array($serviceType, [self::SUPPLEMENTARY, self::ACCESS], true)) {
             return 'DsManage';
         }
-        if ($serviceTypeEnum->equalsValue(ServiceTypeEnum::OPERATIONS)) {
-            return 'dz';
-        }
-        if ($serviceTypeEnum->equalsValue(ServiceTypeEnum::INFO)) {
-            return 'dx';
-        }
-        if ($serviceTypeEnum->equalsValue(ServiceTypeEnum::SEARCH)) {
-            return 'df';
+        switch ($serviceType) {
+            case self::OPERATIONS:
+                return 'dz';
+            case self::INFO:
+                return 'dx';
+            case self::SEARCH:
+                return 'df';
         }
         return null;
     }
 
-    private function getServiceLocation(PortalTypeEnum $portalType, ServiceTypeEnum $ServiceType, LoginTypeEnum $LoginType): string
+    private function getServiceLocation(Account $account, int $ServiceType): string
     {
         $res = 'https://ws1';
-        if (!$LoginType->equalsValue(LoginTypeEnum::LOGIN_NAME_PASSWORD)) {
+        if ($account->getLoginType() !== Account::LOGIN_NAME_PASSWORD) {
             $res .= 'c';
         }
 
-        $res .= '.' . $this->getServiceDomain($portalType) . '/';
+        $res .= '.' . $this->getServiceDomain($account->isProduction()) . '/';
 
-        switch ($LoginType->getValue()) {
-            case LoginTypeEnum::LOGIN_CERT_LOGIN_NAME_PASSWORD:
+        switch ($account->getLoginType()) {
+            case Account::LOGIN_CERT_LOGIN_NAME_PASSWORD:
                 $res .= 'certds/';
                 break;
-            case LoginTypeEnum::LOGIN_SPIS_CERT:
+            case Account::LOGIN_SPIS_CERT:
                 $res .= 'cert/';
                 break;
-            case LoginTypeEnum::LOGIN_HOSTED_SPIS:
+            case Account::LOGIN_HOSTED_SPIS:
                 $res .= 'hspis/';
                 break;
         }
@@ -134,7 +136,7 @@ abstract class Connector
      */
     protected function send(Account $account, int $serviceType, IRequest $request, string $responseClass): IResponse
     {
-        $location = $this->getLocation($account, ServiceTypeEnum::get($serviceType));
+        $location = $this->getLocation($account, $serviceType);
         if (!is_subclass_of($responseClass, IResponse::class)) {
             throw new ConnectionException();
         }
@@ -164,12 +166,12 @@ abstract class Connector
             ],
             'body' => $requestDocument->saveXml(),
         ];
-        switch ($account->getLoginType()->getValue()) {
-            case LoginTypeEnum::LOGIN_HOSTED_SPIS:
+        switch ($account->getLoginType()) {
+            case Account::LOGIN_HOSTED_SPIS:
                 $requestOptions['auth_basic'] = $account->getDataBoxId();
                 break;
-            case LoginTypeEnum::LOGIN_NAME_PASSWORD:
-            case LoginTypeEnum::LOGIN_CERT_LOGIN_NAME_PASSWORD:
+            case Account::LOGIN_NAME_PASSWORD:
+            case Account::LOGIN_CERT_LOGIN_NAME_PASSWORD:
                 $requestOptions['auth_basic'] = $account->getLoginName() . ':' . $account->getPassword();
                 break;
         }
@@ -242,9 +244,9 @@ abstract class Connector
         return $this->serializer->deserialize($response, $responseClass, 'xml');
     }
 
-    protected function getLocation(Account $account, ServiceTypeEnum $serviceType): string
+    protected function getLocation(Account $account, int $serviceType): string
     {
-        return $this->getServiceLocation($account->getPortalType(), $serviceType, $account->getLoginType());
+        return $this->getServiceLocation($account, $serviceType);
     }
 
 }

@@ -2,12 +2,14 @@
 
 namespace TomasKulhanek\CzechDataBox\Connector;
 
-use TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum;
-use TomasKulhanek\CzechDataBox\Enum\PortalTypeEnum;
 use TomasKulhanek\CzechDataBox\Exception\PkcsCertificateException;
 
 class Account
 {
+    public const LOGIN_NAME_PASSWORD = 'password';
+    public const LOGIN_SPIS_CERT = 'cert';
+    public const LOGIN_CERT_LOGIN_NAME_PASSWORD = 'certPassword';
+    public const LOGIN_HOSTED_SPIS = 'hosted';
 
     private ?string $loginName = null;
 
@@ -15,9 +17,9 @@ class Account
 
     private ?string $password = null;
 
-    private LoginTypeEnum $loginType;
+    private string $loginType = self::LOGIN_NAME_PASSWORD;
 
-    private PortalTypeEnum $portalType;
+    private bool $production = true;
 
     private ?string $publicKey = null;
 
@@ -47,25 +49,14 @@ class Account
         return $this;
     }
 
-    public function getLoginType(): LoginTypeEnum
+    public function getLoginType(): string
     {
         return $this->loginType;
     }
 
-    public function setLoginType(LoginTypeEnum $loginType): Account
+    public function setLoginType(string $loginType): Account
     {
         $this->loginType = $loginType;
-        return $this;
-    }
-
-    public function getPortalType(): PortalTypeEnum
-    {
-        return $this->portalType;
-    }
-
-    public function setPortalType(PortalTypeEnum $portalType): Account
-    {
-        $this->portalType = $portalType;
         return $this;
     }
 
@@ -129,7 +120,17 @@ class Account
 
     public function usingCertificate(): bool
     {
-        return in_array($this->getLoginType()->getValue(), [LoginTypeEnum::LOGIN_HOSTED_SPIS, LoginTypeEnum::LOGIN_SPIS_CERT, LoginTypeEnum::LOGIN_CERT_LOGIN_NAME_PASSWORD]);
+        return in_array($this->getLoginType(), [self::LOGIN_HOSTED_SPIS, self::LOGIN_SPIS_CERT, self::LOGIN_CERT_LOGIN_NAME_PASSWORD], true);
+    }
+
+    public function isProduction(): bool
+    {
+        return $this->production;
+    }
+
+    public function setProduction(bool $production): void
+    {
+        $this->production = $production;
     }
 
 }

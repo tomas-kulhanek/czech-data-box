@@ -3,7 +3,6 @@
 namespace TomasKulhanek\CzechDataBox\Connector;
 
 use TomasKulhanek\CzechDataBox\Entity\File;
-use TomasKulhanek\CzechDataBox\Enum\ServiceTypeEnum;
 use TomasKulhanek\CzechDataBox\Exception\ConnectionException;
 use TomasKulhanek\CzechDataBox\Exception\FileSizeOverflow;
 use TomasKulhanek\CzechDataBox\Exception\MissingMainFile;
@@ -29,7 +28,7 @@ class DataMessage extends Connector
      */
     public function authenticateMessage(Account $account, Request\AuthenticateMessage $input): Response\AuthenticateMessage
     {
-        return $this->send($account, ServiceTypeEnum::OPERATIONS, $input, Response\AuthenticateMessage::class);
+        return $this->send($account, self::OPERATIONS, $input, Response\AuthenticateMessage::class);
     }
 
     /**
@@ -44,7 +43,7 @@ class DataMessage extends Connector
      */
     public function verifyMessage(Account $account, Request\VerifyMessage $input): Response\VerifyMessage
     {
-        return $this->send($account, ServiceTypeEnum::INFO, $input, Response\VerifyMessage::class);
+        return $this->send($account, self::INFO, $input, Response\VerifyMessage::class);
     }
 
 
@@ -86,7 +85,7 @@ class DataMessage extends Connector
         if (empty($input->getEnvelope()->getAnnotation())) {
             throw new MissingRequiredField('annotation');
         }
-        return $this->send($account, ServiceTypeEnum::OPERATIONS, $input, Response\CreateMessage::class);
+        return $this->send($account, self::OPERATIONS, $input, Response\CreateMessage::class);
     }
 
     /**
@@ -100,7 +99,7 @@ class DataMessage extends Connector
      */
     public function messageDownload(Account $account, Request\MessageDownload $input): Response\MessageDownload
     {
-        return $this->send($account, ServiceTypeEnum::OPERATIONS, $input, Response\MessageDownload::class);
+        return $this->send($account, self::OPERATIONS, $input, Response\MessageDownload::class);
     }
 
     /**
@@ -114,7 +113,7 @@ class DataMessage extends Connector
      */
     public function signedMessageDownload(Account $account, Request\SignedMessageDownload $input): Response\SignedMessageDownload
     {
-        return $this->send($account, ServiceTypeEnum::OPERATIONS, $input, Response\SignedMessageDownload::class);
+        return $this->send($account, self::OPERATIONS, $input, Response\SignedMessageDownload::class);
     }
 
     /**
@@ -128,7 +127,7 @@ class DataMessage extends Connector
      */
     public function signedSentMessageDownload(Account $account, Request\SignedSentMessageDownload $input): Response\SignedSentMessageDownload
     {
-        return $this->send($account, ServiceTypeEnum::OPERATIONS, $input, Response\SignedSentMessageDownload::class);
+        return $this->send($account, self::OPERATIONS, $input, Response\SignedSentMessageDownload::class);
     }
 
 
@@ -143,7 +142,7 @@ class DataMessage extends Connector
      */
     public function resignIsdsDocument(Account $account, Request\ResignISDSDocument $input): Response\ResignISDSDocument
     {
-        return $this->send($account, ServiceTypeEnum::OPERATIONS, $input, Response\ResignISDSDocument::class);
+        return $this->send($account, self::OPERATIONS, $input, Response\ResignISDSDocument::class);
     }
 
     /**
@@ -157,7 +156,7 @@ class DataMessage extends Connector
      */
     public function messageEnvelopeDownload(Account $account, Request\MessageEnvelopeDownload $input): Response\MessageEnvelopeDownload
     {
-        return $this->send($account, ServiceTypeEnum::INFO, $input, Response\MessageEnvelopeDownload::class);
+        return $this->send($account, self::INFO, $input, Response\MessageEnvelopeDownload::class);
     }
 
     /**
@@ -171,7 +170,7 @@ class DataMessage extends Connector
      */
     public function markMessageAsDownloaded(Account $account, Request\MarkMessageAsDownloaded $input): Response\MarkMessageAsDownloaded
     {
-        return $this->send($account, ServiceTypeEnum::INFO, $input, Response\MarkMessageAsDownloaded::class);
+        return $this->send($account, self::INFO, $input, Response\MarkMessageAsDownloaded::class);
     }
 
 
@@ -186,7 +185,7 @@ class DataMessage extends Connector
      */
     public function getDeliveryInfo(Account $account, Request\GetDeliveryInfo $input): Response\GetDeliveryInfo
     {
-        return $this->send($account, ServiceTypeEnum::INFO, $input, Response\GetDeliveryInfo::class);
+        return $this->send($account, self::INFO, $input, Response\GetDeliveryInfo::class);
     }
 
     /**
@@ -200,7 +199,7 @@ class DataMessage extends Connector
      */
     public function getSignedDeliveryInfo(Account $account, Request\GetSignedDeliveryInfo $input): Response\GetSignedDeliveryInfo
     {
-        return $this->send($account, ServiceTypeEnum::INFO, $input, Response\GetSignedDeliveryInfo::class);
+        return $this->send($account, self::INFO, $input, Response\GetSignedDeliveryInfo::class);
     }
 
 
@@ -216,7 +215,7 @@ class DataMessage extends Connector
      */
     public function getListOfSentMessages(Account $account, Request\GetListOfSentMessages $input): Response\GetListOfSentMessages
     {
-        return $this->send($account, ServiceTypeEnum::INFO, $input, Response\GetListOfSentMessages::class);
+        return $this->send($account, self::INFO, $input, Response\GetListOfSentMessages::class);
     }
 
     /**
@@ -232,7 +231,7 @@ class DataMessage extends Connector
      */
     public function getListOfReceivedMessages(Account $account, Request\GetListOfReceivedMessages $input): Response\GetListOfReceivedMessages
     {
-        return $this->send($account, ServiceTypeEnum::INFO, $input, Response\GetListOfReceivedMessages::class);
+        return $this->send($account, self::INFO, $input, Response\GetListOfReceivedMessages::class);
     }
 
     /**
@@ -246,7 +245,7 @@ class DataMessage extends Connector
      */
     public function getMessageStateChanges(Account $account, Request\GetMessageStateChanges $input): Response\GetMessageStateChanges
     {
-        return $this->send($account, ServiceTypeEnum::INFO, $input, Response\GetMessageStateChanges::class);
+        return $this->send($account, self::INFO, $input, Response\GetMessageStateChanges::class);
     }
 
     /**
@@ -261,7 +260,7 @@ class DataMessage extends Connector
      */
     public function confirmDelivery(Account $account, Request\ConfirmDelivery $input): Response\ConfirmDelivery
     {
-        return $this->send($account, ServiceTypeEnum::INFO, $input, Response\ConfirmDelivery::class);
+        return $this->send($account, self::INFO, $input, Response\ConfirmDelivery::class);
     }
 
 }
