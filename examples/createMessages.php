@@ -20,7 +20,6 @@ $createMessage->getEnvelope()
     ->setLegalTitleYear(date('Y'))
     ->setPublishOwnId(false)
     ->setRecipientIdent('recipientIdent')
-    ->setRecipientId('ju8fjv4')
     ->setRecipientOrgUnit('recipientOrgUnit')
     ->setRecipientOrgUnitNum(777)
     ->setRecipientRefNumber('recipientRefNumber')
@@ -28,7 +27,6 @@ $createMessage->getEnvelope()
     ->setSenderOrgUnit('senderOrgUnit')
     ->setSenderOrgUnitNum(999)
     ->setSenderRefNumber('senderRefNumber')
-    ->setToHands('toHands')
     ->setType('type');
 
 for ($i = 0; $i <= 3; $i++) {

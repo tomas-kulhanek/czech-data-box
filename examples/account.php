@@ -6,7 +6,6 @@ $console->writeln(sprintf('Komunikovat bude probihat vuci %s za datovou schranku
 
 /***********************************/
 $console->write('   - Probiha ziskavani informaci dle loginu');
-/** @var \TomasKulhanek\CzechDataBox\Response\GetOwnerInfoFromLogin */
 $res = $manager->getOwnerInfoFromLogin($account);
 if ($res->getStatus()->isOk()) {
     $console->writeln(' -> OK ' . sprintf('DS "%s" typ subjektu "%s"', $res->getOwnerInfo()->getFirmName(), $res->getOwnerInfo()->getDataBoxType()));
@@ -16,7 +15,6 @@ if ($res->getStatus()->isOk()) {
 
 /***********************************/
 $console->write('   - Probiha ziskavani informaci o expiraci hesla');
-/** @var \TomasKulhanek\CzechDataBox\Response\GetPasswordExpirationInfo */
 $res = $manager->getPasswordExpirationInfo($account);
 if ($res->getStatus()->isOk()) {
     $console->write(' -> OK ');

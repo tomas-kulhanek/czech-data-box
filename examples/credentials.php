@@ -17,7 +17,7 @@ $console = new \Symfony\Component\Console\Output\ConsoleOutput();
 $account = new \TomasKulhanek\CzechDataBox\Connector\Account();
 $account->setProduction(false);
 $account->setLoginType($account::LOGIN_NAME_PASSWORD);
-$account->setDataBoxId('unhfjvx');
+$account->setLoginName('unhfjvx');
 $account->setPassword('Admin123');
 
 $client = \Symfony\Component\HttpClient\HttpClient::create();
