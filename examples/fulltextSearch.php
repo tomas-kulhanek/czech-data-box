@@ -1,6 +1,8 @@
 <?php
+
+/** @var \TomasKulhanek\CzechDataBox\Connector\Account $account */
 require 'credentials.php';
-$console->writeln(sprintf('Komunikovat bude probihat vuci %s za datovou schranku s id %s', ($account->getPortalType()->equalsValue(\TomasKulhanek\CzechDataBox\Enum\PortalTypeEnum::MOJEDATOVASCHRANKA) ? 'mojedatovaschranka.cz' : 'czebox.cz'), $account->getDataBoxId()));
+$console->writeln(sprintf('Komunikovat bude probihat vuci %s za datovou schranku s id %s ', ($account->isProduction() ? 'mojedatovaschranka.cz' : 'czebox.cz'), $account->getDataBoxId()));
 /** @var \TomasKulhanek\CzechDataBox\Manager $manager */
 
 $ownerInfo = new \TomasKulhanek\CzechDataBox\Entity\OwnerInfo();

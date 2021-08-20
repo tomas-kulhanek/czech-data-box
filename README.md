@@ -28,13 +28,13 @@ $account = new \TomasKulhanek\CzechDataBox\Connector\Account();
 try {
     $account->setPassword('mojeTajneHeslo')
         ->setLoginName('mujLogin')
-            ->setLoginType(\TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum::get(\TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum::LOGIN_NAME_PASSWORD))
-            ->setPortalType(\TomasKulhanek\CzechDataBox\Enum\PortalTypeEnum::get(\TomasKulhanek\CzechDataBox\Enum\PortalTypeEnum::CZEBOX));
+            ->setLoginType($account::LOGIN_NAME_PASSWORD)
+            ->setProduction(false);
 } catch (\TomasKulhanek\CzechDataBox\Exception\BadOptionException $exception) {
     die($exception->getMessage());
 }
 ```
-Prostředí ke kterému se připojuje je definováno pomocí ``\TomasKulhanek\CzechDataBox\Connector\Account::setPortalType()``
+Prostředí ke kterému se připojuje je definováno pomocí ``\TomasKulhanek\CzechDataBox\Connector\Account::isProduction()``
 
 ## Pomoc a řešní chyb
 

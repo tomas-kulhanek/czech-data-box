@@ -2,7 +2,6 @@
 
 namespace TomasKulhanek\CzechDataBox\Connector;
 
-use TomasKulhanek\CzechDataBox\Enum\ServiceTypeEnum;
 use TomasKulhanek\CzechDataBox\Exception\ConnectionException;
 use TomasKulhanek\CzechDataBox\Exception\SystemExclusion;
 use TomasKulhanek\CzechDataBox\Request;
@@ -22,7 +21,7 @@ class SearchDataBox extends Connector
      */
     public function findDataBox(Account $account, Request\FindDataBox $input): Response\FindDataBox
     {
-        return $this->send($account, ServiceTypeEnum::SEARCH, $input, Response\FindDataBox::class);
+        return $this->send($account, self::SEARCH, $input, Response\FindDataBox::class);
     }
 
     /**
@@ -36,7 +35,7 @@ class SearchDataBox extends Connector
      */
     public function pdzInfo(Account $account, Request\PDZInfo $input): Response\PDZInfo
     {
-        return $this->send($account, ServiceTypeEnum::SEARCH, $input, Response\PDZInfo::class);
+        return $this->send($account, self::SEARCH, $input, Response\PDZInfo::class);
     }
 
     /**
@@ -50,7 +49,7 @@ class SearchDataBox extends Connector
      */
     public function dataBoxCreditInfo(Account $account, Request\DataBoxCreditInfo $input): Response\DataBoxCreditInfo
     {
-        return $this->send($account, ServiceTypeEnum::SEARCH, $input, Response\DataBoxCreditInfo::class);
+        return $this->send($account, self::SEARCH, $input, Response\DataBoxCreditInfo::class);
     }
 
     /**
@@ -64,7 +63,7 @@ class SearchDataBox extends Connector
      */
     public function isdsSearch3(Account $account, Request\ISDSSearch3 $input): Response\ISDSSearch3
     {
-        return $this->send($account, ServiceTypeEnum::SEARCH, $input, Response\ISDSSearch3::class);
+        return $this->send($account, self::SEARCH, $input, Response\ISDSSearch3::class);
     }
 
     /**
@@ -76,7 +75,7 @@ class SearchDataBox extends Connector
      */
     public function getDataBoxActivityStatus(Account $account, Request\GetDataBoxActivityStatus $input): Response\GetDataBoxActivityStatus
     {
-        return $this->send($account, ServiceTypeEnum::SEARCH, $input, Response\GetDataBoxActivityStatus::class);
+        return $this->send($account, self::SEARCH, $input, Response\GetDataBoxActivityStatus::class);
     }
 
     /**
@@ -88,7 +87,7 @@ class SearchDataBox extends Connector
      */
     public function dtInfo(Account $account, Request\DTInfo $input): Response\DTInfo
     {
-        return $this->send($account, ServiceTypeEnum::SEARCH, $input, Response\DTInfo::class);
+        return $this->send($account, self::SEARCH, $input, Response\DTInfo::class);
     }
 
     /**
@@ -100,7 +99,7 @@ class SearchDataBox extends Connector
      */
     public function pdzSendInfo(Account $account, Request\PDZSendInfo $input): Response\PDZSendInfo
     {
-        return $this->send($account, ServiceTypeEnum::SEARCH, $input, Response\PDZSendInfo::class);
+        return $this->send($account, self::SEARCH, $input, Response\PDZSendInfo::class);
     }
 
     /**
@@ -114,7 +113,7 @@ class SearchDataBox extends Connector
      */
     public function findPersonalDataBox(Account $account, Request\FindPersonalDataBox $input): Response\FindPersonalDataBox
     {
-        return $this->send($account, ServiceTypeEnum::SEARCH, $input, Response\FindPersonalDataBox::class);
+        return $this->send($account, self::SEARCH, $input, Response\FindPersonalDataBox::class);
     }
 
     /**
@@ -126,7 +125,7 @@ class SearchDataBox extends Connector
      */
     public function getDataBoxList(Account $account, Request\GetDataBoxList $input): Response\GetDataBoxList
     {
-        return $this->send($account, ServiceTypeEnum::SEARCH, $input, Response\GetDataBoxList::class);
+        return $this->send($account, self::SEARCH, $input, Response\GetDataBoxList::class);
     }
 
     /**
@@ -140,7 +139,7 @@ class SearchDataBox extends Connector
      */
     public function checkDataBox(Account $account, Request\CheckDataBox $input): Response\CheckDataBox
     {
-        return $this->send($account, ServiceTypeEnum::SEARCH, $input, Response\CheckDataBox::class);
+        return $this->send($account, self::SEARCH, $input, Response\CheckDataBox::class);
     }
 
 }
