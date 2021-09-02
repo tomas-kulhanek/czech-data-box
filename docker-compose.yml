@@ -1,0 +1,13 @@
+version: '3.3'
+
+services:
+    php-fpm:
+        env_file:
+            -   .env
+        environment:
+            COMPOSER_MEMORY_LIMIT: -1
+        build:
+            dockerfile: Dockerfile
+            context: .
+        volumes:
+            - ./:/var/www

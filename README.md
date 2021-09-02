@@ -1,8 +1,11 @@
 # PHP knihovna pro komunikaci s Informačním systémem datových schránek (ISDS) Ministerstva vnitra
 
-![CRAN](https://img.shields.io/cran/l/devtools.svg)
-![PyPI - License](https://img.shields.io/pypi/l/Django.svg)
-[![Latest stable](https://img.shields.io/packagist/v/tomas-kulhanek/czech-data-box.svg)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
+[DEV branch workflows](https://github.com/tomas-kulhanek/czech-data-box/actions/workflows/main.yml/badge.svg?branch=main)
+[![Latest Stable Version](https://poser.pugx.org/tomas-kulhanek/czech-data-box/v/stable)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
+[![Total Downloads](https://poser.pugx.org/tomas-kulhanek/czech-data-box/downloads)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
+[![Monthly Downloads](https://poser.pugx.org/tomas-kulhanek/czech-data-box/d/monthly)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
+[![License](https://poser.pugx.org/tomas-kulhanek/czech-data-box/license)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
+
 
 ⚠ **POZOR!!** Pokud implementujete napojení na ISDS, je potřeba aby jste se řídili dle [PROVOZNÍHO ŘÁDU](https://www.datoveschranky.info/dulezite-informace/provozni-rad-isds)⚠
 ## Instalace
@@ -24,7 +27,7 @@ Veškeré ukázky, jak pracovat s knihovnou naleznete v examples. Jediná podmí
 Pro každou operaci je potřebné zadat přístupové údaje
 ```php
 <?php
-$account = new \TomasKulhanek\CzechDataBox\Connector\Account();
+$account = new \TomasKulhanek\CzechDataBox\Account();
 try {
     $account->setPassword('mojeTajneHeslo')
         ->setLoginName('mujLogin')
@@ -34,7 +37,7 @@ try {
     die($exception->getMessage());
 }
 ```
-Prostředí ke kterému se připojuje je definováno pomocí ``\TomasKulhanek\CzechDataBox\Connector\Account::isProduction()``
+Prostředí ke kterému se připojuje je definováno pomocí ``\TomasKulhanek\CzechDataBox\Account::isProduction()``
 
 ## Pomoc a řešní chyb
 

@@ -1,61 +1,72 @@
 {
-	"name": "tomas-kulhanek/czech-data-box",
-	"homepage": "https://tomaskulhanek.cz",
-	"description": "PHP library for connection to Integrated system of data box (ISDS) in Czech republic",
-	"keywords": [
-		"isds",
-		"datovky",
-		"czech"
-	],
-	"type": "library",
-	"support": {
-		"email": "jsem@tomaskulhanek.cz",
-		"issues": "https://github.com/tomas-kulhanek/czech-data-box/issues",
-		"source": "https://github.com/tomas-kulhanek/czech-data-box"
-	},
-	"license": [
-		"BSD-3-Clause",
-		"GPL-2.0",
-		"GPL-3.0"
-	],
-	"authors": [
-		{
-			"name": "Tomas Kulhanek",
-			"homepage": "https://tomaskulhanek.cz"
-		},
-		{
-			"name": "Vojtech Krupka"
-		}
-	],
-	"require": {
-		"php": ">=7.4",
-		"ext-xml": "*",
-		"ext-mbstring": "*",
-		"ext-curl": "*",
-		"ext-openssl": "*",
-		"ext-dom": "*",
-		"symfony/http-client": "^5.2",
-		"doctrine/collections": "^1.6",
-		"symfony/yaml": "^5.2",
-		"tomas-kulhanek/serializer": "^1.0"
-	},
-	"autoload": {
-		"psr-4": {
-			"TomasKulhanek\\CzechDataBox\\": "src/"
-		}
-	},
-	"suggest": {
-		"ext-curl": "for comunication with czech databox servers"
-	},
-	"require-dev": {
-		"nette/tester": "^2.0",
-		"phpstan/phpstan": "^0.12.0",
-		"phpstan/phpstan-nette": "^0.12",
-		"symfony/console": "^5.2"
-	},
-	"archive": {
-		"exclude": [
-			"/tests"
-		]
-	}
+  "name": "tomas-kulhanek/czech-data-box",
+  "homepage": "https://tomaskulhanek.cz",
+  "description": "PHP library for connection to Integrated system of data box (ISDS) in Czech republic",
+  "keywords": [
+    "isds",
+    "datovky",
+    "czech"
+  ],
+  "type": "library",
+  "support": {
+    "email": "jsem@tomaskulhanek.cz",
+    "issues": "https://github.com/tomas-kulhanek/czech-data-box/issues",
+    "source": "https://github.com/tomas-kulhanek/czech-data-box"
+  },
+  "license": [
+    "BSD-3-Clause",
+    "GPL-2.0",
+    "GPL-3.0"
+  ],
+  "authors": [
+    {
+      "name": "Tomas Kulhanek",
+      "homepage": "https://tomaskulhanek.cz"
+    },
+    {
+      "name": "Vojtech Krupka"
+    }
+  ],
+  "require": {
+    "php": "^7.4|^8.0",
+    "ext-xml": "*",
+    "ext-mbstring": "*",
+    "ext-curl": "*",
+    "ext-openssl": "*",
+    "ext-dom": "*",
+    "tomas-kulhanek/serializer": "^1.0",
+    "psr/http-client": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "TomasKulhanek\\CzechDataBox\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "TomasKulhanek\\Tests\\CzechDataBox\\": "tests/"
+    }
+  },
+  "suggest": {
+    "ext-curl": "for comunication with czech databox servers"
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^0.12.98",
+    "phpstan/phpstan-nette": "^0.12.21",
+    "symfony/console": "^5.2",
+    "symfony/http-client": "^5.3",
+    "php-http/httplug": "^2.2",
+    "phpunit/phpunit": "^9.5",
+    "symplify/easy-coding-standard": "^9.4",
+    "nyholm/psr7": "^1.4",
+    "guzzlehttp/guzzle": "^7.3"
+  },
+  "archive": {
+    "exclude": [
+      "/tests"
+    ]
+  },
+  "config": {
+    "sort-packages": true
+  }
 }

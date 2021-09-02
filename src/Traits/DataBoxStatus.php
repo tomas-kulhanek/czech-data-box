@@ -1,15 +1,16 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace TomasKulhanek\CzechDataBox\Traits;
 
-use TomasKulhanek\CzechDataBox\IResponseStatus;
 use JMS\Serializer\Annotation as Serializer;
+use TomasKulhanek\CzechDataBox\DTO\Response\IResponseStatus;
 
 trait DataBoxStatus
 {
-
     /**
-     * @Serializer\Type("TomasKulhanek\CzechDataBox\Entity\DataBoxStatus")
+     * @Serializer\Type("TomasKulhanek\CzechDataBox\DTO\DataBoxStatus")
      * @Serializer\SerializedName("p:dbStatus")
      * @Serializer\XmlElement(cdata=false)
      */
@@ -25,5 +26,4 @@ trait DataBoxStatus
         $this->status = $status;
         return $this;
     }
-
 }

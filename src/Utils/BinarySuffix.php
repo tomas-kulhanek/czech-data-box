@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace TomasKulhanek\CzechDataBox\Utils;
 
@@ -6,7 +8,6 @@ use InvalidArgumentException;
 
 class BinarySuffix
 {
-
     public const CONVERT_THRESHOLD = 1024;
 
     private int $number;
@@ -72,5 +73,4 @@ class BinarySuffix
         }
         return $this->number;
     }
-
 }

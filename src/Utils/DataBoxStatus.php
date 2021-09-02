@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace TomasKulhanek\CzechDataBox\Utils;
 
@@ -6,7 +8,6 @@ use TomasKulhanek\CzechDataBox\Exception\BadOptionException;
 
 class DataBoxStatus
 {
-
     public const GENERAL = 'GENERAL';
     public const ADDRESS = 'ADDRESS';
     public const ICO = 'ICO';
@@ -123,5 +124,4 @@ class DataBoxStatus
         }
         throw new BadOptionException(sprintf('The value %s is not allowed', $type));
     }
-
 }

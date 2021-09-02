@@ -1,8 +1,6 @@
 .idea/
-build
+.env
 composer.lock
-docks
 vendor
-/temp
-/tests/config.local.yaml
 /src/Cafile.crt
+tests/.phpunit.result.cache

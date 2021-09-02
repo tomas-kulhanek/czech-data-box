@@ -1,20 +1,19 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace TomasKulhanek\CzechDataBox\Traits;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use TomasKulhanek\CzechDataBox\Entity\File;
+use TomasKulhanek\CzechDataBox\DTO\File;
 
 trait GetMainFile
 {
-
     /**
-     * @return Collection<mixed,mixed>
+     * @return array<mixed, mixed>
      */
-    public function getFiles(): Collection
+    public function getFiles(): array
     {
-        return new ArrayCollection();
+        return [];
     }
 
     public function getMainFile(): ?File
@@ -27,5 +26,4 @@ trait GetMainFile
         }
         return null;
     }
-
 }
