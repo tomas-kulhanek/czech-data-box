@@ -25,8 +25,8 @@ trait AccountTrait
         $account = new \TomasKulhanek\CzechDataBox\Account();
         $account->setProduction((bool) getenv('IS_PRODUCTION'));
         $account->setLoginType($account::LOGIN_HOSTED_SPIS);
-        $account->setPublicKey(getenv('CERT_PUB'));
-        $account->setPrivateKey(getenv('CERT_PRIV'));
+        $account->setPublicKey(file_get_contents(__DIR__ . '/../../.data/cert.crt'));
+        $account->setPrivateKey(file_get_contents(__DIR__ . '/../../.data/cert.pem'));
         $account->setLoginName(getenv('PFO_LOGIN_USER'));
         $account->setPassword(getenv('PFO_PASSWORD_USER'));
         $account->setPrivateKeyPassPhrase(getenv('CERT_PASSPHRASE'));
@@ -50,8 +50,8 @@ trait AccountTrait
         $account = new \TomasKulhanek\CzechDataBox\Account();
         $account->setProduction((bool) getenv('IS_PRODUCTION'));
         $account->setLoginType($account::LOGIN_HOSTED_SPIS);
-        $account->setPublicKey(getenv('CERT_PUB'));
-        $account->setPrivateKey(getenv('CERT_PRIV'));
+        $account->setPublicKey(file_get_contents(__DIR__ . '/../../.data/cert.crt'));
+        $account->setPrivateKey(file_get_contents(__DIR__ . '/../../.data/cert.pem'));
         $account->setLoginName(getenv('FO_LOGIN_USER'));
         $account->setPassword(getenv('FO_PASSWORD_USER'));
         $account->setPrivateKeyPassPhrase(getenv('CERT_PASSPHRASE'));
@@ -64,8 +64,8 @@ trait AccountTrait
         $account = new \TomasKulhanek\CzechDataBox\Account();
         $account->setProduction((bool) getenv('IS_PRODUCTION'));
         $account->setLoginType($account::LOGIN_HOSTED_SPIS);
-        $account->setPublicKey(getenv('CERT_PUB'));
-        $account->setPrivateKey(getenv('CERT_PRIV'));
+        $account->setPublicKey(file_get_contents(__DIR__ . '/../../.data/cert.crt'));
+        $account->setPrivateKey(file_get_contents(__DIR__ . '/../../.data/cert.pem'));
         $account->setLoginName(getenv('OVM_LOGIN_USER'));
         $account->setPassword(getenv('OVM_PASSWORD_USER'));
         $account->setPrivateKeyPassPhrase(getenv('CERT_PASSPHRASE'));

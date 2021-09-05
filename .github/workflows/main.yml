@@ -91,7 +91,11 @@ jobs:
           php_version: "${{ matrix.php-version }}"
           args: "${{ env.composer-install-args }}"
 
-      - run: cp src/cacert.pem.dist src/cacert.pem
+      - run: |
+          cp src/cacert.pem.dist src/cacert.pem
+          mkdir .data
+          echo ${{ secrets.CERT_PRIV }} | base64 -d > .data/cert.pem
+          echo ${{ secrets.CERT_PUB }} | base64 -d > .data/cert.crt
 
       - name: PHPUnit
         uses: php-actions/phpunit@v3
