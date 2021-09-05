@@ -48,5 +48,4 @@ class DataBoxTest extends TestCase
         self::assertTrue($response->getStatus()->isOk());
         self::assertNull($response->getPasswordExpiry());
     }
-
 }

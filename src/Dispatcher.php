@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 
 namespace TomasKulhanek\CzechDataBox;
-
 
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -16,7 +17,6 @@ use TomasKulhanek\CzechDataBox\Exception\SystemExclusion;
 
 class Dispatcher implements DispatcherInterface
 {
-
     public const OPERATIONS = 0;
     public const INFO = 1;
     public const SEARCH = 2;
@@ -33,8 +33,7 @@ class Dispatcher implements DispatcherInterface
         RequestFactoryInterface $requestFactory,
         StreamFactoryInterface $streamFactory,
         UriFactoryInterface $uriFactory
-    )
-    {
+    ) {
         $this->httpClient = $httpClient;
         $this->requestFactory = $requestFactory;
         $this->streamFactory = $streamFactory;

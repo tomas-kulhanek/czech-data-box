@@ -15,7 +15,6 @@ use TomasKulhanek\CzechDataBox\Utils;
 
 class Connector
 {
-
     private Dispatcher $dispatcher;
 
     private SerializerInterface $serializer;
@@ -229,7 +228,7 @@ class Connector
     }
 
     /**
-     * @template T of IResponse
+     * @template T of DTO\Response\IResponse
      * @param Account $account
      * @param int $serviceType
      * @param DTO\Request\IRequest $request

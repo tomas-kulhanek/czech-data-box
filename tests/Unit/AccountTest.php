@@ -9,6 +9,8 @@ use TomasKulhanek\CzechDataBox\Account;
 
 class AccountTest extends TestCase
 {
+    use GeneratePkcs;
+
     private const TEST_PASS_PHRASE = 'isds';
 
     public function testCertificateLogin(): void
@@ -38,26 +40,5 @@ class AccountTest extends TestCase
         self::assertSame($account->getPrivateKeyPassPhrase(), $passPhrase);
         self::assertSame($account->getPrivateKey(), $cert_array['pkey']);
         self::assertSame($account->getPublicKey(), $cert_array['cert']);
-    }
-
-    private function generateP12Certificate(string $passPhrase): string
-    {
-        $Info = [
-            "countryName" => "CZ",
-            "stateOrProvinceName" => "Prague",
-            "localityName" => "Prague",
-            "organizationName" => "Tomáš Kulhánek",
-            "organizationalUnitName" => "Test Department",
-            "commonName" => "Tester",
-            "emailAddress" => "jsem+tests@tomaskulhanek.cz",
-        ];
-
-        $Private_Key = null;
-        $Unsigned_Cert = openssl_csr_new($Info, $Private_Key);
-
-        $Signed_Cert = openssl_csr_sign($Unsigned_Cert, null, $Private_Key, 365);
-
-        openssl_pkcs12_export_to_file($Signed_Cert, "test.p12", $Private_Key, $passPhrase);
-        return file_get_contents(__DIR__ . "/../_data/test.p12");
     }
 }
