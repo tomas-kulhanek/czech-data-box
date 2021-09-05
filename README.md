@@ -1,8 +1,11 @@
 # PHP knihovna pro komunikaci s Informačním systémem datových schránek (ISDS) Ministerstva vnitra
 
-![CRAN](https://img.shields.io/cran/l/devtools.svg)
-![PyPI - License](https://img.shields.io/pypi/l/Django.svg)
-[![Latest stable](https://img.shields.io/packagist/v/tomas-kulhanek/czech-data-box.svg)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
+![DEV branch workflows](https://github.com/tomas-kulhanek/czech-data-box/actions/workflows/main.yml/badge.svg)
+[![Latest Stable Version](https://poser.pugx.org/tomas-kulhanek/czech-data-box/v/stable)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
+[![Total Downloads](https://poser.pugx.org/tomas-kulhanek/czech-data-box/downloads)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
+[![Monthly Downloads](https://poser.pugx.org/tomas-kulhanek/czech-data-box/d/monthly)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
+[![License](https://poser.pugx.org/tomas-kulhanek/czech-data-box/license)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
+
 
 ⚠ **POZOR!!** Pokud implementujete napojení na ISDS, je potřeba aby jste se řídili dle [PROVOZNÍHO ŘÁDU](https://www.datoveschranky.info/dulezite-informace/provozni-rad-isds)⚠
 ## Instalace
@@ -15,6 +18,16 @@ Pro instalaci balíčku je nutné jej instalovat skrze [composer](https://getcom
 composer require tomas-kulhanek/czech-data-box
 ```
 
+Dále je potřeba využít nějakého klienta. Buď je možné využít [Guzzle](https://github.com/guzzle/guzzle/) nebo [Symfony Http client](https://github.com/symfony/http-client)
+```bash
+composer require tomas-kulhanek/czech-data-box guzzlehttp/guzzle:^7.0
+```
+```bash
+composer require tomas-kulhanek/czech-data-box symfony/http-client
+```
+
+Pokud je potřeba implementovat vlastního klienta, je potřeba implementovat rozhraní `TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface` a zajistit správné nastavení hlaviček nebo SSL klientských certifikátů.
+
 ## Popis
 Tato knihovna slouží k základní komunikaci s Informačním systémem datových scrhánek [ISDS](https://mojedatovaschranka.cz) nebo [ISDS test](https://czebox.cz)
 
@@ -24,7 +37,7 @@ Veškeré ukázky, jak pracovat s knihovnou naleznete v examples. Jediná podmí
 Pro každou operaci je potřebné zadat přístupové údaje
 ```php
 <?php
-$account = new \TomasKulhanek\CzechDataBox\Connector\Account();
+$account = new \TomasKulhanek\CzechDataBox\Account();
 try {
     $account->setPassword('mojeTajneHeslo')
         ->setLoginName('mujLogin')
@@ -34,8 +47,31 @@ try {
     die($exception->getMessage());
 }
 ```
-Prostředí ke kterému se připojuje je definováno pomocí ``\TomasKulhanek\CzechDataBox\Connector\Account::isProduction()``
+Prostředí ke kterému se připojuje je definováno pomocí ``\TomasKulhanek\CzechDataBox\Account::isProduction()``
 
+## Využití s Symfony HTPP client
+### Instalace
+```bash
+composer require tomas-kulhanek/czech-data-box symfony/http-client
+```
+#### Využitví
+```php
+$serializer = \TomasKulhanek\Serializer\SerializerFactory::create();
+$guzzleProvider = \TomasKulhanek\CzechDataBox\Provider\SymfonyClientProvider::create();
+$connector = new \TomasKulhanek\CzechDataBox\Connector($serializer, $guzzleProvider);
+```
+
+## Využití s Guzzle 7
+### Instalace
+```bash
+composer require tomas-kulhanek/czech-data-box guzzlehttp/guzzle:^7.0
+```
+#### Využitví 
+```php
+$serializer = \TomasKulhanek\Serializer\SerializerFactory::create();
+$guzzleProvider = \TomasKulhanek\CzechDataBox\Provider\GuzzleClientProvider::create();
+$connector = new \TomasKulhanek\CzechDataBox\Connector($serializer, $guzzleProvider);
+```
 ## Pomoc a řešní chyb
 
 V případě že potřebujete poradit, nebo při implementaci Vám třída zobrazuje chybu vytvořte prosím nové Issues.

@@ -1,13 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace TomasKulhanek\CzechDataBox\Traits;
 
-use TomasKulhanek\Serializer\Utils\SplFileInfo;
 use JMS\Serializer\Annotation as Serializer;
+use TomasKulhanek\Serializer\Utils\SplFileInfo;
 
 trait Signature
 {
-
     /**
      * @Serializer\SkipWhenEmpty
      * @Serializer\Type("base64File")
@@ -26,5 +27,4 @@ trait Signature
         $this->signature = $signature;
         return $this;
     }
-
 }

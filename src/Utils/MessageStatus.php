@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace TomasKulhanek\CzechDataBox\Utils;
 
@@ -6,7 +8,6 @@ use TomasKulhanek\CzechDataBox\Exception\BadOptionException;
 
 class MessageStatus
 {
-
     public const FILTER_ALL = -1;
     public const FILTER_SUBMITTED = 1;
     public const FILTER_STAMPED = 2;
@@ -80,5 +81,4 @@ class MessageStatus
         }
         throw new BadOptionException(sprintf('The value %s is not allowed', $type));
     }
-
 }

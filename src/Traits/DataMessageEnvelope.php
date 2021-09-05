@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace TomasKulhanek\CzechDataBox\Traits;
 
@@ -6,7 +8,6 @@ use JMS\Serializer\Annotation as Serializer;
 
 trait DataMessageEnvelope
 {
-
     use DataMessageEnvelopeSub;
     use DataMessageId;
 
@@ -174,5 +175,4 @@ trait DataMessageEnvelope
     {
         $this->toHands = $toHands;
     }
-
 }

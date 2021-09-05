@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace TomasKulhanek\CzechDataBox\Traits;
 
@@ -6,7 +8,6 @@ use JMS\Serializer\Annotation as Serializer;
 
 trait Dummy
 {
-
     /**
      * @Serializer\SkipWhenEmpty
      * @Serializer\Type("string")
@@ -25,5 +26,4 @@ trait Dummy
         $this->dummy = $dummy;
         return $this;
     }
-
 }

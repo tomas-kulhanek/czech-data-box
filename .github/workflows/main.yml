@@ -1,0 +1,120 @@
+name: "main"
+
+on:
+  pull_request:
+  push:
+  schedule:
+    - cron: "0 7 * * 1"
+
+env:
+  extensions: "xml mbstring curl openssl dom xdebug"
+  composer-install-args: "--no-progress --no-interaction --prefer-dist --no-scripts"
+
+jobs:
+  qa:
+    name: "Quality assurance"
+    runs-on: "${{ matrix.operating-system }}"
+
+    strategy:
+      matrix:
+        include:
+          - operating-system: "ubuntu-latest"
+            php-version: "8.0"
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "${{ matrix.php-version }}"
+          coverage: none
+
+      - uses: php-actions/composer@v6
+        with:
+          php_version: "${{ matrix.php-version }}"
+          args:  "${{ env.composer-install-args }}"
+      - run: vendor/bin/ecs check src tests
+
+  static-analysis:
+    name: "Static analysis"
+    runs-on: "${{ matrix.operating-system }}"
+
+    strategy:
+      matrix:
+        include:
+          - operating-system: "ubuntu-latest"
+            php-version: "8.0"
+          - operating-system: "ubuntu-latest"
+            php-version: "7.4"
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "${{ matrix.php-version }}"
+          coverage: none
+
+      - uses: php-actions/composer@v6
+        with:
+          php_version: "${{ matrix.php-version }}"
+          args: "${{ env.composer-install-args }}"
+
+      - name: PHPStan Static Analysis
+        uses: php-actions/phpstan@v2
+        with:
+          configuration: phpstan.neon
+          php_version: "${{ matrix.php-version }}"
+
+  tests:
+    name: "Tests"
+    runs-on: "${{ matrix.operating-system }}"
+
+    strategy:
+      matrix:
+        include:
+          - operating-system: "ubuntu-latest"
+            php-version: "8.0"
+          - operating-system: "ubuntu-latest"
+            php-version: "7.4"
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "${{ matrix.php-version }}"
+          coverage: none
+
+      - uses: php-actions/composer@v6
+        with:
+          php_version: "${{ matrix.php-version }}"
+          args: "${{ env.composer-install-args }}"
+
+      - run: |
+          cp src/cacert.pem.dist src/cacert.pem
+          mkdir .data
+          echo ${{ secrets.CERT_PRIV }} | base64 -d > .data/cert.pem
+          echo ${{ secrets.CERT_PUB }} | base64 -d > .data/cert.crt
+
+      - name: PHPUnit
+        uses: php-actions/phpunit@v3
+        env:
+          FO_ID_DS: '${{ secrets.FO_ID_DS }}'
+          FO_LOGIN_USER: '${{ secrets.FO_LOGIN_USER }}'
+          FO_PASSWORD_USER: '${{ secrets.FO_PASSWORD_USER }}'
+          OVM_ID_DS: '${{ secrets.OVM_ID_DS }}'
+          OVM_LOGIN_USER: '${{ secrets.OVM_LOGIN_USER }}'
+          OVM_PASSWORD_USER: '${{ secrets.OVM_PASSWORD_USER }}'
+          IS_PRODUCTION: '0'
+          CERT_PRIV: '${{ secrets.CERT_PRIV }}'
+          CERT_PUB: '${{ secrets.CERT_PUB }}'
+          CERT_PASSPHRASE: '${{ secrets.CERT_PASSPHRASE }}'
+          PFO_ID_DS: '${{ secrets.PFO_ID_DS }}'
+          PFO_LOGIN_USER: '${{ secrets.PFO_LOGIN_USER }}'
+          PFO_PASSWORD_USER: '${{ secrets.PFO_PASSWORD_USER }}'
+        with:
+          bootstrap: vendor/autoload.php
+          configuration: phpunit.xml
+          php_version: "${{ matrix.php-version }}"
+          php_extensions: "${{ env.extensions }}"

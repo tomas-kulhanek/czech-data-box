@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace TomasKulhanek\CzechDataBox\Traits;
 
@@ -6,7 +8,6 @@ use JMS\Serializer\Annotation as Serializer;
 
 trait DataBoxId
 {
-
     /**
      * @Serializer\Type("string")
      * @Serializer\XmlElement(cdata=false)
@@ -24,5 +25,4 @@ trait DataBoxId
         $this->dataBoxId = $dataBoxId;
         return $this;
     }
-
 }
