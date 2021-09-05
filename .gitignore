@@ -5,3 +5,4 @@ vendor
 .phpunit.result.cache
 tests/_data/test.p12
 tests/_reports
+.data
