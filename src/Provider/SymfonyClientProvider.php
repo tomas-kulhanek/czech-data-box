@@ -77,6 +77,9 @@ class SymfonyClientProvider implements ClientProviderInterface
 
         $requestOptions['headers'] = $this->getHeaders($account);
         $requestOptions['body'] = $xmlBody;
+        if (file_exists(__DIR__ . '/../cacert.pem')) {
+            $requestOptions['cafile'] = __DIR__ . '/../cacert.pem';
+        }
 
         try {
             return $this->client->request(

@@ -83,6 +83,9 @@ class GuzzleClientProvider implements ClientProviderInterface
 
         $requestOptions[\GuzzleHttp\RequestOptions::HEADERS] = $this->getHeaders();
         $requestOptions[\GuzzleHttp\RequestOptions::BODY] = $xmlBody;
+        if (file_exists(__DIR__ . '/../cacert.pem')) {
+            $requestOptions['cafile'] = __DIR__ . '/../cacert.pem';
+        }
 
         try {
             return $this->client->request(

@@ -91,6 +91,8 @@ jobs:
           php_version: "${{ matrix.php-version }}"
           args: "${{ env.composer-install-args }}"
 
+      - run: cp src/cacert.pem.dist src/cacert.pem
+
       - name: PHPUnit
         uses: php-actions/phpunit@v3
         env:
@@ -100,7 +102,13 @@ jobs:
           OVM_ID_DS: '${{ secrets.OVM_ID_DS }}'
           OVM_LOGIN_USER: '${{ secrets.OVM_LOGIN_USER }}'
           OVM_PASSWORD_USER: '${{ secrets.OVM_PASSWORD_USER }}'
-          IS_PRODUCTION: '${{ secrets.IS_PRODUCTION }}'
+          IS_PRODUCTION: '0'
+          CERT_PRIV: '${{ secrets.CERT_PRIV }}'
+          CERT_PUB: '${{ secrets.CERT_PUB }}'
+          CERT_PASSPHRASE: '${{ secrets.CERT_PASSPHRASE }}'
+          PFO_ID_DS: '${{ secrets.PFO_ID_DS }}'
+          PFO_LOGIN_USER: '${{ secrets.PFO_LOGIN_USER }}'
+          PFO_PASSWORD_USER: '${{ secrets.PFO_PASSWORD_USER }}'
         with:
           bootstrap: vendor/autoload.php
           configuration: phpunit.xml

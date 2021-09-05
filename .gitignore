@@ -2,7 +2,6 @@
 .env
 composer.lock
 vendor
-/src/Cafile.crt
 .phpunit.result.cache
 tests/_data/test.p12
 tests/_reports
