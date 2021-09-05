@@ -3,4 +3,6 @@
 composer.lock
 vendor
 /src/Cafile.crt
-tests/.phpunit.result.cache
+.phpunit.result.cache
+tests/_data/test.p12
+tests/_reports

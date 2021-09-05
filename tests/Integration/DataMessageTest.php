@@ -16,7 +16,7 @@ class DataMessageTest extends TestCase
 
     public function testAuthenticateMessage(): void
     {
-        $client = $this->createConnector();
+        $client = $this->createGuzzleConnector();
         $message = new DTO\Request\AuthenticateMessage();
         $message->setDataMessage($this->getOriginalMessage());
         $account = $this->createFOAccount();
@@ -27,7 +27,7 @@ class DataMessageTest extends TestCase
 
     public function testVerifyMessage(): void
     {
-        $client = $this->createConnector();
+        $client = $this->createGuzzleConnector();
         $account = $this->createFOAccount();
         $verifyMessage = new DTO\Request\VerifyMessage();
         $verifyMessage->setDataMessageId('7903783');
@@ -41,15 +41,15 @@ class DataMessageTest extends TestCase
         $recipient = new DTO\Recipient();
         $recipient->setDataBoxId($this->createOVMAccount()->getDataBoxId());
         $newMessageEnvelope->addRecipient($recipient);
-        $response = $this->createConnector()->createMessage($this->createFOAccount(), $newMessageEnvelope);
+        $response = $this->createGuzzleConnector()->createMessage($this->createFOAccount(), $newMessageEnvelope);
 
         self::assertTrue($response->isOk(), $response->getStatus()->getMessage());
     }
 
     public function testMessageDownload(): void
     {
-        $ovmAccount = $this->createOVMAccount();
-        $client = $this->createConnector();
+        $ovmAccount = $this->createOvmCertAccount();
+        $client = $this->createGuzzleConnector();
 
         $listrec = new DTO\Request\GetListOfReceivedMessages();
         $listrec->setStatusFilter(Utils\MessageStatus::getDecEntryForStatus(Utils\MessageStatus::FILTER_ALL))
@@ -59,7 +59,7 @@ class DataMessageTest extends TestCase
         $listrecRes = $client->getListOfReceivedMessages($ovmAccount, $listrec);
         self::assertTrue($listrecRes->getStatus()->isOk(), $listrecRes->getStatus()->getMessage());
 
-        $client = $this->createConnector();
+        $client = $this->createGuzzleConnector();
         $message = new DTO\Request\MarkMessageAsDownloaded();
         $message->setDataMessageId($listrecRes->getRecord()[0]->getDataMessageId());
         $response = $client->markMessageAsDownloaded($ovmAccount, $message);
@@ -76,8 +76,8 @@ class DataMessageTest extends TestCase
 
     public function testSignedMessageDownload(): void
     {
-        $ovmAccount = $this->createOVMAccount();
-        $client = $this->createConnector();
+        $ovmAccount = $this->createOvmCertAccount();
+        $client = $this->createGuzzleConnector();
 
         $listrec = new DTO\Request\GetListOfReceivedMessages();
         $listrec->setStatusFilter(Utils\MessageStatus::getDecEntryForStatus(Utils\MessageStatus::FILTER_ALL))
@@ -87,7 +87,7 @@ class DataMessageTest extends TestCase
         $listrecRes = $client->getListOfReceivedMessages($ovmAccount, $listrec);
         self::assertTrue($listrecRes->getStatus()->isOk(), $listrecRes->getStatus()->getMessage());
 
-        $client = $this->createConnector();
+        $client = $this->createGuzzleConnector();
         $message = new DTO\Request\MarkMessageAsDownloaded();
         $message->setDataMessageId($listrecRes->getRecord()[0]->getDataMessageId());
         $response = $client->markMessageAsDownloaded($ovmAccount, $message);
@@ -104,7 +104,7 @@ class DataMessageTest extends TestCase
     public function testSignedSentMessageDownload(): void
     {
         $account = $this->createFOAccount();
-        $client = $this->createConnector();
+        $client = $this->createGuzzleConnector();
 
         $listrec = new DTO\Request\GetListOfSentMessages();
         $listrec->setStatusFilter(Utils\MessageStatus::getDecEntryForStatus(Utils\MessageStatus::FILTER_ALL))
@@ -114,7 +114,7 @@ class DataMessageTest extends TestCase
         $listrecRes = $client->getListOfSentMessages($account, $listrec);
         self::assertTrue($listrecRes->getStatus()->isOk(), $listrecRes->getStatus()->getMessage());
 
-        $client = $this->createConnector();
+        $client = $this->createGuzzleConnector();
 
         $request = new DTO\Request\SignedSentMessageDownload();
         $request->setDataMessageId($listrecRes->getRecord()[0]->getDataMessageId());
@@ -127,7 +127,7 @@ class DataMessageTest extends TestCase
     public function testResignIsdsDocument(): void
     {
         $ovmAccount = $this->createFOAccount();
-        $client = $this->createConnector();
+        $client = $this->createGuzzleConnector();
 
         $request = new DTO\Request\ResignISDSDocument();
         $request->setDocument($this->getOriginalMessage());
@@ -139,8 +139,8 @@ class DataMessageTest extends TestCase
 
     public function testMessageEnvelopeDownload(): void
     {
-        $account = $this->createOVMAccount();
-        $client = $this->createConnector();
+        $account = $this->createOvmCertAccount();
+        $client = $this->createGuzzleConnector();
 
         $listrec = new DTO\Request\GetListOfReceivedMessages();
         $listrec->setStatusFilter(Utils\MessageStatus::getDecEntryForStatus(Utils\MessageStatus::FILTER_ALL))
@@ -150,7 +150,7 @@ class DataMessageTest extends TestCase
         $listrecRes = $client->getListOfReceivedMessages($account, $listrec);
         self::assertTrue($listrecRes->getStatus()->isOk(), $listrecRes->getStatus()->getMessage());
 
-        $client = $this->createConnector();
+        $client = $this->createGuzzleConnector();
 
         $request = new DTO\Request\MessageEnvelopeDownload();
         $request->setDataMessageId($listrecRes->getRecord()[0]->getDataMessageId());
@@ -162,8 +162,8 @@ class DataMessageTest extends TestCase
 
     public function testMarkMessageAsDownloaded(): void
     {
-        $account = $this->createOVMAccount();
-        $client = $this->createConnector();
+        $account = $this->createOvmCertAccount();
+        $client = $this->createGuzzleConnector();
 
         $listrec = new DTO\Request\GetListOfReceivedMessages();
         $listrec->setStatusFilter(Utils\MessageStatus::getDecEntryForStatus(Utils\MessageStatus::FILTER_ALL))
@@ -173,7 +173,7 @@ class DataMessageTest extends TestCase
         $listrecRes = $client->getListOfReceivedMessages($account, $listrec);
         self::assertTrue($listrecRes->getStatus()->isOk(), $listrecRes->getStatus()->getMessage());
 
-        $client = $this->createConnector();
+        $client = $this->createGuzzleConnector();
 
         $request = new DTO\Request\MarkMessageAsDownloaded();
         $request->setDataMessageId($listrecRes->getRecord()[0]->getDataMessageId());
@@ -186,7 +186,7 @@ class DataMessageTest extends TestCase
     public function testDeliveryInfo(): void
     {
         $account = $this->createFOAccount();
-        $client = $this->createConnector();
+        $client = $this->createGuzzleConnector();
 
         $listrec = new DTO\Request\GetListOfSentMessages();
         $listrec->setStatusFilter(Utils\MessageStatus::getDecEntryForStatus(Utils\MessageStatus::FILTER_ALL))
@@ -196,7 +196,7 @@ class DataMessageTest extends TestCase
         $listrecRes = $client->getListOfSentMessages($account, $listrec);
         self::assertTrue($listrecRes->getStatus()->isOk(), $listrecRes->getStatus()->getMessage());
 
-        $client = $this->createConnector();
+        $client = $this->createGuzzleConnector();
 
         $request = new DTO\Request\GetDeliveryInfo();
         $request->setDataMessageId($listrecRes->getRecord()[0]->getDataMessageId());
@@ -209,7 +209,7 @@ class DataMessageTest extends TestCase
     public function testSignedDeliveryInfo(): void
     {
         $account = $this->createFOAccount();
-        $client = $this->createConnector();
+        $client = $this->createGuzzleConnector();
 
         $listrec = new DTO\Request\GetListOfSentMessages();
         $listrec->setStatusFilter(Utils\MessageStatus::getDecEntryForStatus(Utils\MessageStatus::FILTER_ALL))
@@ -219,7 +219,7 @@ class DataMessageTest extends TestCase
         $listrecRes = $client->getListOfSentMessages($account, $listrec);
         self::assertTrue($listrecRes->getStatus()->isOk(), $listrecRes->getStatus()->getMessage());
 
-        $client = $this->createConnector();
+        $client = $this->createGuzzleConnector();
 
         $request = new DTO\Request\GetSignedDeliveryInfo();
         $request->setDataMessageId($listrecRes->getRecord()[0]->getDataMessageId());
@@ -231,8 +231,8 @@ class DataMessageTest extends TestCase
 
     public function testMessageStateChanges(): void
     {
-        $account = $this->createOVMAccount();
-        $client = $this->createConnector();
+        $account = $this->createOvmCertAccount();
+        $client = $this->createGuzzleConnector();
 
         $request = new DTO\Request\GetMessageStateChanges();
         $request

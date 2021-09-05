@@ -14,8 +14,8 @@ class DataBoxTest extends TestCase
 
     public function testOwnerInfoFromLogin(): void
     {
-        $account = $this->createFOAccount();
-        $response = $this->createConnector()
+        $account = $this->createFOCertAccount();
+        $response = $this->createGuzzleConnector()
             ->getOwnerInfoFromLogin($account);
 
         self::assertTrue($response->getStatus()->isOk());
@@ -42,7 +42,7 @@ class DataBoxTest extends TestCase
     public function testPasswordExpirationInfo(): void
     {
         $account = $this->createFOAccount();
-        $response = $this->createConnector()
+        $response = $this->createGuzzleConnector()
             ->getPasswordExpirationInfo($account);
 
         self::assertTrue($response->getStatus()->isOk());

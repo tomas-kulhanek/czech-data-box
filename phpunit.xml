@@ -3,10 +3,10 @@
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
     <coverage>
         <include>
-            <directory suffix=".php">../../src</directory>
+            <directory suffix=".php">./src</directory>
         </include>
         <report>
-            <html outputDirectory="../../tests/reports" lowUpperBound="35" highLowerBound="70"/>
+            <html outputDirectory="./tests/_reports"/>
             <text outputFile="php://stdout" showUncoveredFiles="true"/>
         </report>
     </coverage>

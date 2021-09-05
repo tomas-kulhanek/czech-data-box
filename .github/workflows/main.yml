@@ -103,6 +103,6 @@ jobs:
           IS_PRODUCTION: '${{ secrets.IS_PRODUCTION }}'
         with:
           bootstrap: vendor/autoload.php
-          configuration: tests/phpunit.xml
+          configuration: phpunit.xml
           php_version: "${{ matrix.php-version }}"
           php_extensions: "${{ env.extensions }}"

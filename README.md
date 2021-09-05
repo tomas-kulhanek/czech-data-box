@@ -18,6 +18,16 @@ Pro instalaci balíčku je nutné jej instalovat skrze [composer](https://getcom
 composer require tomas-kulhanek/czech-data-box
 ```
 
+Dále je potřeba využít nějakého klienta. Buď je možné využít [Guzzle](https://github.com/guzzle/guzzle/) nebo [Symfony Http client](https://github.com/symfony/http-client)
+```bash
+composer require tomas-kulhanek/czech-data-box guzzlehttp/guzzle:^7.0
+```
+```bash
+composer require tomas-kulhanek/czech-data-box symfony/http-client
+```
+
+Pokud je potřeba implementovat vlastního klienta, je potřeba implementovat rozhraní `TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface` a zajistit správné nastavení hlaviček nebo SSL klientských certifikátů.
+
 ## Popis
 Tato knihovna slouží k základní komunikaci s Informačním systémem datových scrhánek [ISDS](https://mojedatovaschranka.cz) nebo [ISDS test](https://czebox.cz)
 
@@ -39,6 +49,29 @@ try {
 ```
 Prostředí ke kterému se připojuje je definováno pomocí ``\TomasKulhanek\CzechDataBox\Account::isProduction()``
 
+## Využití s Symfony HTPP client
+### Instalace
+```bash
+composer require tomas-kulhanek/czech-data-box symfony/http-client
+```
+#### Využitví
+```php
+$serializer = \TomasKulhanek\Serializer\SerializerFactory::create();
+$guzzleProvider = \TomasKulhanek\CzechDataBox\Provider\SymfonyClientProvider::create();
+$connector = new \TomasKulhanek\CzechDataBox\Connector($serializer, $guzzleProvider);
+```
+
+## Využití s Guzzle 7
+### Instalace
+```bash
+composer require tomas-kulhanek/czech-data-box guzzlehttp/guzzle:^7.0
+```
+#### Využitví 
+```php
+$serializer = \TomasKulhanek\Serializer\SerializerFactory::create();
+$guzzleProvider = \TomasKulhanek\CzechDataBox\Provider\GuzzleClientProvider::create();
+$connector = new \TomasKulhanek\CzechDataBox\Connector($serializer, $guzzleProvider);
+```
 ## Pomoc a řešní chyb
 
 V případě že potřebujete poradit, nebo při implementaci Vám třída zobrazuje chybu vytvořte prosím nové Issues.

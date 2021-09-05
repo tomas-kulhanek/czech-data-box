@@ -11,88 +11,90 @@ use DOMXPath;
 use JMS\Serializer\SerializerInterface;
 use TomasKulhanek\CzechDataBox\DTO;
 use TomasKulhanek\CzechDataBox\Exception;
+use TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface;
+use TomasKulhanek\CzechDataBox\Provider\EndpointProvider;
 use TomasKulhanek\CzechDataBox\Utils;
 
 class Connector
 {
-    private Dispatcher $dispatcher;
+    private ClientProviderInterface $provider;
 
     private SerializerInterface $serializer;
 
-    public function __construct(SerializerInterface $serializer, Dispatcher $dispatcher)
+    public function __construct(SerializerInterface $serializer, ClientProviderInterface $provider)
     {
-        $this->dispatcher = $dispatcher;
+        $this->provider = $provider;
         $this->serializer = $serializer;
     }
 
     public function findDataBox(Account $account, DTO\Request\FindDataBox $input): DTO\Response\FindDataBox
     {
-        return $this->send($account, Dispatcher::SEARCH, $input, DTO\Response\FindDataBox::class);
+        return $this->send($account, EndpointProvider::SEARCH, $input, DTO\Response\FindDataBox::class);
     }
 
     public function pdzInfo(Account $account, DTO\Request\PDZInfo $input): DTO\Response\PDZInfo
     {
-        return $this->send($account, Dispatcher::SEARCH, $input, DTO\Response\PDZInfo::class);
+        return $this->send($account, EndpointProvider::SEARCH, $input, DTO\Response\PDZInfo::class);
     }
 
     public function dataBoxCreditInfo(Account $account, DTO\Request\DataBoxCreditInfo $input): DTO\Response\DataBoxCreditInfo
     {
-        return $this->send($account, Dispatcher::SEARCH, $input, DTO\Response\DataBoxCreditInfo::class);
+        return $this->send($account, EndpointProvider::SEARCH, $input, DTO\Response\DataBoxCreditInfo::class);
     }
 
     public function isdsSearch3(Account $account, DTO\Request\ISDSSearch3 $input): DTO\Response\ISDSSearch3
     {
-        return $this->send($account, Dispatcher::SEARCH, $input, DTO\Response\ISDSSearch3::class);
+        return $this->send($account, EndpointProvider::SEARCH, $input, DTO\Response\ISDSSearch3::class);
     }
 
     public function getDataBoxActivityStatus(Account $account, DTO\Request\GetDataBoxActivityStatus $input): DTO\Response\GetDataBoxActivityStatus
     {
-        return $this->send($account, Dispatcher::SEARCH, $input, DTO\Response\GetDataBoxActivityStatus::class);
+        return $this->send($account, EndpointProvider::SEARCH, $input, DTO\Response\GetDataBoxActivityStatus::class);
     }
 
     public function dtInfo(Account $account, DTO\Request\DTInfo $input): DTO\Response\DTInfo
     {
-        return $this->send($account, Dispatcher::SEARCH, $input, DTO\Response\DTInfo::class);
+        return $this->send($account, EndpointProvider::SEARCH, $input, DTO\Response\DTInfo::class);
     }
 
     public function pdzSendInfo(Account $account, DTO\Request\PDZSendInfo $input): DTO\Response\PDZSendInfo
     {
-        return $this->send($account, Dispatcher::SEARCH, $input, DTO\Response\PDZSendInfo::class);
+        return $this->send($account, EndpointProvider::SEARCH, $input, DTO\Response\PDZSendInfo::class);
     }
 
     public function findPersonalDataBox(Account $account, DTO\Request\FindPersonalDataBox $input): DTO\Response\FindPersonalDataBox
     {
-        return $this->send($account, Dispatcher::SEARCH, $input, DTO\Response\FindPersonalDataBox::class);
+        return $this->send($account, EndpointProvider::SEARCH, $input, DTO\Response\FindPersonalDataBox::class);
     }
 
     public function getDataBoxList(Account $account, DTO\Request\GetDataBoxList $input): DTO\Response\GetDataBoxList
     {
-        return $this->send($account, Dispatcher::SEARCH, $input, DTO\Response\GetDataBoxList::class);
+        return $this->send($account, EndpointProvider::SEARCH, $input, DTO\Response\GetDataBoxList::class);
     }
 
     public function checkDataBox(Account $account, DTO\Request\CheckDataBox $input): DTO\Response\CheckDataBox
     {
-        return $this->send($account, Dispatcher::SEARCH, $input, DTO\Response\CheckDataBox::class);
+        return $this->send($account, EndpointProvider::SEARCH, $input, DTO\Response\CheckDataBox::class);
     }
 
     public function getOwnerInfoFromLogin(Account $account): DTO\Response\GetOwnerInfoFromLogin
     {
-        return $this->send($account, Dispatcher::ACCESS, (new DTO\Request\GetOwnerInfoFromLogin()), DTO\Response\GetOwnerInfoFromLogin::class);
+        return $this->send($account, EndpointProvider::ACCESS, (new DTO\Request\GetOwnerInfoFromLogin()), DTO\Response\GetOwnerInfoFromLogin::class);
     }
 
     public function changeIsdsPassword(Account $account, DTO\Request\ChangeISDSPassword $input): DTO\Response\ChangeISDSPassword
     {
-        return $this->send($account, Dispatcher::ACCESS, $input, DTO\Response\ChangeISDSPassword::class);
+        return $this->send($account, EndpointProvider::ACCESS, $input, DTO\Response\ChangeISDSPassword::class);
     }
 
     public function getPasswordExpirationInfo(Account $account): DTO\Response\GetPasswordInfo
     {
-        return $this->send($account, Dispatcher::ACCESS, (new DTO\Request\GetPasswordInfo()), DTO\Response\GetPasswordInfo::class);
+        return $this->send($account, EndpointProvider::ACCESS, (new DTO\Request\GetPasswordInfo()), DTO\Response\GetPasswordInfo::class);
     }
 
     public function authenticateMessage(Account $account, DTO\Request\AuthenticateMessage $input): DTO\Response\AuthenticateMessage
     {
-        return $this->send($account, Dispatcher::OPERATIONS, $input, DTO\Response\AuthenticateMessage::class);
+        return $this->send($account, EndpointProvider::OPERATIONS, $input, DTO\Response\AuthenticateMessage::class);
     }
 
     /**
@@ -100,7 +102,7 @@ class Connector
      */
     public function verifyMessage(Account $account, DTO\Request\VerifyMessage $input): DTO\Response\VerifyMessage
     {
-        return $this->send($account, Dispatcher::INFO, $input, DTO\Response\VerifyMessage::class);
+        return $this->send($account, EndpointProvider::INFO, $input, DTO\Response\VerifyMessage::class);
     }
 
     public function createMessage(Account $account, DTO\Request\CreateMessage $input): DTO\Response\CreateMessage
@@ -128,62 +130,62 @@ class Connector
         if (empty($input->getEnvelope()->getAnnotation())) {
             throw new Exception\MissingRequiredField('annotation');
         }
-        return $this->send($account, Dispatcher::OPERATIONS, $input, DTO\Response\CreateMessage::class);
+        return $this->send($account, EndpointProvider::OPERATIONS, $input, DTO\Response\CreateMessage::class);
     }
 
     public function messageDownload(Account $account, DTO\Request\MessageDownload $input): DTO\Response\MessageDownload
     {
-        return $this->send($account, Dispatcher::OPERATIONS, $input, DTO\Response\MessageDownload::class);
+        return $this->send($account, EndpointProvider::OPERATIONS, $input, DTO\Response\MessageDownload::class);
     }
 
     public function signedMessageDownload(Account $account, DTO\Request\SignedMessageDownload $input): DTO\Response\SignedMessageDownload
     {
-        return $this->send($account, Dispatcher::OPERATIONS, $input, DTO\Response\SignedMessageDownload::class);
+        return $this->send($account, EndpointProvider::OPERATIONS, $input, DTO\Response\SignedMessageDownload::class);
     }
 
     public function signedSentMessageDownload(Account $account, DTO\Request\SignedSentMessageDownload $input): DTO\Response\SignedSentMessageDownload
     {
-        return $this->send($account, Dispatcher::OPERATIONS, $input, DTO\Response\SignedSentMessageDownload::class);
+        return $this->send($account, EndpointProvider::OPERATIONS, $input, DTO\Response\SignedSentMessageDownload::class);
     }
 
     public function resignIsdsDocument(Account $account, DTO\Request\ResignISDSDocument $input): DTO\Response\ResignISDSDocument
     {
-        return $this->send($account, Dispatcher::OPERATIONS, $input, DTO\Response\ResignISDSDocument::class);
+        return $this->send($account, EndpointProvider::OPERATIONS, $input, DTO\Response\ResignISDSDocument::class);
     }
 
     public function messageEnvelopeDownload(Account $account, DTO\Request\MessageEnvelopeDownload $input): DTO\Response\MessageEnvelopeDownload
     {
-        return $this->send($account, Dispatcher::INFO, $input, DTO\Response\MessageEnvelopeDownload::class);
+        return $this->send($account, EndpointProvider::INFO, $input, DTO\Response\MessageEnvelopeDownload::class);
     }
 
     public function markMessageAsDownloaded(Account $account, DTO\Request\MarkMessageAsDownloaded $input): DTO\Response\MarkMessageAsDownloaded
     {
-        return $this->send($account, Dispatcher::INFO, $input, DTO\Response\MarkMessageAsDownloaded::class);
+        return $this->send($account, EndpointProvider::INFO, $input, DTO\Response\MarkMessageAsDownloaded::class);
     }
 
     public function getDeliveryInfo(Account $account, DTO\Request\GetDeliveryInfo $input): DTO\Response\GetDeliveryInfo
     {
-        return $this->send($account, Dispatcher::INFO, $input, DTO\Response\GetDeliveryInfo::class);
+        return $this->send($account, EndpointProvider::INFO, $input, DTO\Response\GetDeliveryInfo::class);
     }
 
     public function getSignedDeliveryInfo(Account $account, DTO\Request\GetSignedDeliveryInfo $input): DTO\Response\GetSignedDeliveryInfo
     {
-        return $this->send($account, Dispatcher::INFO, $input, DTO\Response\GetSignedDeliveryInfo::class);
+        return $this->send($account, EndpointProvider::INFO, $input, DTO\Response\GetSignedDeliveryInfo::class);
     }
 
     public function getListOfSentMessages(Account $account, DTO\Request\GetListOfSentMessages $input): DTO\Response\GetListOfSentMessages
     {
-        return $this->send($account, Dispatcher::INFO, $input, DTO\Response\GetListOfSentMessages::class);
+        return $this->send($account, EndpointProvider::INFO, $input, DTO\Response\GetListOfSentMessages::class);
     }
 
     public function getListOfReceivedMessages(Account $account, DTO\Request\GetListOfReceivedMessages $input): DTO\Response\GetListOfReceivedMessages
     {
-        return $this->send($account, Dispatcher::INFO, $input, DTO\Response\GetListOfReceivedMessages::class);
+        return $this->send($account, EndpointProvider::INFO, $input, DTO\Response\GetListOfReceivedMessages::class);
     }
 
     public function getMessageStateChanges(Account $account, DTO\Request\GetMessageStateChanges $input): DTO\Response\GetMessageStateChanges
     {
-        return $this->send($account, Dispatcher::INFO, $input, DTO\Response\GetMessageStateChanges::class);
+        return $this->send($account, EndpointProvider::INFO, $input, DTO\Response\GetMessageStateChanges::class);
     }
 
     /**
@@ -191,7 +193,7 @@ class Connector
      */
     public function confirmDelivery(Account $account, DTO\Request\ConfirmDelivery $input): DTO\Response\ConfirmDelivery
     {
-        return $this->send($account, Dispatcher::INFO, $input, DTO\Response\ConfirmDelivery::class);
+        return $this->send($account, EndpointProvider::INFO, $input, DTO\Response\ConfirmDelivery::class);
     }
 
     private function getXmlDocument(?string $xmlContent = null): DOMDocument
@@ -264,8 +266,7 @@ class Connector
             throw new Exception\ConnectionException();
         }
 
-        $response = $this->dispatcher->dispatch($account, $serviceType, $xmlBody);
-        $response = $response->getBody()->getContents();
+        $response = $this->provider->sendRequest($account, $serviceType, $xmlBody);
         $soapResponse = $this->getXmlDocument($response);
         if (empty($soapResponse->documentElement)) {
             throw new Exception\ConnectionException('The response is empty');

@@ -5,10 +5,13 @@ declare(strict_types=1);
 
 namespace TomasKulhanek\Tests\CzechDataBox\Integration;
 
+use GuzzleHttp\Client;
 use JMS\Serializer\SerializerInterface;
-use Symfony\Component\HttpClient\Psr18Client;
+use Symfony\Component\HttpClient\HttpClient;
 use TomasKulhanek\CzechDataBox\Connector;
-use TomasKulhanek\CzechDataBox\Dispatcher;
+use TomasKulhanek\CzechDataBox\Provider\EndpointProvider;
+use TomasKulhanek\CzechDataBox\Provider\GuzzleClientProvider;
+use TomasKulhanek\CzechDataBox\Provider\SymfonyClientProvider;
 use TomasKulhanek\Serializer\SerializerFactory;
 
 trait ConnectorTrait
@@ -18,18 +21,31 @@ trait ConnectorTrait
         return SerializerFactory::create();
     }
 
-    protected function createDispatcher(): Dispatcher
+    protected function createGuzzleProvider(): GuzzleClientProvider
     {
-        $psr18Client = new Psr18Client();
-        return new Dispatcher($psr18Client, $psr18Client, $psr18Client, $psr18Client);
+        $endpointProvider = new EndpointProvider();
+        return new GuzzleClientProvider(new Client(), $endpointProvider);
     }
 
+    protected function createSymfonyProvider(): SymfonyClientProvider
+    {
+        $endpointProvider = new EndpointProvider();
+        return new SymfonyClientProvider(HttpClient::create(), $endpointProvider);
+    }
 
-    private function createConnector(): Connector
+    private function createGuzzleConnector(): Connector
     {
         return new Connector(
             $this->createSerializer(),
-            $this->createDispatcher()
+            $this->createGuzzleProvider()
+        );
+    }
+
+    private function createSymfonyConnector(): Connector
+    {
+        return new Connector(
+            $this->createSerializer(),
+            $this->createSymfonyProvider()
         );
     }
 }
