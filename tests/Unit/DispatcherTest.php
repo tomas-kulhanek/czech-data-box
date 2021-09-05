@@ -63,13 +63,13 @@ class DispatcherTest extends TestCase
         $uriMock = $this->createMock(UriInterface::class);
         $uriFactory->expects($this->once())
             ->method('createUri')
-            ->with(...['uri' => 'https://ws1.czebox.cz/DS/dx'])
+            ->with('https://ws1.czebox.cz/DS/dx')
             ->willReturn($uriMock);
 
         $requestFactory
             ->expects($this->once())
             ->method('createRequest')
-            ->with(...['method' => 'POST', 'uri' => $uriMock])
+            ->with('POST', $uriMock)
             ->willReturn($requestMock);
 
         $clientInterface->expects($this->once())
@@ -127,13 +127,13 @@ class DispatcherTest extends TestCase
         $uriMock = $this->createMock(UriInterface::class);
         $uriFactory->expects($this->once())
             ->method('createUri')
-            ->with(...['uri' => 'https://ws1.czebox.cz/DS/DsManage'])
+            ->with('https://ws1.czebox.cz/DS/DsManage')
             ->willReturn($uriMock);
 
         $requestFactory
             ->expects($this->once())
             ->method('createRequest')
-            ->with(...['method' => 'POST', 'uri' => $uriMock])
+            ->with('POST', $uriMock)
             ->willReturn($requestMock);
 
         $clientInterface->expects($this->once())
@@ -191,13 +191,13 @@ class DispatcherTest extends TestCase
         $uriMock = $this->createMock(UriInterface::class);
         $uriFactory->expects($this->once())
             ->method('createUri')
-            ->with(...['uri' => 'https://ws1.czebox.cz/DS/DsManage'])
+            ->with('https://ws1.czebox.cz/DS/DsManage')
             ->willReturn($uriMock);
 
         $requestFactory
             ->expects($this->once())
             ->method('createRequest')
-            ->with(...['method' => 'POST', 'uri' => $uriMock])
+            ->with('POST', $uriMock)
             ->willReturn($requestMock);
 
         $clientInterface->expects($this->once())
@@ -255,13 +255,13 @@ class DispatcherTest extends TestCase
         $uriMock = $this->createMock(UriInterface::class);
         $uriFactory->expects($this->once())
             ->method('createUri')
-            ->with(...['uri' => 'https://ws1.czebox.cz/DS/df'])
+            ->with('https://ws1.czebox.cz/DS/df')
             ->willReturn($uriMock);
 
         $requestFactory
             ->expects($this->once())
             ->method('createRequest')
-            ->with(...['method' => 'POST', 'uri' => $uriMock])
+            ->with('POST', $uriMock)
             ->willReturn($requestMock);
 
         $clientInterface->expects($this->once())
@@ -319,13 +319,13 @@ class DispatcherTest extends TestCase
         $uriMock = $this->createMock(UriInterface::class);
         $uriFactory->expects($this->once())
             ->method('createUri')
-            ->with(...['uri' => 'https://ws1.czebox.cz/DS/dz'])
+            ->with('https://ws1.czebox.cz/DS/dz')
             ->willReturn($uriMock);
 
         $requestFactory
             ->expects($this->once())
             ->method('createRequest')
-            ->with(...['method' => 'POST', 'uri' => $uriMock])
+            ->with('POST', $uriMock)
             ->willReturn($requestMock);
 
         $clientInterface->expects($this->once())
@@ -382,13 +382,13 @@ class DispatcherTest extends TestCase
         $uriMock = $this->createMock(UriInterface::class);
         $uriFactory->expects($this->once())
             ->method('createUri')
-            ->with(...['uri' => 'https://ws1c.czebox.cz/cert/DS/dz'])
+            ->with('https://ws1c.czebox.cz/cert/DS/dz')
             ->willReturn($uriMock);
 
         $requestFactory
             ->expects($this->once())
             ->method('createRequest')
-            ->with(...['method' => 'POST', 'uri' => $uriMock])
+            ->with('POST', $uriMock)
             ->willReturn($requestMock);
 
         $clientInterface->expects($this->once())
@@ -446,13 +446,13 @@ class DispatcherTest extends TestCase
         $uriMock = $this->createMock(UriInterface::class);
         $uriFactory->expects($this->once())
             ->method('createUri')
-            ->with(...['uri' => 'https://ws1c.czebox.cz/certds/DS/dz'])
+            ->with('https://ws1c.czebox.cz/certds/DS/dz')
             ->willReturn($uriMock);
 
         $requestFactory
             ->expects($this->once())
             ->method('createRequest')
-            ->with(...['method' => 'POST', 'uri' => $uriMock])
+            ->with('POST', $uriMock)
             ->willReturn($requestMock);
 
         $clientInterface->expects($this->once())
@@ -511,13 +511,13 @@ class DispatcherTest extends TestCase
         $uriMock = $this->createMock(UriInterface::class);
         $uriFactory->expects($this->once())
             ->method('createUri')
-            ->with(...['uri' => 'https://ws1c.czebox.cz/hspis/DS/dz'])
+            ->with('https://ws1c.czebox.cz/hspis/DS/dz')
             ->willReturn($uriMock);
 
         $requestFactory
             ->expects($this->once())
             ->method('createRequest')
-            ->with(...['method' => 'POST', 'uri' => $uriMock])
+            ->with('POST', $uriMock)
             ->willReturn($requestMock);
 
         $clientInterface->expects($this->once())
