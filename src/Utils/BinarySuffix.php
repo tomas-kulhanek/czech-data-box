@@ -12,8 +12,6 @@ class BinarySuffix
 
     private int $number;
 
-    private string $locale;
-
     /**
      * @var array<int,string>
      */
@@ -28,16 +26,14 @@ class BinarySuffix
 
     /**
      * @param int $number
-     * @param string $locale
      * @throws InvalidArgumentException
      */
-    public function __construct(int $number, $locale = 'en')
+    public function __construct(int $number)
     {
         if (!is_numeric($number)) {
             throw new InvalidArgumentException('Binary suffix converter accept only numeric values.');
         }
         $this->number = $number;
-        $this->locale = $locale;
         /*
          * Workaround for 32-bit systems which ignore array ordering when
          * dropping values over 2^32-1
@@ -47,12 +43,11 @@ class BinarySuffix
 
     /**
      * @param int $number
-     * @param string $locale
      * @return int|string
      */
-    public static function convert(int $number, $locale = 'cs')
+    public static function convert(int $number)
     {
-        $obj = new self($number, $locale);
+        $obj = new self($number);
         return $obj->doConvert();
     }
 
