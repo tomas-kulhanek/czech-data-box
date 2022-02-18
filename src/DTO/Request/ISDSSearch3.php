@@ -41,7 +41,7 @@ class ISDSSearch3 implements IRequest
      * @Serializer\XmlElement(cdata=false)
      * @Serializer\SerializedName("p:page")
      */
-    private int $page = 1;
+    private int $page = 0;
 
     /**
      * @Serializer\Type("int")
