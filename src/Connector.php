@@ -96,6 +96,11 @@ class Connector
     {
         return $this->send($account, EndpointProvider::OPERATIONS, $input, DTO\Response\AuthenticateMessage::class);
     }
+    
+	public function getUserInfoFromLogin(Account $account): DTO\Response\GetUserInfoFromLogin
+    {
+        return $this->send($account, EndpointProvider::ACCESS, (new DTO\Request\GetUserInfoFromLogin()), DTO\Response\GetUserInfoFromLogin::class);
+    }
 
     /**
      * @deprecated
