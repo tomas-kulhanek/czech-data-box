@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TomasKulhanek\CzechDataBox\DTO\Response;
 
 use JMS\Serializer\Annotation as Serializer;
+use TomasKulhanek\CzechDataBox\DTO\UserInfo;
 use TomasKulhanek\CzechDataBox\DTO\Response\IResponse;
 use TomasKulhanek\CzechDataBox\Traits\DataBoxStatus;
 
@@ -19,10 +20,14 @@ class GetUserInfoFromLogin extends IResponse
     use DataBoxStatus;
 
     /**
-     * @Serializer\SkipWhenEmpty
-     * @Serializer\Type("string")
-     * @Serializer\SerializedName("p:dbUserInfo")
+     * @Serializer\Type("TomasKulhanek\CzechDataBox\DTO\UserInfo")
      * @Serializer\XmlElement(cdata=false)
+     * @Serializer\SerializedName("p:dbUserInfo")
      */
-    protected ?string $userInfo = null;
+    protected UserInfo $userInfo;
+	
+	public function getUserInfo(): UserInfo
+    {
+        return $this->userInfo;
+    }
 }
