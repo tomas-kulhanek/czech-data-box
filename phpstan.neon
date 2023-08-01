@@ -1,9 +1,7 @@
 parameters:
-    excludes_analyse:
-    	- /tests/tmp/*
     level: 8
     paths:
-        - src
+    	- src
     fileExtensions:
     	- php
 

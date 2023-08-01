@@ -9,5 +9,5 @@ use TomasKulhanek\CzechDataBox\Account;
 
 interface ClientProviderInterface
 {
-    public function sendRequest(Account $account, int $serviceType, string $xmlBody): string;
+	public function sendRequest(Account $account, int $serviceType, string $xmlBody): string;
 }

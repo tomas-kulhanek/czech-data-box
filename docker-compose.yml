@@ -2,6 +2,7 @@ version: '3.3'
 
 services:
     php-fpm:
+        command: php-fpm8.1
         env_file:
             -   .env
         environment:
@@ -9,5 +10,6 @@ services:
         build:
             dockerfile: Dockerfile
             context: .
+            target: development
         volumes:
             - ./:/var/www

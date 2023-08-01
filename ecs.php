@@ -1,23 +1,20 @@
 <?php
 
 use PhpCsFixer\Fixer\ArrayNotation\ArraySyntaxFixer;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
-use Symplify\EasyCodingStandard\ValueObject\Option;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $parameters = $containerConfigurator->parameters();
+return static function (\Symplify\EasyCodingStandard\Config\ECSConfig $containerConfigurator): void {
+    $containerConfigurator->paths([
+        __DIR__ . '/src',
+        __DIR__ . '/tests'
+    ]);
+    $containerConfigurator->fileExtensions(['php', 'phpt']);
 
-    // alternative to CLI arguments, easier to maintain and extend
-    $parameters->set(Option::PATHS, [__DIR__ . '/src', __DIR__ . '/tests']);
-
-
-    $services = $containerConfigurator->services();
-    $services->set(ArraySyntaxFixer::class)
-        ->call('configure', [[
-            'syntax' => 'short',
-        ]]);
-
-// B. full sets
-    $containerConfigurator->import(SetList::PSR_12);
+    $containerConfigurator->sets([SetList::PSR_12]);
+    $containerConfigurator->rule(\PhpCsFixer\Fixer\Import\NoUnusedImportsFixer::class);
+    $containerConfigurator->ruleWithConfiguration(ArraySyntaxFixer::class, [
+        'syntax' => 'short',
+    ]);
+    $containerConfigurator->indentation('tab');
+    $containerConfigurator->lineEnding("\n");
 };

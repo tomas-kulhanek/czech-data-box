@@ -1,12 +1,34 @@
 FROM composer:2 AS composer
 
-FROM helppc/php-fpm:v2.0.1 AS builder
-WORKDIR /build
+FROM ghcr.io/tomas-kulhanek/docker-application:main AS builder
+WORKDIR /var/www
+RUN apt-get -y --no-install-recommends update && \
+    apt-get -y --no-install-recommends install git && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* /var/cache/apt/lists
+
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 COPY ./composer.* ./
 RUN composer install --no-dev --no-progress --no-interaction --no-scripts
 
-FROM helppc/php-fpm-xdebug:v2.0.1
+
+FROM ghcr.io/tomas-kulhanek/docker-application:main AS development
 WORKDIR /var/www
-COPY --from=builder /build .
+RUN apt-get -y --no-install-recommends update && \
+    apt-get -y --no-install-recommends upgrade && \
+    apt-get -y --no-install-recommends install git vim curl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* /var/cache/apt/lists
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+
+
+FROM ghcr.io/tomas-kulhanek/docker-application:main
+WORKDIR /var/www
+RUN apt-get -y --no-install-recommends update && \
+    apt-get -y --no-install-recommends upgrade && \
+    apt-get -y --no-install-recommends install curl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* /var/cache/apt/lists
+COPY --from=builder /var/www .
 COPY . ./
