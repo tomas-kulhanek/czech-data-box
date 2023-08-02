@@ -59,9 +59,10 @@ jobs:
           args: "${{ env.composer-install-args }}"
 
       - name: PHPStan Static Analysis
-        uses: php-actions/phpstan@v2
+        uses: php-actions/phpstan@v3
         with:
           configuration: phpstan.neon
+          memory_limit: 256M
           php_version: "${{ matrix.php-version }}"
 
   tests:

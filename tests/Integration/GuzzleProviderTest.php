@@ -10,48 +10,48 @@ use TomasKulhanek\CzechDataBox\Account;
 
 class GuzzleProviderTest extends TestCase
 {
-    use AccountTrait;
-    use ConnectorTrait;
+	use AccountTrait;
+	use ConnectorTrait;
 
-    public function testLoginAndPassword()
-    {
-        $account = $this->createFOAccount();
+	public function testLoginAndPassword()
+	{
+		$account = $this->createFOAccount();
 
-        $response = $this->createGuzzleConnector()
-            ->getOwnerInfoFromLogin($account);
+		$response = $this->createGuzzleConnector()
+			->getOwnerInfoFromLogin($account);
 
-        self::assertTrue($response->getStatus()->isOk());
-    }
+		self::assertTrue($response->getStatus()->isOk());
+	}
 
-    public function testHspis()
-    {
-        $account = $this->createFOCertAccount();
+	public function testHspis()
+	{
+		$account = $this->createFOCertAccount();
 
-        $response = $this->createGuzzleConnector()
-            ->getOwnerInfoFromLogin($account);
+		$response = $this->createGuzzleConnector()
+			->getOwnerInfoFromLogin($account);
 
-        self::assertTrue($response->getStatus()->isOk());
-    }
+		self::assertTrue($response->getStatus()->isOk());
+	}
 
-    public function testLoginAndPasswordAndCert()
-    {
-        $account = $this->createOvmCertAccount();
-        $account->setLoginType(Account::LOGIN_CERT_LOGIN_NAME_PASSWORD);
+	public function testLoginAndPasswordAndCert()
+	{
+		$account = $this->createOvmCertAccount();
+		$account->setLoginType(Account::LOGIN_CERT_LOGIN_NAME_PASSWORD);
 
-        $response = $this->createGuzzleConnector()
-            ->getOwnerInfoFromLogin($account);
+		$response = $this->createGuzzleConnector()
+			->getOwnerInfoFromLogin($account);
 
-        self::assertTrue($response->getStatus()->isOk());
-    }
+		self::assertTrue($response->getStatus()->isOk());
+	}
 
-    public function testSpisCert()
-    {
-        $account = $this->createOvmCertAccount();
-        $account->setLoginType(Account::LOGIN_SPIS_CERT);
+	public function testSpisCert()
+	{
+		$account = $this->createOvmCertAccount();
+		$account->setLoginType(Account::LOGIN_SPIS_CERT);
 
-        $response = $this->createGuzzleConnector()
-            ->getOwnerInfoFromLogin($account);
+		$response = $this->createGuzzleConnector()
+			->getOwnerInfoFromLogin($account);
 
-        self::assertTrue($response->getStatus()->isOk());
-    }
+		self::assertTrue($response->getStatus()->isOk());
+	}
 }
