@@ -20,10 +20,12 @@ jobs:
         include:
           - operating-system: "ubuntu-latest"
             php-version: "8.1"
+          - operating-system: "ubuntu-latest"
+            php-version: "8.2"
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: shivammathur/setup-php@v2
         with:
           php-version: "${{ matrix.php-version }}"
@@ -44,10 +46,12 @@ jobs:
         include:
           - operating-system: "ubuntu-latest"
             php-version: "8.1"
+          - operating-system: "ubuntu-latest"
+            php-version: "8.2"
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: shivammathur/setup-php@v2
         with:
           php-version: "${{ matrix.php-version }}"
@@ -74,10 +78,12 @@ jobs:
         include:
           - operating-system: "ubuntu-latest"
             php-version: "8.1"
+          - operating-system: "ubuntu-latest"
+            php-version: "8.2"
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: shivammathur/setup-php@v2
         with:
           php-version: "${{ matrix.php-version }}"
@@ -97,6 +103,7 @@ jobs:
       - name: PHPUnit
         uses: php-actions/phpunit@v3
         env:
+          XDEBUG_MODE: coverage
           FO_ID_DS: '${{ secrets.FO_ID_DS }}'
           FO_LOGIN_USER: '${{ secrets.FO_LOGIN_USER }}'
           FO_PASSWORD_USER: '${{ secrets.FO_PASSWORD_USER }}'
@@ -115,3 +122,4 @@ jobs:
           configuration: phpunit.xml
           php_version: "${{ matrix.php-version }}"
           php_extensions: "${{ env.extensions }}"
+          version: "10.2"

@@ -16,8 +16,8 @@ use TomasKulhanek\CzechDataBox\Exception\SystemExclusion;
 
 class SymfonyClientProvider implements ClientProviderInterface
 {
-	private readonly HttpClientInterface $client;
-	private readonly EndpointProvider $endpointProvider;
+	private HttpClientInterface $client;
+	private EndpointProvider $endpointProvider;
 
 
 	public static function create(): self

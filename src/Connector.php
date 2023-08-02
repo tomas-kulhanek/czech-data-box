@@ -52,9 +52,9 @@ use TomasKulhanek\CzechDataBox\Utils\BinarySuffix;
 
 class Connector
 {
-	private readonly ClientProviderInterface $provider;
+	private ClientProviderInterface $provider;
 
-	private readonly SerializerInterface $serializer;
+	private SerializerInterface $serializer;
 
 	public function __construct(SerializerInterface $serializer, ClientProviderInterface $provider)
 	{
@@ -131,7 +131,7 @@ class Connector
 	{
 		return $this->send($account, EndpointProvider::OPERATIONS, $input, DTO\Response\AuthenticateMessage::class);
 	}
-	
+
 	public function getUserInfoFromLogin(Account $account): GetUserInfoFromLogin
 	{
 		return $this->send($account, EndpointProvider::ACCESS, (new DTO\Request\GetUserInfoFromLogin()), GetUserInfoFromLogin::class);

@@ -8,17 +8,17 @@ use TomasKulhanek\CzechDataBox\Exception\BadOptionException;
 
 class MessageStatus
 {
-	final public const FILTER_ALL = -1;
-	final public const FILTER_SUBMITTED = 1;
-	final public const FILTER_STAMPED = 2;
-	final public const FILTER_ANTIVIRUS_FAILED = 3;
-	final public const FILTER_DELIVERED = 4;
-	final public const FILTER_DELIVERED_AFTER_TIME = 5;
-	final public const FILTER_DELIVERED_BY_LOGIN = 6;
-	final public const FILTER_READ = 7;
-	final public const FILTER_UNDELIVERED = 8;
-	final public const FILTER_DELETED = 9;
-	final public const FILTER_IN_VAULT = 10;
+	public const FILTER_ALL = -1;
+	public const FILTER_SUBMITTED = 1;
+	public const FILTER_STAMPED = 2;
+	public const FILTER_ANTIVIRUS_FAILED = 3;
+	public const FILTER_DELIVERED = 4;
+	public const FILTER_DELIVERED_AFTER_TIME = 5;
+	public const FILTER_DELIVERED_BY_LOGIN = 6;
+	public const FILTER_READ = 7;
+	public const FILTER_UNDELIVERED = 8;
+	public const FILTER_DELETED = 9;
+	public const FILTER_IN_VAULT = 10;
 
 	public static function getDecEntryForStatus(int ...$statuses): float
 	{

@@ -8,9 +8,9 @@ use InvalidArgumentException;
 
 class BinarySuffix
 {
-	final public const CONVERT_THRESHOLD = 1024;
+	public const CONVERT_THRESHOLD = 1024;
 
-	private readonly int $number;
+	private int $number;
 
 	/**
 	 * @var array<int,string>

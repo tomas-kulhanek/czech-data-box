@@ -27,7 +27,7 @@ class FindPersonalDataBox extends IResponse
 		new Assert\Type(type: PersonalOwnerInfo::class)
 	])]
 	#[Assert\Valid()]
-	protected $record;
+	protected array $record = [];
 
 	/**
 	 * @return PersonalOwnerInfo[]

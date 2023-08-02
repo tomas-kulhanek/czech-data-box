@@ -13,7 +13,7 @@ class GuzzleProviderTest extends TestCase
 	use AccountTrait;
 	use ConnectorTrait;
 
-	public function testLoginAndPassword()
+	public function testLoginAndPassword(): void
 	{
 		$account = $this->createFOAccount();
 
@@ -23,7 +23,7 @@ class GuzzleProviderTest extends TestCase
 		self::assertTrue($response->getStatus()->isOk());
 	}
 
-	public function testHspis()
+	public function testHspis(): void
 	{
 		$account = $this->createFOCertAccount();
 
@@ -33,7 +33,7 @@ class GuzzleProviderTest extends TestCase
 		self::assertTrue($response->getStatus()->isOk());
 	}
 
-	public function testLoginAndPasswordAndCert()
+	public function testLoginAndPasswordAndCert(): void
 	{
 		$account = $this->createOvmCertAccount();
 		$account->setLoginType(Account::LOGIN_CERT_LOGIN_NAME_PASSWORD);
@@ -44,7 +44,7 @@ class GuzzleProviderTest extends TestCase
 		self::assertTrue($response->getStatus()->isOk());
 	}
 
-	public function testSpisCert()
+	public function testSpisCert(): void
 	{
 		$account = $this->createOvmCertAccount();
 		$account->setLoginType(Account::LOGIN_SPIS_CERT);

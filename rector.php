@@ -10,7 +10,7 @@ return static function (\Rector\Config\RectorConfig $containerConfigurator): voi
     ]);
 
     // Define what rule sets will be applied
-    $containerConfigurator->import(LevelSetList::UP_TO_PHP_81);
+    $containerConfigurator->import(LevelSetList::UP_TO_PHP_80);
 
     $containerConfigurator->phpstanConfig( __DIR__ . '/phpstan.neon');
     $containerConfigurator->skip([

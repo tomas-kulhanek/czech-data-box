@@ -14,9 +14,9 @@ trait AccountTrait
 		$account = new \TomasKulhanek\CzechDataBox\Account();
 		$account->setProduction((bool) getenv('IS_PRODUCTION'));
 		$account->setLoginType($account::LOGIN_NAME_PASSWORD);
-		$account->setLoginName(getenv('PFO_LOGIN_USER'));
-		$account->setPassword(getenv('PFO_PASSWORD_USER'));
-		$account->setDataBoxId(getenv('PFO_ID_DS'));
+		$account->setLoginName((string) getenv('PFO_LOGIN_USER'));
+		$account->setPassword((string) getenv('PFO_PASSWORD_USER'));
+		$account->setDataBoxId((string) getenv('PFO_ID_DS'));
 		return $account;
 	}
 
@@ -25,12 +25,12 @@ trait AccountTrait
 		$account = new \TomasKulhanek\CzechDataBox\Account();
 		$account->setProduction((bool) getenv('IS_PRODUCTION'));
 		$account->setLoginType($account::LOGIN_HOSTED_SPIS);
-		$account->setPublicKey(file_get_contents(__DIR__ . '/../../.data/cert.crt'));
-		$account->setPrivateKey(file_get_contents(__DIR__ . '/../../.data/cert.pem'));
-		$account->setLoginName(getenv('PFO_LOGIN_USER'));
-		$account->setPassword(getenv('PFO_PASSWORD_USER'));
-		$account->setPrivateKeyPassPhrase(getenv('CERT_PASSPHRASE'));
-		$account->setDataBoxId(getenv('PFO_ID_DS'));
+		$account->setPublicKey((string) file_get_contents(__DIR__ . '/../../.data/cert.crt'));
+		$account->setPrivateKey((string) file_get_contents(__DIR__ . '/../../.data/cert.pem'));
+		$account->setLoginName((string) getenv('PFO_LOGIN_USER'));
+		$account->setPassword((string) getenv('PFO_PASSWORD_USER'));
+		$account->setPrivateKeyPassPhrase((string) getenv('CERT_PASSPHRASE'));
+		$account->setDataBoxId((string) getenv('PFO_ID_DS'));
 		return $account;
 	}
 
@@ -39,9 +39,9 @@ trait AccountTrait
 		$account = new \TomasKulhanek\CzechDataBox\Account();
 		$account->setProduction((bool) getenv('IS_PRODUCTION'));
 		$account->setLoginType($account::LOGIN_NAME_PASSWORD);
-		$account->setLoginName(getenv('FO_LOGIN_USER'));
-		$account->setPassword(getenv('FO_PASSWORD_USER'));
-		$account->setDataBoxId(getenv('FO_ID_DS'));
+		$account->setLoginName((string) getenv('FO_LOGIN_USER'));
+		$account->setPassword((string) getenv('FO_PASSWORD_USER'));
+		$account->setDataBoxId((string) getenv('FO_ID_DS'));
 		return $account;
 	}
 
@@ -50,12 +50,12 @@ trait AccountTrait
 		$account = new \TomasKulhanek\CzechDataBox\Account();
 		$account->setProduction((bool) getenv('IS_PRODUCTION'));
 		$account->setLoginType($account::LOGIN_HOSTED_SPIS);
-		$account->setPublicKey(file_get_contents(__DIR__ . '/../../.data/cert.crt'));
-		$account->setPrivateKey(file_get_contents(__DIR__ . '/../../.data/cert.pem'));
-		$account->setLoginName(getenv('FO_LOGIN_USER'));
-		$account->setPassword(getenv('FO_PASSWORD_USER'));
-		$account->setPrivateKeyPassPhrase(getenv('CERT_PASSPHRASE'));
-		$account->setDataBoxId(getenv('FO_ID_DS'));
+		$account->setPublicKey((string) file_get_contents(__DIR__ . '/../../.data/cert.crt'));
+		$account->setPrivateKey((string) file_get_contents(__DIR__ . '/../../.data/cert.pem'));
+		$account->setLoginName((string) getenv('FO_LOGIN_USER'));
+		$account->setPassword((string) getenv('FO_PASSWORD_USER'));
+		$account->setPrivateKeyPassPhrase((string) getenv('CERT_PASSPHRASE'));
+		$account->setDataBoxId((string) getenv('FO_ID_DS'));
 		return $account;
 	}
 
@@ -64,12 +64,12 @@ trait AccountTrait
 		$account = new \TomasKulhanek\CzechDataBox\Account();
 		$account->setProduction((bool) getenv('IS_PRODUCTION'));
 		$account->setLoginType($account::LOGIN_HOSTED_SPIS);
-		$account->setPublicKey(file_get_contents(__DIR__ . '/../../.data/cert.crt'));
-		$account->setPrivateKey(file_get_contents(__DIR__ . '/../../.data/cert.pem'));
-		$account->setLoginName(getenv('OVM_LOGIN_USER'));
-		$account->setPassword(getenv('OVM_PASSWORD_USER'));
-		$account->setPrivateKeyPassPhrase(getenv('CERT_PASSPHRASE'));
-		$account->setDataBoxId(getenv('OVM_ID_DS'));
+		$account->setPublicKey((string) file_get_contents(__DIR__ . '/../../.data/cert.crt'));
+		$account->setPrivateKey((string) file_get_contents(__DIR__ . '/../../.data/cert.pem'));
+		$account->setLoginName((string) getenv('OVM_LOGIN_USER'));
+		$account->setPassword((string) getenv('OVM_PASSWORD_USER'));
+		$account->setPrivateKeyPassPhrase((string) getenv('CERT_PASSPHRASE'));
+		$account->setDataBoxId((string) getenv('OVM_ID_DS'));
 		return $account;
 	}
 
@@ -78,9 +78,9 @@ trait AccountTrait
 		$account = new \TomasKulhanek\CzechDataBox\Account();
 		$account->setProduction((bool) getenv('IS_PRODUCTION'));
 		$account->setLoginType($account::LOGIN_NAME_PASSWORD);
-		$account->setLoginName(getenv('OVM_LOGIN_USER'));
-		$account->setPassword(getenv('OVM_PASSWORD_USER'));
-		$account->setDataBoxId(getenv('OVM_ID_DS'));
+		$account->setLoginName((string) getenv('OVM_LOGIN_USER'));
+		$account->setPassword((string) getenv('OVM_PASSWORD_USER'));
+		$account->setDataBoxId((string) getenv('OVM_ID_DS'));
 		return $account;
 	}
 }

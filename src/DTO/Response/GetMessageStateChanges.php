@@ -22,7 +22,7 @@ class GetMessageStateChanges extends IResponse
 	#[Serializer\XmlList(entry: 'dmRecord', inline: false)]
 	#[Serializer\SerializedName('p:dmRecords')]
 	#[Assert\All([
-		new Assert\Type(type: StateChangeRecord::class)
+		new Assert\Type(StateChangeRecord::class)
 	])]
 	#[Assert\Valid()]
 	protected array $record = [];

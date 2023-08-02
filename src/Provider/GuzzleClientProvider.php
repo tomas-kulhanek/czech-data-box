@@ -16,8 +16,8 @@ use TomasKulhanek\CzechDataBox\Exception\SystemExclusion;
 
 class GuzzleClientProvider implements ClientProviderInterface
 {
-	private readonly Client $client;
-	private readonly EndpointProvider $endpointProvider;
+	private Client $client;
+	private EndpointProvider $endpointProvider;
 
 	public static function create(): self
 	{

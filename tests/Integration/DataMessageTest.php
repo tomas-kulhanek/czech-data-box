@@ -37,6 +37,7 @@ class DataMessageTest extends TestCase
 
 	public function testCreateMessage(): void
 	{
+		self::assertTrue($this->createOVMAccount()->getDataBoxId() !== null);
 		$newMessageEnvelope = $this->getNewMessageEnvelope();
 		$recipient = new DTO\Recipient();
 		$recipient->setDataBoxId($this->createOVMAccount()->getDataBoxId());
@@ -71,6 +72,7 @@ class DataMessageTest extends TestCase
 		$response = $client->messageDownload($ovmAccount, $request);
 
 		self::assertTrue($response->getStatus()->isOk(), $response->getStatus()->getMessage());
+		self::assertTrue($response->getReturnedMessage() !== null);
 		self::assertSame($ovmAccount->getDataBoxId(), $response->getReturnedMessage()->getDataMessage()->getRecipientId());
 	}
 

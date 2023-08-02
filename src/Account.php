@@ -8,10 +8,10 @@ use TomasKulhanek\CzechDataBox\Exception\PkcsCertificateException;
 
 class Account
 {
-	final public const LOGIN_NAME_PASSWORD = 'password';
-	final public const LOGIN_SPIS_CERT = 'cert';
-	final public const LOGIN_CERT_LOGIN_NAME_PASSWORD = 'certPassword';
-	final public const LOGIN_HOSTED_SPIS = 'hosted';
+	public const LOGIN_NAME_PASSWORD = 'password';
+	public const LOGIN_SPIS_CERT = 'cert';
+	public const LOGIN_CERT_LOGIN_NAME_PASSWORD = 'certPassword';
+	public const LOGIN_HOSTED_SPIS = 'hosted';
 
 	private ?string $loginName = null;
 

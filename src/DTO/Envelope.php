@@ -9,7 +9,7 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageEnvelopeSub;
 
 #[Serializer\XmlRoot(name: 'p:dmEnvelope')]
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\AccessorOrder(custom: ['senderOrgUnit', 'senderOrgUnitNum', 'annotation', 'recipientRefNumber', 'senderRefNumber', 'recipientIdent', 'senderIdent', 'legalTitleLaw', 'legalTitleYear', 'legalTitleSect', 'legalTitlePar', 'legalTitlePoint', 'personalDelivery', 'allowSubstDelivery', 'ovm', 'publishOwnId'])]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['senderOrgUnit', 'senderOrgUnitNum', 'annotation', 'recipientRefNumber', 'senderRefNumber', 'recipientIdent', 'senderIdent', 'legalTitleLaw', 'legalTitleYear', 'legalTitleSect', 'legalTitlePar', 'legalTitlePoint', 'personalDelivery', 'allowSubstDelivery', 'ovm', 'publishOwnId'])]
 class Envelope
 {
 	use DataMessageEnvelopeSub;

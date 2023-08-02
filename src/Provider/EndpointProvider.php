@@ -9,11 +9,11 @@ use TomasKulhanek\CzechDataBox\Account;
 
 class EndpointProvider
 {
-	final public const OPERATIONS = 0;
-	final public const INFO = 1;
-	final public const SEARCH = 2;
-	final public const SUPPLEMENTARY = 3;
-	final public const ACCESS = 5;
+	public const OPERATIONS = 0;
+	public const INFO = 1;
+	public const SEARCH = 2;
+	public const SUPPLEMENTARY = 3;
+	public const ACCESS = 5;
 
 	private function getServiceDomain(bool $isProduction): string
 	{

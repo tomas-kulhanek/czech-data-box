@@ -9,7 +9,7 @@ trait GeneratePkcs
 {
 	private function generateP12Certificate(string $passPhrase): string
 	{
-		$Info = [
+		$dn = [
 			"countryName" => "CZ",
 			"stateOrProvinceName" => "Prague",
 			"localityName" => "Prague",
@@ -19,13 +19,16 @@ trait GeneratePkcs
 			"emailAddress" => "jsem+tests@tomaskulhanek.cz",
 		];
 
-		$Private_Key = null;
-		$Unsigned_Cert = openssl_csr_new($Info, $Private_Key);
+		$privateKey = openssl_pkey_new([
+			"private_key_bits" => 2048,
+			"private_key_type" => OPENSSL_KEYTYPE_RSA,
+		]);
+		$csr = openssl_csr_new($dn, $privateKey, ['digest_alg' => 'sha256']);
 
-		$Signed_Cert = openssl_csr_sign($Unsigned_Cert, null, $Private_Key, 365);
+		$x509 = openssl_csr_sign($csr, null, $privateKey, 365, ['digest_alg' => 'sha256']);
 
 		$certFilePath = __DIR__ . "/../_data/test.p12";
-		openssl_pkcs12_export_to_file($Signed_Cert, $certFilePath, $Private_Key, $passPhrase);
+		openssl_pkcs12_export_to_file($x509, $certFilePath, $privateKey, $passPhrase);
 		return file_get_contents($certFilePath);
 	}
 }

@@ -10,7 +10,7 @@ use TomasKulhanek\CzechDataBox\Traits\DataBoxId;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(name: 'p:DataBoxCreditInfo', namespace: 'http://isds.czechpoint.cz/v20')]
-#[Serializer\AccessorOrder(custom: ['dataBoxId', 'fromDate', 'toDate'])]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['dataBoxId', 'fromDate', 'toDate'])]
 class DataBoxCreditInfo implements IRequest
 {
 	use DataBoxId;
@@ -18,12 +18,12 @@ class DataBoxCreditInfo implements IRequest
 	#[Serializer\Type("DateTimeImmutable<'Y-m-d'>")]
 	#[Serializer\XmlElement(cdata: false)]
 	#[Serializer\SerializedName('p:ciFromDate')]
-	private readonly DateTimeImmutable $fromDate;
+	private DateTimeImmutable $fromDate;
 
 	#[Serializer\Type("DateTimeImmutable<'Y-m-d'>")]
 	#[Serializer\XmlElement(cdata: false)]
 	#[Serializer\SerializedName('p:ciTodate')]
-	private readonly DateTimeImmutable $toDate;
+	private DateTimeImmutable $toDate;
 
 	public function __construct(DateTimeImmutable $fromDate, DateTimeImmutable $toDate)
 	{

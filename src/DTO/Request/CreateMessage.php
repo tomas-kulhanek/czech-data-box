@@ -13,7 +13,7 @@ use TomasKulhanek\CzechDataBox\Traits\GetMainFile;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(name: 'p:CreateMultipleMessage', namespace: 'http://isds.czechpoint.cz/v20')]
-#[Serializer\AccessorOrder(custom: ['recipients', 'envelope', 'files'])]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['recipients', 'envelope', 'files'])]
 class CreateMessage implements IRequest
 {
 	use GetMainFile;
@@ -50,17 +50,11 @@ class CreateMessage implements IRequest
 	#[Assert\Valid()]
 	protected array $recipients = [];
 
-	/**
-	 * @return Envelope
-	 */
 	public function getEnvelope(): Envelope
 	{
 		return $this->envelope;
 	}
 
-	/**
-	 * @return CreateMessage
-	 */
 	public function setEnvelope(Envelope $envelope): CreateMessage
 	{
 		$this->envelope = $envelope;
@@ -77,7 +71,6 @@ class CreateMessage implements IRequest
 
 	/**
 	 * @param File[] $files
-	 * @return CreateMessage
 	 */
 	public function setFiles(array $files): CreateMessage
 	{
