@@ -19,8 +19,9 @@ class PDZInfo extends IResponse
 	 * @var PDZRecord[]
 	 */
 	#[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\PDZRecord>')]
-	#[Serializer\XmlList(entry: 'dbPDZRecord', inline: false)]
-	#[Serializer\SerializedName('p:dbPDZRecords')]
+	#[Serializer\XmlList(entry: 'dbPDZRecord', inline: false, namespace: 'http://isds.czechpoint.cz/v20')]
+	#[Serializer\SerializedName('dbPDZRecords')]
+	#[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
 	#[Assert\All([
 		new Assert\Type(type: PDZRecord::class)
 	])]
