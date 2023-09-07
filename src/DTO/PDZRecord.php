@@ -45,8 +45,8 @@ class PDZRecord
 	#[Serializer\Type('string')]
 	#[Serializer\SerializedName('p:ODZIdent')]
 	#[Serializer\XmlElement(cdata: false)]
-	#[Assert\NotBlank(allowNull: false)]
-	protected string $ident;
+	#[Assert\NotBlank(allowNull: true)]
+	protected ?string $ident;
 
 	public function getType(): string
 	{
@@ -103,12 +103,12 @@ class PDZRecord
 		return $this;
 	}
 
-	public function getIdent(): string
+	public function getIdent(): ?string
 	{
 		return $this->ident;
 	}
 
-	public function setIdent(string $ident): PDZRecord
+	public function setIdent(?string $ident): PDZRecord
 	{
 		$this->ident = $ident;
 		return $this;
