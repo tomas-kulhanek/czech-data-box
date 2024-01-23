@@ -13,53 +13,43 @@ env:
 jobs:
   qa:
     name: "Quality assurance"
-    runs-on: "${{ matrix.operating-system }}"
-
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        include:
-          - operating-system: "ubuntu-latest"
-            php-version: "8.1"
-          - operating-system: "ubuntu-latest"
-            php-version: "8.2"
+        php-version: [ '8.1', '8.2', '8.3' ]
       fail-fast: false
 
     steps:
       - uses: actions/checkout@v3
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: "${{ matrix.php-version }}"
+          php-version: ${{ matrix.php-version }}
           coverage: none
 
       - uses: php-actions/composer@v6
         with:
-          php_version: "${{ matrix.php-version }}"
+          php_version: ${{ matrix.php-version }}
           args:  "${{ env.composer-install-args }}"
       - run: vendor/bin/ecs check src tests
 
   static-analysis:
     name: "Static analysis"
-    runs-on: "${{ matrix.operating-system }}"
-
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        include:
-          - operating-system: "ubuntu-latest"
-            php-version: "8.1"
-          - operating-system: "ubuntu-latest"
-            php-version: "8.2"
+        php-version: [ '8.1', '8.2', '8.3' ]
       fail-fast: false
 
     steps:
       - uses: actions/checkout@v3
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: "${{ matrix.php-version }}"
+          php-version: ${{ matrix.php-version }}
           coverage: none
 
       - uses: php-actions/composer@v6
         with:
-          php_version: "${{ matrix.php-version }}"
+          php_version: ${{ matrix.php-version }}
           args: "${{ env.composer-install-args }}"
 
       - name: PHPStan Static Analysis
@@ -67,31 +57,26 @@ jobs:
         with:
           configuration: phpstan.neon
           memory_limit: 256M
-          php_version: "${{ matrix.php-version }}"
+          php_version: ${{ matrix.php-version }}
 
   tests:
     name: "Tests"
-    runs-on: "${{ matrix.operating-system }}"
-
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        include:
-          - operating-system: "ubuntu-latest"
-            php-version: "8.1"
-          - operating-system: "ubuntu-latest"
-            php-version: "8.2"
+        php-version: [ '8.1', '8.2', '8.3' ]
       fail-fast: false
 
     steps:
       - uses: actions/checkout@v3
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: "${{ matrix.php-version }}"
+          php-version: ${{ matrix.php-version }}
           coverage: none
 
       - uses: php-actions/composer@v6
         with:
-          php_version: "${{ matrix.php-version }}"
+          php_version: ${{ matrix.php-version }}
           args: "${{ env.composer-install-args }}"
 
       - run: |
@@ -120,6 +105,6 @@ jobs:
         with:
           bootstrap: vendor/autoload.php
           configuration: phpunit.xml
-          php_version: "${{ matrix.php-version }}"
+          php_version: ${{ matrix.php-version }}
           php_extensions: "${{ env.extensions }}"
           version: "10.2"
