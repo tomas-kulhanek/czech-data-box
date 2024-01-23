@@ -11,5 +11,5 @@ use TomasKulhanek\CzechDataBox\Traits\DataBoxStatus;
 #[Serializer\XmlRoot(name: 'p:ChangeISDSPasswordResponse', namespace: 'http://isds.czechpoint.cz/v20')]
 class ChangeISDSPassword extends IResponse
 {
-	use DataBoxStatus;
+    use DataBoxStatus;
 }

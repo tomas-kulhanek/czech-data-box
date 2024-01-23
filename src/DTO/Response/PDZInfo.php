@@ -13,36 +13,36 @@ use TomasKulhanek\CzechDataBox\Traits\DataBoxStatus;
 #[Serializer\XmlRoot(name: 'p:PDZInfoResponse', namespace: 'http://isds.czechpoint.cz/v20')]
 class PDZInfo extends IResponse
 {
-	use DataBoxStatus;
+    use DataBoxStatus;
 
-	/**
-	 * @var PDZRecord[]
-	 */
-	#[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\PDZRecord>')]
-	#[Serializer\XmlList(entry: 'dbPDZRecord', inline: false, namespace: 'http://isds.czechpoint.cz/v20')]
-	#[Serializer\SerializedName('dbPDZRecords')]
-	#[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
-	#[Assert\All([
-		new Assert\Type(type: PDZRecord::class)
-	])]
-	#[Assert\Valid()]
-	protected array $pdzRecord = [];
+    /**
+     * @var PDZRecord[]
+     */
+    #[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\PDZRecord>')]
+    #[Serializer\XmlList(entry: 'dbPDZRecord', inline: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbPDZRecords')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Assert\All([
+        new Assert\Type(type: PDZRecord::class)
+    ])]
+    #[Assert\Valid()]
+    protected array $pdzRecord = [];
 
-	/**
-	 * @return PDZRecord[]
-	 */
-	public function getPdzRecord(): array
-	{
-		return $this->pdzRecord;
-	}
+    /**
+     * @return PDZRecord[]
+     */
+    public function getPdzRecord(): array
+    {
+        return $this->pdzRecord;
+    }
 
-	/**
-	 * @param PDZRecord[] $pdzRecord
-	 * @return PDZInfo
-	 */
-	public function setPdzRecord(array $pdzRecord): PDZInfo
-	{
-		$this->pdzRecord = $pdzRecord;
-		return $this;
-	}
+    /**
+     * @param PDZRecord[] $pdzRecord
+     * @return PDZInfo
+     */
+    public function setPdzRecord(array $pdzRecord): PDZInfo
+    {
+        $this->pdzRecord = $pdzRecord;
+        return $this;
+    }
 }

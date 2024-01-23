@@ -10,7 +10,7 @@ trait AccountTrait
 {
     protected function createPFOAccount(): Account
     {
-        $account = new \TomasKulhanek\CzechDataBox\Account();
+        $account = new Account();
         $account->setProduction(false);
         $account->setLoginType($account::LOGIN_NAME_PASSWORD);
         $account->setLoginName((string) getenv('PFO_LOGIN_USER'));
@@ -21,7 +21,7 @@ trait AccountTrait
 
     protected function createPFOCertAccount(): Account
     {
-        $account = new \TomasKulhanek\CzechDataBox\Account();
+        $account = new Account();
         $account->setProduction(false);
         $account->setLoginType($account::LOGIN_HOSTED_SPIS);
         $account->setPublicKey((string) file_get_contents(__DIR__ . '/../../.data/cert.crt'));
@@ -35,7 +35,7 @@ trait AccountTrait
 
     protected function createFOAccount(): Account
     {
-        $account = new \TomasKulhanek\CzechDataBox\Account();
+        $account = new Account();
         $account->setProduction(false);
         $account->setLoginType($account::LOGIN_NAME_PASSWORD);
         $account->setLoginName((string) getenv('FO_LOGIN_USER'));
@@ -46,7 +46,7 @@ trait AccountTrait
 
     protected function createFOCertAccount(): Account
     {
-        $account = new \TomasKulhanek\CzechDataBox\Account();
+        $account = new Account();
         $account->setProduction(false);
         $account->setLoginType($account::LOGIN_HOSTED_SPIS);
         $account->setPublicKey((string) file_get_contents(__DIR__ . '/../../.data/cert.crt'));
@@ -60,7 +60,7 @@ trait AccountTrait
 
     protected function createOvmCertAccount(): Account
     {
-        $account = new \TomasKulhanek\CzechDataBox\Account();
+        $account = new Account();
         $account->setProduction(false);
         $account->setLoginType($account::LOGIN_HOSTED_SPIS);
         $account->setPublicKey((string) file_get_contents(__DIR__ . '/../../.data/cert.crt'));
@@ -74,7 +74,7 @@ trait AccountTrait
 
     protected function createOVMAccount(): Account
     {
-        $account = new \TomasKulhanek\CzechDataBox\Account();
+        $account = new Account();
         $account->setProduction(false);
         $account->setLoginType($account::LOGIN_NAME_PASSWORD);
         $account->setLoginName((string) getenv('OVM_LOGIN_USER'));

@@ -13,12 +13,12 @@ use TomasKulhanek\CzechDataBox\Traits\Signature;
 #[Serializer\AccessorOrder(order: 'custom', custom: ['signature', 'status'])]
 class SignedSentMessageDownload extends IResponse
 {
-	use DataMessageStatus;
-	use Signature;
+    use DataMessageStatus;
+    use Signature;
 
-	public function setStatus(\TomasKulhanek\CzechDataBox\DTO\DataMessageStatus $status): SignedSentMessageDownload
-	{
-		$this->status = $status;
-		return $this;
-	}
+    public function setStatus(\TomasKulhanek\CzechDataBox\DTO\DataMessageStatus $status): SignedSentMessageDownload
+    {
+        $this->status = $status;
+        return $this;
+    }
 }

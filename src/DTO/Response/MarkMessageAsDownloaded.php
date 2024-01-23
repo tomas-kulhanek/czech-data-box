@@ -11,5 +11,5 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 #[Serializer\XmlRoot(name: 'p:MarkMessageAsDownloadedResponse', namespace: 'http://isds.czechpoint.cz/v20')]
 class MarkMessageAsDownloaded extends IResponse
 {
-	use DataMessageStatus;
+    use DataMessageStatus;
 }

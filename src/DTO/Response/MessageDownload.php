@@ -13,23 +13,23 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 #[Serializer\XmlRoot(name: 'p:MessageDownloadResponse', namespace: 'http://isds.czechpoint.cz/v20')]
 class MessageDownload extends IResponse
 {
-	use DataMessageStatus;
+    use DataMessageStatus;
 
-	#[Serializer\SkipWhenEmpty]
-	#[Serializer\Type(ReturnedMessage::class)]
-	#[Serializer\SerializedName('p:dmReturnedMessage')]
-	#[Serializer\XmlElement(cdata: false)]
-	#[Assert\Valid()]
-	protected ?ReturnedMessage $returnedMessage = null;
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type(ReturnedMessage::class)]
+    #[Serializer\SerializedName('p:dmReturnedMessage')]
+    #[Serializer\XmlElement(cdata: false)]
+    #[Assert\Valid()]
+    protected ?ReturnedMessage $returnedMessage = null;
 
-	public function getReturnedMessage(): ?ReturnedMessage
-	{
-		return $this->returnedMessage;
-	}
+    public function getReturnedMessage(): ?ReturnedMessage
+    {
+        return $this->returnedMessage;
+    }
 
-	public function setReturnedMessage(?ReturnedMessage $returnedMessage): MessageDownload
-	{
-		$this->returnedMessage = $returnedMessage;
-		return $this;
-	}
+    public function setReturnedMessage(?ReturnedMessage $returnedMessage): MessageDownload
+    {
+        $this->returnedMessage = $returnedMessage;
+        return $this;
+    }
 }

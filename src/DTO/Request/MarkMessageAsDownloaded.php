@@ -11,5 +11,5 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageId;
 #[Serializer\XmlRoot(name: 'p:MarkMessageAsDownloaded', namespace: 'http://isds.czechpoint.cz/v20')]
 class MarkMessageAsDownloaded implements IRequest
 {
-	use DataMessageId;
+    use DataMessageId;
 }

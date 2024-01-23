@@ -14,5 +14,5 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageId;
 #[Serializer\XmlRoot(name: 'p:GetDeliveryInfo', namespace: 'http://isds.czechpoint.cz/v20')]
 class GetDeliveryInfo implements IRequest
 {
-	use DataMessageId;
+    use DataMessageId;
 }

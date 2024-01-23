@@ -13,17 +13,17 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 #[Serializer\XmlRoot(name: 'p:GetDeliveryInfoResponse', namespace: 'http://isds.czechpoint.cz/v20')]
 class GetDeliveryInfo extends IResponse
 {
-	use DataMessageStatus;
+    use DataMessageStatus;
 
-	#[Serializer\Type(Delivery::class)]
-	#[Serializer\SerializedName('p:dmDelivery')]
-	#[Serializer\SkipWhenEmpty]
-	#[Serializer\XmlElement(cdata: false)]
-	#[Assert\Valid()]
-	protected Delivery $delivery;
+    #[Serializer\Type(Delivery::class)]
+    #[Serializer\SerializedName('p:dmDelivery')]
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\XmlElement(cdata: false)]
+    #[Assert\Valid()]
+    protected Delivery $delivery;
 
-	public function getDelivery(): Delivery
-	{
-		return $this->delivery;
-	}
+    public function getDelivery(): Delivery
+    {
+        return $this->delivery;
+    }
 }

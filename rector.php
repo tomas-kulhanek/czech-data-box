@@ -5,14 +5,13 @@ declare(strict_types=1);
 use Rector\Set\ValueObject\LevelSetList;
 
 return static function (\Rector\Config\RectorConfig $containerConfigurator): void {
-    $containerConfigurator->paths([
-        __DIR__ . '/src'
-    ]);
+	$containerConfigurator->paths([
+		__DIR__ . '/src'
+	]);
 
-    // Define what rule sets will be applied
-    $containerConfigurator->import(LevelSetList::UP_TO_PHP_80);
+	$containerConfigurator->import(LevelSetList::UP_TO_PHP_80);
 
-    $containerConfigurator->phpstanConfig( __DIR__ . '/phpstan.neon');
+	$containerConfigurator->phpstanConfig( __DIR__ . '/phpstan.neon');
     $containerConfigurator->skip([
         \Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector::class,
     ]);

@@ -11,5 +11,5 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageId;
 #[Serializer\XmlRoot(name: 'p:VerifyMessage', namespace: 'http://isds.czechpoint.cz/v20')]
 class VerifyMessage implements IRequest
 {
-	use DataMessageId;
+    use DataMessageId;
 }

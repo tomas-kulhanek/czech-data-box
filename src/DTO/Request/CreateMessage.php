@@ -16,95 +16,95 @@ use TomasKulhanek\CzechDataBox\Traits\GetMainFile;
 #[Serializer\AccessorOrder(order: 'custom', custom: ['recipients', 'envelope', 'files'])]
 class CreateMessage implements IRequest
 {
-	use GetMainFile;
+    use GetMainFile;
 
-	#[Serializer\Type(Envelope::class)]
-	#[Serializer\SerializedName('p:dmEnvelope')]
-	#[Serializer\XmlElement(cdata: false)]
-	#[Assert\Valid()]
-	protected Envelope $envelope;
+    #[Serializer\Type(Envelope::class)]
+    #[Serializer\SerializedName('p:dmEnvelope')]
+    #[Serializer\XmlElement(cdata: false)]
+    #[Assert\Valid()]
+    protected Envelope $envelope;
 
-	/**
-	 * @var File[]
-	 */
-	#[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\File>')]
-	#[Serializer\XmlList(entry: 'dmFile', inline: false, namespace: 'http://isds.czechpoint.cz/v20')]
-	#[Serializer\SerializedName('dmFiles')]
-	#[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
-	#[Assert\All([
-		new Assert\Type(File::class)
-	])]
-	#[Assert\Valid()]
-	protected array $files = [];
+    /**
+     * @var File[]
+     */
+    #[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\File>')]
+    #[Serializer\XmlList(entry: 'dmFile', inline: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dmFiles')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Assert\All([
+        new Assert\Type(File::class)
+    ])]
+    #[Assert\Valid()]
+    protected array $files = [];
 
-	/**
-	 * @var Recipient[]
-	 */
-	#[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\Recipient>')]
-	#[Serializer\XmlList(entry: 'dmRecipient', inline: false, namespace: 'http://isds.czechpoint.cz/v20')]
-	#[Serializer\SerializedName('dmRecipients')]
-	#[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
-	#[Assert\All([
-		new Assert\Type(Recipient::class)
-	])]
-	#[Assert\Valid()]
-	protected array $recipients = [];
+    /**
+     * @var Recipient[]
+     */
+    #[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\Recipient>')]
+    #[Serializer\XmlList(entry: 'dmRecipient', inline: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dmRecipients')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Assert\All([
+        new Assert\Type(Recipient::class)
+    ])]
+    #[Assert\Valid()]
+    protected array $recipients = [];
 
-	public function getEnvelope(): Envelope
-	{
-		return $this->envelope;
-	}
+    public function getEnvelope(): Envelope
+    {
+        return $this->envelope;
+    }
 
-	public function setEnvelope(Envelope $envelope): CreateMessage
-	{
-		$this->envelope = $envelope;
-		return $this;
-	}
+    public function setEnvelope(Envelope $envelope): CreateMessage
+    {
+        $this->envelope = $envelope;
+        return $this;
+    }
 
-	/**
-	 * @return File[]
-	 */
-	public function getFiles(): array
-	{
-		return $this->files;
-	}
+    /**
+     * @return File[]
+     */
+    public function getFiles(): array
+    {
+        return $this->files;
+    }
 
-	/**
-	 * @param File[] $files
-	 */
-	public function setFiles(array $files): CreateMessage
-	{
-		$this->files = $files;
-		return $this;
-	}
+    /**
+     * @param File[] $files
+     */
+    public function setFiles(array $files): CreateMessage
+    {
+        $this->files = $files;
+        return $this;
+    }
 
-	/**
-	 * @return Recipient[]
-	 */
-	public function getRecipients(): array
-	{
-		return $this->recipients;
-	}
+    /**
+     * @return Recipient[]
+     */
+    public function getRecipients(): array
+    {
+        return $this->recipients;
+    }
 
-	/**
-	 * @param Recipient[] $recipients
-	 * @return CreateMessage
-	 */
-	public function setRecipients(array $recipients): CreateMessage
-	{
-		$this->recipients = $recipients;
-		return $this;
-	}
+    /**
+     * @param Recipient[] $recipients
+     * @return CreateMessage
+     */
+    public function setRecipients(array $recipients): CreateMessage
+    {
+        $this->recipients = $recipients;
+        return $this;
+    }
 
-	public function addRecipient(Recipient $recipient): CreateMessage
-	{
-		$this->recipients[] = $recipient;
-		return $this;
-	}
+    public function addRecipient(Recipient $recipient): CreateMessage
+    {
+        $this->recipients[] = $recipient;
+        return $this;
+    }
 
-	public function addFile(File $file): CreateMessage
-	{
-		$this->files[] = $file;
-		return $this;
-	}
+    public function addFile(File $file): CreateMessage
+    {
+        $this->files[] = $file;
+        return $this;
+    }
 }

@@ -12,19 +12,19 @@ use TomasKulhanek\Serializer\Utils\SplFileInfo;
 #[Serializer\AccessType(type: 'public_method')]
 class AuthenticateMessage implements IRequest
 {
-	#[Serializer\Type('base64File')]
-	#[Serializer\SerializedName('p:dmMessage')]
-	#[Serializer\XmlElement(cdata: false)]
-	protected SplFileInfo $dataMessage;
+    #[Serializer\Type('base64File')]
+    #[Serializer\SerializedName('p:dmMessage')]
+    #[Serializer\XmlElement(cdata: false)]
+    protected SplFileInfo $dataMessage;
 
-	public function getDataMessage(): SplFileInfo
-	{
-		return $this->dataMessage;
-	}
+    public function getDataMessage(): SplFileInfo
+    {
+        return $this->dataMessage;
+    }
 
-	public function setDataMessage(SplFileInfo $dataMessage): AuthenticateMessage
-	{
-		$this->dataMessage = $dataMessage;
-		return $this;
-	}
+    public function setDataMessage(SplFileInfo $dataMessage): AuthenticateMessage
+    {
+        $this->dataMessage = $dataMessage;
+        return $this;
+    }
 }

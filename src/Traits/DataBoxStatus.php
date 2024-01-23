@@ -9,19 +9,19 @@ use TomasKulhanek\CzechDataBox\DTO\Response\IResponseStatus;
 
 trait DataBoxStatus
 {
-	#[Serializer\Type(\TomasKulhanek\CzechDataBox\DTO\DataBoxStatus::class)]
-	#[Serializer\SerializedName('p:dbStatus')]
-	#[Serializer\XmlElement(cdata: false)]
-	protected IResponseStatus $status;
+    #[Serializer\Type(\TomasKulhanek\CzechDataBox\DTO\DataBoxStatus::class)]
+    #[Serializer\SerializedName('p:dbStatus')]
+    #[Serializer\XmlElement(cdata: false)]
+    protected IResponseStatus $status;
 
-	public function getStatus(): IResponseStatus
-	{
-		return $this->status;
-	}
+    public function getStatus(): IResponseStatus
+    {
+        return $this->status;
+    }
 
-	public function setStatus(IResponseStatus $status): self
-	{
-		$this->status = $status;
-		return $this;
-	}
+    public function setStatus(IResponseStatus $status): self
+    {
+        $this->status = $status;
+        return $this;
+    }
 }

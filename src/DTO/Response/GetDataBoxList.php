@@ -12,22 +12,22 @@ use TomasKulhanek\Serializer\Utils\SplFileInfo;
 #[Serializer\XmlRoot(name: 'p:GetDataBoxListResponse', namespace: 'http://isds.czechpoint.cz/v20')]
 class GetDataBoxList extends IResponse
 {
-	use DataBoxStatus;
+    use DataBoxStatus;
 
-	#[Serializer\SkipWhenEmpty]
-	#[Serializer\Type('base64File')]
-	#[Serializer\SerializedName('p:dblData')]
-	#[Serializer\XmlElement(cdata: false)]
-	protected ?SplFileInfo $data = null;
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type('base64File')]
+    #[Serializer\SerializedName('p:dblData')]
+    #[Serializer\XmlElement(cdata: false)]
+    protected ?SplFileInfo $data = null;
 
-	public function getData(): ?SplFileInfo
-	{
-		return $this->data;
-	}
+    public function getData(): ?SplFileInfo
+    {
+        return $this->data;
+    }
 
-	public function setData(SplFileInfo $data): GetDataBoxList
-	{
-		$this->data = $data;
-		return $this;
-	}
+    public function setData(SplFileInfo $data): GetDataBoxList
+    {
+        $this->data = $data;
+        return $this;
+    }
 }

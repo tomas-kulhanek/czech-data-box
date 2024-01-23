@@ -12,105 +12,105 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 class PDZRecord
 {
-	#[Serializer\Type('string')]
-	#[Serializer\SerializedName('p:PDZType')]
-	#[Serializer\XmlElement(cdata: false)]
-	#[Assert\NotBlank(allowNull: false)]
-	protected string $type;
+    #[Serializer\Type('string')]
+    #[Serializer\SerializedName('p:PDZType')]
+    #[Serializer\XmlElement(cdata: false)]
+    #[Assert\NotBlank(allowNull: false)]
+    protected string $type;
 
-	#[Serializer\SkipWhenEmpty]
-	#[Serializer\Type('string')]
-	#[Serializer\SerializedName('p:PDZRecip')]
-	#[Serializer\XmlElement(cdata: false)]
-	protected ?string $recipient = null;
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type('string')]
+    #[Serializer\SerializedName('p:PDZRecip')]
+    #[Serializer\XmlElement(cdata: false)]
+    protected ?string $recipient = null;
 
-	#[Serializer\Type('string')]
-	#[Serializer\SerializedName('p:PDZPayer')]
-	#[Serializer\XmlElement(cdata: false)]
-	#[Assert\NotBlank(allowNull: false)]
-	protected string $payer;
+    #[Serializer\Type('string')]
+    #[Serializer\SerializedName('p:PDZPayer')]
+    #[Serializer\XmlElement(cdata: false)]
+    #[Assert\NotBlank(allowNull: false)]
+    protected string $payer;
 
-	#[Serializer\SkipWhenEmpty]
-	#[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
-	#[Serializer\SerializedName('p:PDZExpire')]
-	#[Serializer\XmlElement(cdata: false)]
-	protected ?DateTimeImmutable $expire = null;
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
+    #[Serializer\SerializedName('p:PDZExpire')]
+    #[Serializer\XmlElement(cdata: false)]
+    protected ?DateTimeImmutable $expire = null;
 
-	#[Serializer\SkipWhenEmpty]
-	#[Serializer\Type('int')]
-	#[Serializer\SerializedName('p:PDZCnt')]
-	#[Serializer\XmlElement(cdata: false)]
-	protected ?int $count = null;
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type('int')]
+    #[Serializer\SerializedName('p:PDZCnt')]
+    #[Serializer\XmlElement(cdata: false)]
+    protected ?int $count = null;
 
-	#[Serializer\Type('string')]
-	#[Serializer\SerializedName('p:ODZIdent')]
-	#[Serializer\XmlElement(cdata: false)]
-	#[Assert\NotBlank(allowNull: true)]
-	protected ?string $ident;
+    #[Serializer\Type('string')]
+    #[Serializer\SerializedName('p:ODZIdent')]
+    #[Serializer\XmlElement(cdata: false)]
+    #[Assert\NotBlank(allowNull: true)]
+    protected ?string $ident = null;
 
-	public function getType(): string
-	{
-		return $this->type;
-	}
+    public function getType(): string
+    {
+        return $this->type;
+    }
 
-	public function setType(string $type): PDZRecord
-	{
-		$this->type = $type;
-		return $this;
-	}
+    public function setType(string $type): PDZRecord
+    {
+        $this->type = $type;
+        return $this;
+    }
 
-	public function getRecipient(): ?string
-	{
-		return $this->recipient;
-	}
+    public function getRecipient(): ?string
+    {
+        return $this->recipient;
+    }
 
-	public function setRecipient(?string $recipient): PDZRecord
-	{
-		$this->recipient = $recipient;
-		return $this;
-	}
+    public function setRecipient(?string $recipient): PDZRecord
+    {
+        $this->recipient = $recipient;
+        return $this;
+    }
 
-	public function getPayer(): string
-	{
-		return $this->payer;
-	}
+    public function getPayer(): string
+    {
+        return $this->payer;
+    }
 
-	public function setPayer(string $payer): PDZRecord
-	{
-		$this->payer = $payer;
-		return $this;
-	}
+    public function setPayer(string $payer): PDZRecord
+    {
+        $this->payer = $payer;
+        return $this;
+    }
 
-	public function getExpire(): ?DateTimeImmutable
-	{
-		return $this->expire;
-	}
+    public function getExpire(): ?DateTimeImmutable
+    {
+        return $this->expire;
+    }
 
-	public function setExpire(?DateTimeImmutable $expire): PDZRecord
-	{
-		$this->expire = $expire;
-		return $this;
-	}
+    public function setExpire(?DateTimeImmutable $expire): PDZRecord
+    {
+        $this->expire = $expire;
+        return $this;
+    }
 
-	public function getCount(): ?int
-	{
-		return $this->count;
-	}
+    public function getCount(): ?int
+    {
+        return $this->count;
+    }
 
-	public function setCount(?int $count): PDZRecord
-	{
-		$this->count = $count;
-		return $this;
-	}
+    public function setCount(?int $count): PDZRecord
+    {
+        $this->count = $count;
+        return $this;
+    }
 
-	public function getIdent(): ?string
-	{
-		return $this->ident;
-	}
+    public function getIdent(): ?string
+    {
+        return $this->ident;
+    }
 
-	public function setIdent(?string $ident): PDZRecord
-	{
-		$this->ident = $ident;
-		return $this;
-	}
+    public function setIdent(?string $ident): PDZRecord
+    {
+        $this->ident = $ident;
+        return $this;
+    }
 }

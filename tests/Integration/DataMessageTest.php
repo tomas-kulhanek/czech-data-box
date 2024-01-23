@@ -4,6 +4,24 @@ declare(strict_types=1);
 
 namespace TomasKulhanek\Tests\CzechDataBox\Integration;
 
+use TomasKulhanek\CzechDataBox\DTO\Request\AuthenticateMessage;
+use TomasKulhanek\CzechDataBox\DTO\Request\VerifyMessage;
+use TomasKulhanek\CzechDataBox\DTO\Recipient;
+use TomasKulhanek\CzechDataBox\DTO\Request\GetListOfReceivedMessages;
+use TomasKulhanek\CzechDataBox\Utils\MessageStatus;
+use TomasKulhanek\CzechDataBox\DTO\Request\MarkMessageAsDownloaded;
+use TomasKulhanek\CzechDataBox\DTO\Request\MessageDownload;
+use TomasKulhanek\CzechDataBox\DTO\Request\SignedMessageDownload;
+use TomasKulhanek\CzechDataBox\DTO\Request\GetListOfSentMessages;
+use TomasKulhanek\CzechDataBox\DTO\Request\SignedSentMessageDownload;
+use TomasKulhanek\CzechDataBox\DTO\Request\ResignISDSDocument;
+use TomasKulhanek\CzechDataBox\DTO\Request\MessageEnvelopeDownload;
+use TomasKulhanek\CzechDataBox\DTO\Request\GetDeliveryInfo;
+use TomasKulhanek\CzechDataBox\DTO\Request\GetSignedDeliveryInfo;
+use TomasKulhanek\CzechDataBox\DTO\Request\GetMessageStateChanges;
+use TomasKulhanek\CzechDataBox\DTO\Request\CreateMessage;
+use TomasKulhanek\CzechDataBox\DTO\Envelope;
+use TomasKulhanek\CzechDataBox\DTO\File;
 use PHPUnit\Framework\TestCase;
 use TomasKulhanek\CzechDataBox\DTO;
 use TomasKulhanek\CzechDataBox\Utils;
@@ -17,7 +35,7 @@ class DataMessageTest extends TestCase
     public function testAuthenticateMessage(): void
     {
         $client = $this->createGuzzleConnector();
-        $message = new DTO\Request\AuthenticateMessage();
+        $message = new AuthenticateMessage();
         $message->setDataMessage($this->getOriginalMessage());
         $account = $this->createFOAccount();
         $response = $client->authenticateMessage($account, $message);
@@ -29,7 +47,7 @@ class DataMessageTest extends TestCase
     {
         $client = $this->createGuzzleConnector();
         $account = $this->createFOAccount();
-        $verifyMessage = new DTO\Request\VerifyMessage();
+        $verifyMessage = new VerifyMessage();
         $verifyMessage->setDataMessageId('7903783');
         $response = $client->verifyMessage($account, $verifyMessage);
         self::assertTrue($response->getStatus()->isOk(), $response->getStatus()->getMessage());
@@ -39,7 +57,7 @@ class DataMessageTest extends TestCase
     {
         self::assertTrue($this->createOVMAccount()->getDataBoxId() !== null);
         $newMessageEnvelope = $this->getNewMessageEnvelope();
-        $recipient = new DTO\Recipient();
+        $recipient = new Recipient();
         $recipient->setDataBoxId($this->createOVMAccount()->getDataBoxId());
         $newMessageEnvelope->addRecipient($recipient);
         $response = $this->createGuzzleConnector()->createMessage($this->createFOAccount(), $newMessageEnvelope);
@@ -52,8 +70,8 @@ class DataMessageTest extends TestCase
         $ovmAccount = $this->createOvmCertAccount();
         $client = $this->createGuzzleConnector();
 
-        $listrec = new DTO\Request\GetListOfReceivedMessages();
-        $listrec->setStatusFilter(Utils\MessageStatus::getDecEntryForStatus(Utils\MessageStatus::FILTER_ALL))
+        $listrec = new GetListOfReceivedMessages();
+        $listrec->setStatusFilter(MessageStatus::getDecEntryForStatus(MessageStatus::FILTER_ALL))
             ->setListTo(new \DateTimeImmutable())
             ->setListFrom((new \DateTimeImmutable())->modify('-1 day'));
 
@@ -61,12 +79,12 @@ class DataMessageTest extends TestCase
         self::assertTrue($listrecRes->getStatus()->isOk(), $listrecRes->getStatus()->getMessage());
 
         $client = $this->createGuzzleConnector();
-        $message = new DTO\Request\MarkMessageAsDownloaded();
+        $message = new MarkMessageAsDownloaded();
         $message->setDataMessageId($listrecRes->getRecord()[0]->getDataMessageId());
         $response = $client->markMessageAsDownloaded($ovmAccount, $message);
         self::assertTrue($response->getStatus()->isOk(), $response->getStatus()->getMessage());
 
-        $request = new DTO\Request\MessageDownload();
+        $request = new MessageDownload();
         $request->setDataMessageId($listrecRes->getRecord()[0]->getDataMessageId());
 
         $response = $client->messageDownload($ovmAccount, $request);
@@ -81,8 +99,8 @@ class DataMessageTest extends TestCase
         $ovmAccount = $this->createOvmCertAccount();
         $client = $this->createGuzzleConnector();
 
-        $listrec = new DTO\Request\GetListOfReceivedMessages();
-        $listrec->setStatusFilter(Utils\MessageStatus::getDecEntryForStatus(Utils\MessageStatus::FILTER_ALL))
+        $listrec = new GetListOfReceivedMessages();
+        $listrec->setStatusFilter(MessageStatus::getDecEntryForStatus(MessageStatus::FILTER_ALL))
             ->setListTo(new \DateTimeImmutable())
             ->setListFrom((new \DateTimeImmutable())->modify('-1 day'));
 
@@ -90,12 +108,12 @@ class DataMessageTest extends TestCase
         self::assertTrue($listrecRes->getStatus()->isOk(), $listrecRes->getStatus()->getMessage());
 
         $client = $this->createGuzzleConnector();
-        $message = new DTO\Request\MarkMessageAsDownloaded();
+        $message = new MarkMessageAsDownloaded();
         $message->setDataMessageId($listrecRes->getRecord()[0]->getDataMessageId());
         $response = $client->markMessageAsDownloaded($ovmAccount, $message);
         self::assertTrue($response->getStatus()->isOk(), $response->getStatus()->getMessage());
 
-        $request = new DTO\Request\SignedMessageDownload();
+        $request = new SignedMessageDownload();
         $request->setDataMessageId($listrecRes->getRecord()[0]->getDataMessageId());
 
         $response = $client->signedMessageDownload($ovmAccount, $request);
@@ -108,8 +126,8 @@ class DataMessageTest extends TestCase
         $account = $this->createFOAccount();
         $client = $this->createGuzzleConnector();
 
-        $listrec = new DTO\Request\GetListOfSentMessages();
-        $listrec->setStatusFilter(Utils\MessageStatus::getDecEntryForStatus(Utils\MessageStatus::FILTER_ALL))
+        $listrec = new GetListOfSentMessages();
+        $listrec->setStatusFilter(MessageStatus::getDecEntryForStatus(MessageStatus::FILTER_ALL))
             ->setListTo(new \DateTimeImmutable())
             ->setListFrom((new \DateTimeImmutable())->modify('-1 day'));
 
@@ -118,7 +136,7 @@ class DataMessageTest extends TestCase
 
         $client = $this->createGuzzleConnector();
 
-        $request = new DTO\Request\SignedSentMessageDownload();
+        $request = new SignedSentMessageDownload();
         $request->setDataMessageId($listrecRes->getRecord()[0]->getDataMessageId());
 
         $response = $client->signedSentMessageDownload($account, $request);
@@ -131,7 +149,7 @@ class DataMessageTest extends TestCase
         $ovmAccount = $this->createFOAccount();
         $client = $this->createGuzzleConnector();
 
-        $request = new DTO\Request\ResignISDSDocument();
+        $request = new ResignISDSDocument();
         $request->setDocument($this->getOriginalMessage());
 
         $response = $client->resignIsdsDocument($ovmAccount, $request);
@@ -144,8 +162,8 @@ class DataMessageTest extends TestCase
         $account = $this->createOvmCertAccount();
         $client = $this->createGuzzleConnector();
 
-        $listrec = new DTO\Request\GetListOfReceivedMessages();
-        $listrec->setStatusFilter(Utils\MessageStatus::getDecEntryForStatus(Utils\MessageStatus::FILTER_ALL))
+        $listrec = new GetListOfReceivedMessages();
+        $listrec->setStatusFilter(MessageStatus::getDecEntryForStatus(MessageStatus::FILTER_ALL))
             ->setListTo(new \DateTimeImmutable())
             ->setListFrom((new \DateTimeImmutable())->modify('-1 day'));
 
@@ -154,7 +172,7 @@ class DataMessageTest extends TestCase
 
         $client = $this->createGuzzleConnector();
 
-        $request = new DTO\Request\MessageEnvelopeDownload();
+        $request = new MessageEnvelopeDownload();
         $request->setDataMessageId($listrecRes->getRecord()[0]->getDataMessageId());
 
         $response = $client->messageEnvelopeDownload($account, $request);
@@ -167,8 +185,8 @@ class DataMessageTest extends TestCase
         $account = $this->createOvmCertAccount();
         $client = $this->createGuzzleConnector();
 
-        $listrec = new DTO\Request\GetListOfReceivedMessages();
-        $listrec->setStatusFilter(Utils\MessageStatus::getDecEntryForStatus(Utils\MessageStatus::FILTER_ALL))
+        $listrec = new GetListOfReceivedMessages();
+        $listrec->setStatusFilter(MessageStatus::getDecEntryForStatus(MessageStatus::FILTER_ALL))
             ->setListTo(new \DateTimeImmutable())
             ->setListFrom((new \DateTimeImmutable())->modify('-1 day'));
 
@@ -177,7 +195,7 @@ class DataMessageTest extends TestCase
 
         $client = $this->createGuzzleConnector();
 
-        $request = new DTO\Request\MarkMessageAsDownloaded();
+        $request = new MarkMessageAsDownloaded();
         $request->setDataMessageId($listrecRes->getRecord()[0]->getDataMessageId());
 
         $response = $client->markMessageAsDownloaded($account, $request);
@@ -190,8 +208,8 @@ class DataMessageTest extends TestCase
         $account = $this->createFOAccount();
         $client = $this->createGuzzleConnector();
 
-        $listrec = new DTO\Request\GetListOfSentMessages();
-        $listrec->setStatusFilter(Utils\MessageStatus::getDecEntryForStatus(Utils\MessageStatus::FILTER_ALL))
+        $listrec = new GetListOfSentMessages();
+        $listrec->setStatusFilter(MessageStatus::getDecEntryForStatus(MessageStatus::FILTER_ALL))
             ->setListTo(new \DateTimeImmutable())
             ->setListFrom((new \DateTimeImmutable())->modify('-1 day'));
 
@@ -200,7 +218,7 @@ class DataMessageTest extends TestCase
 
         $client = $this->createGuzzleConnector();
 
-        $request = new DTO\Request\GetDeliveryInfo();
+        $request = new GetDeliveryInfo();
         $request->setDataMessageId($listrecRes->getRecord()[0]->getDataMessageId());
 
         $response = $client->getDeliveryInfo($account, $request);
@@ -213,8 +231,8 @@ class DataMessageTest extends TestCase
         $account = $this->createFOAccount();
         $client = $this->createGuzzleConnector();
 
-        $listrec = new DTO\Request\GetListOfSentMessages();
-        $listrec->setStatusFilter(Utils\MessageStatus::getDecEntryForStatus(Utils\MessageStatus::FILTER_ALL))
+        $listrec = new GetListOfSentMessages();
+        $listrec->setStatusFilter(MessageStatus::getDecEntryForStatus(MessageStatus::FILTER_ALL))
             ->setListTo(new \DateTimeImmutable())
             ->setListFrom((new \DateTimeImmutable())->modify('-1 day'));
 
@@ -223,7 +241,7 @@ class DataMessageTest extends TestCase
 
         $client = $this->createGuzzleConnector();
 
-        $request = new DTO\Request\GetSignedDeliveryInfo();
+        $request = new GetSignedDeliveryInfo();
         $request->setDataMessageId($listrecRes->getRecord()[0]->getDataMessageId());
 
         $response = $client->getSignedDeliveryInfo($account, $request);
@@ -236,7 +254,7 @@ class DataMessageTest extends TestCase
         $account = $this->createOvmCertAccount();
         $client = $this->createGuzzleConnector();
 
-        $request = new DTO\Request\GetMessageStateChanges();
+        $request = new GetMessageStateChanges();
         $request
             ->setChangesTo(new \DateTimeImmutable())
             ->setChangesFrom((new \DateTimeImmutable())->modify('-1 day'));
@@ -246,11 +264,11 @@ class DataMessageTest extends TestCase
         self::assertTrue($response->getStatus()->isOk(), $response->getStatus()->getMessage());
     }
 
-    private function getNewMessageEnvelope(): DTO\Request\CreateMessage
+    private function getNewMessageEnvelope(): CreateMessage
     {
-        $createMessage = new DTO\Request\CreateMessage();
+        $createMessage = new CreateMessage();
         $createMessage
-            ->setEnvelope((new DTO\Envelope()));
+            ->setEnvelope((new Envelope()));
         $createMessage->getEnvelope()
             ->setPersonalDelivery(false)
             ->setOvm(false)
@@ -272,7 +290,7 @@ class DataMessageTest extends TestCase
             ->setSenderRefNumber('senderRefNumber')
             ->setType('type');
 
-        $file = new DTO\File();
+        $file = new File();
         $file->setEncodedContent($this->getTestAttachment())
             ->setFormat('pdf')
             ->setDescription('example.pdf')

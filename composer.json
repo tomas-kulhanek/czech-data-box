@@ -1,7 +1,14 @@
 {
   "name": "tomas-kulhanek/czech-data-box",
-  "homepage": "https://tomaskulhanek.cz",
   "description": "PHP library for connection to Integrated system of data box (ISDS) in Czech republic",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Tomáš Kulhánek",
+			"email": "jsem@tomaskulhanek.cz",
+			"homepage": "https://github.com/tomas-kulhanek"
+		}
+	],
   "keywords": [
     "isds",
     "datovky",
@@ -13,20 +20,6 @@
     "issues": "https://github.com/tomas-kulhanek/czech-data-box/issues",
     "source": "https://github.com/tomas-kulhanek/czech-data-box"
   },
-  "license": [
-    "BSD-3-Clause",
-    "GPL-2.0",
-    "GPL-3.0"
-  ],
-  "authors": [
-    {
-      "name": "Tomas Kulhanek",
-      "homepage": "https://tomaskulhanek.cz"
-    },
-    {
-      "name": "Vojtech Krupka"
-    }
-  ],
   "require": {
     "php": ">=8.1",
     "ext-curl": "*",
@@ -56,12 +49,34 @@
     "guzzlehttp/guzzle": "^7.3",
     "nyholm/psr7": "^1.4",
     "php-http/httplug": "^2.2",
-    "phpstan/phpstan": "^1.10",
-    "phpunit/phpunit": "^10.2",
-    "rector/rector": "^0.17.7",
     "symfony/http-client": "5.4.*|6.*",
-    "symplify/easy-coding-standard": "^12.0"
+		"phpstan/phpstan": "^1.10",
+		"phpunit/phpunit": "^10.5",
+		"rector/rector": "^0.19.2",
+		"squizlabs/php_codesniffer": "^3.7"
   },
+	"scripts": {
+		"check": [
+			"@phpstan",
+			"@phpcs",
+			"@phpunit"
+		],
+		"test:phpunit": "php -d xdebug.mode=off vendor/phpunit/phpunit/phpunit",
+		"check:phpstan": "php -d memory_limit=512M vendor/bin/phpstan analyse -c phpstan.neon",
+		"check:rector": "php vendor/bin/rector process src tests public --dry-run",
+		"check:cs": "phpcs --extensions=php --standard=PSR12 -n src tests",
+		"fix:cs": "phpcbf --extensions=php --standard=PSR12 -n src tests",
+		"fix:rector": "php vendor/bin/rector process src tests public",
+		"fix:all": [
+			"@fix:rector",
+			"@fix:cs"
+		],
+		"check:all": [
+			"@check:phpstan",
+			"@check:rector",
+			"@check:cs"
+		]
+	},
   "archive": {
     "exclude": [
       "/tests"

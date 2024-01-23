@@ -13,25 +13,25 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 #[Serializer\XmlRoot(name: 'p:GetMessageStateChangesResponse', namespace: 'http://isds.czechpoint.cz/v20')]
 class GetMessageStateChanges extends IResponse
 {
-	use DataMessageStatus;
+    use DataMessageStatus;
 
-	/**
-	 * @var StateChangeRecord[]
-	 */
-	#[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\StateChangeRecord>')]
-	#[Serializer\XmlList(entry: 'dmRecord', inline: false)]
-	#[Serializer\SerializedName('p:dmRecords')]
-	#[Assert\All([
-		new Assert\Type(StateChangeRecord::class)
-	])]
-	#[Assert\Valid()]
-	protected array $record = [];
+    /**
+     * @var StateChangeRecord[]
+     */
+    #[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\StateChangeRecord>')]
+    #[Serializer\XmlList(entry: 'dmRecord', inline: false)]
+    #[Serializer\SerializedName('p:dmRecords')]
+    #[Assert\All([
+        new Assert\Type(StateChangeRecord::class)
+    ])]
+    #[Assert\Valid()]
+    protected array $record = [];
 
-	/**
-	 * @return StateChangeRecord[]
-	 */
-	public function getRecords(): array
-	{
-		return $this->record;
-	}
+    /**
+     * @return StateChangeRecord[]
+     */
+    public function getRecords(): array
+    {
+        return $this->record;
+    }
 }

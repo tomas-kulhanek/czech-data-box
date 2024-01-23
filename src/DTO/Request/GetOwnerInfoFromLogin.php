@@ -11,5 +11,5 @@ use TomasKulhanek\CzechDataBox\Traits\Dummy;
 #[Serializer\XmlRoot(name: 'p:GetOwnerInfoFromLogin', namespace: 'http://isds.czechpoint.cz/v20')]
 class GetOwnerInfoFromLogin implements IRequest
 {
-	use Dummy;
+    use Dummy;
 }

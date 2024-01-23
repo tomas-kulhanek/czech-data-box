@@ -11,20 +11,20 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 #[Serializer\XmlRoot(name: 'p:AuthenticateMessageResponse', namespace: 'http://isds.czechpoint.cz/v20')]
 class AuthenticateMessage extends IResponse
 {
-	use DataMessageStatus;
+    use DataMessageStatus;
 
-	#[Serializer\Type('bool')]
-	#[Serializer\SerializedName('p:dmAuthResult')]
-	protected bool $authenticated;
+    #[Serializer\Type('bool')]
+    #[Serializer\SerializedName('p:dmAuthResult')]
+    protected bool $authenticated;
 
-	public function isAuthenticated(): bool
-	{
-		return $this->authenticated;
-	}
+    public function isAuthenticated(): bool
+    {
+        return $this->authenticated;
+    }
 
-	public function setAuthenticated(bool $authenticated): AuthenticateMessage
-	{
-		$this->authenticated = $authenticated;
-		return $this;
-	}
+    public function setAuthenticated(bool $authenticated): AuthenticateMessage
+    {
+        $this->authenticated = $authenticated;
+        return $this;
+    }
 }

@@ -14,5 +14,5 @@ use TomasKulhanek\CzechDataBox\Traits\DataBoxId;
 #[Serializer\XmlRoot(name: 'p:DTInfo', namespace: 'http://isds.czechpoint.cz/v20')]
 class DTInfo implements IRequest
 {
-	use DataBoxId;
+    use DataBoxId;
 }

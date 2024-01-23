@@ -11,15 +11,15 @@ use TomasKulhanek\CzechDataBox\Traits\DataBoxStatus;
 #[Serializer\XmlRoot(name: 'p:PDZSendInfoResponse', namespace: 'http://isds.czechpoint.cz/v20')]
 class PDZSendInfo extends IResponse
 {
-	use DataBoxStatus;
+    use DataBoxStatus;
 
-	#[Serializer\Type('bool')]
-	#[Serializer\XmlElement(cdata: false)]
-	#[Serializer\SerializedName('p:PDZsiResult')]
-	protected bool $result;
+    #[Serializer\Type('bool')]
+    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('p:PDZsiResult')]
+    protected bool $result;
 
-	public function isResult(): bool
-	{
-		return $this->result;
-	}
+    public function isResult(): bool
+    {
+        return $this->result;
+    }
 }

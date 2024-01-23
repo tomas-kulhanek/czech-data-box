@@ -13,29 +13,29 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 #[Serializer\XmlRoot(name: 'p:MessageEnvelopeDownloadResponse', namespace: 'http://isds.czechpoint.cz/v20')]
 class MessageEnvelopeDownload extends IResponse
 {
-	use DataMessageStatus;
+    use DataMessageStatus;
 
-	#[Serializer\SkipWhenEmpty]
-	#[Serializer\Type(ReturnedMessageEnvelope::class)]
-	#[Serializer\XmlElement(cdata: false)]
-	#[Serializer\SerializedName('p:dmReturnedMessageEnvelope')]
-	#[Assert\Valid()]
-	protected ?ReturnedMessageEnvelope $message = null;
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type(ReturnedMessageEnvelope::class)]
+    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('p:dmReturnedMessageEnvelope')]
+    #[Assert\Valid()]
+    protected ?ReturnedMessageEnvelope $message = null;
 
-	public function setStatus(\TomasKulhanek\CzechDataBox\DTO\DataMessageStatus $status): MessageEnvelopeDownload
-	{
-		$this->status = $status;
-		return $this;
-	}
+    public function setStatus(\TomasKulhanek\CzechDataBox\DTO\DataMessageStatus $status): MessageEnvelopeDownload
+    {
+        $this->status = $status;
+        return $this;
+    }
 
-	public function getMessage(): ?ReturnedMessageEnvelope
-	{
-		return $this->message;
-	}
+    public function getMessage(): ?ReturnedMessageEnvelope
+    {
+        return $this->message;
+    }
 
-	public function setMessage(?ReturnedMessageEnvelope $message): MessageEnvelopeDownload
-	{
-		$this->message = $message;
-		return $this;
-	}
+    public function setMessage(?ReturnedMessageEnvelope $message): MessageEnvelopeDownload
+    {
+        $this->message = $message;
+        return $this;
+    }
 }

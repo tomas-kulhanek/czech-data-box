@@ -11,5 +11,5 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 #[Serializer\XmlRoot(name: 'p:ConfirmDeliveryResponse', namespace: 'http://isds.czechpoint.cz/v20')]
 class ConfirmDelivery extends IResponse
 {
-	use DataMessageStatus;
+    use DataMessageStatus;
 }

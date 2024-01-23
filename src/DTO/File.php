@@ -13,139 +13,139 @@ use TomasKulhanek\Serializer\Utils\SplFileInfo;
 #[Serializer\AccessType(type: 'public_method')]
 class File
 {
-	#[Serializer\Type('string')]
-	#[Serializer\XmlAttribute]
-	#[Serializer\SerializedName('dmMimeType')]
-	#[Assert\NotBlank(allowNull: false)]
-	protected string $mimeType;
+    #[Serializer\Type('string')]
+    #[Serializer\XmlAttribute]
+    #[Serializer\SerializedName('dmMimeType')]
+    #[Assert\NotBlank(allowNull: false)]
+    protected string $mimeType;
 
-	#[Serializer\Type('string')]
-	#[Serializer\XmlAttribute]
-	#[Serializer\SerializedName('dmFileMetaType')]
-	#[Assert\NotBlank(allowNull: false)]
-	protected string $metaType;
+    #[Serializer\Type('string')]
+    #[Serializer\XmlAttribute]
+    #[Serializer\SerializedName('dmFileMetaType')]
+    #[Assert\NotBlank(allowNull: false)]
+    protected string $metaType;
 
-	#[Serializer\Type('string')]
-	#[Serializer\SkipWhenEmpty]
-	#[Serializer\XmlAttribute]
-	#[Serializer\SerializedName('dmFileGuid')]
-	protected ?string $guid = null;
+    #[Serializer\Type('string')]
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\XmlAttribute]
+    #[Serializer\SerializedName('dmFileGuid')]
+    protected ?string $guid = null;
 
-	#[Serializer\Type('string')]
-	#[Serializer\SkipWhenEmpty]
-	#[Serializer\XmlAttribute]
-	#[Serializer\SerializedName('dmUpFileGuid')]
-	protected ?string $upGuid = null;
+    #[Serializer\Type('string')]
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\XmlAttribute]
+    #[Serializer\SerializedName('dmUpFileGuid')]
+    protected ?string $upGuid = null;
 
-	#[Serializer\Type('string')]
-	#[Serializer\XmlAttribute]
-	#[Serializer\SerializedName('dmFileDescr')]
-	#[Assert\NotBlank(allowNull: false)]
-	protected string $description;
+    #[Serializer\Type('string')]
+    #[Serializer\XmlAttribute]
+    #[Serializer\SerializedName('dmFileDescr')]
+    #[Assert\NotBlank(allowNull: false)]
+    protected string $description;
 
-	#[Serializer\SkipWhenEmpty]
-	#[Serializer\Type('string')]
-	#[Serializer\XmlAttribute]
-	#[Serializer\SerializedName('dmFormat')]
-	protected ?string $format = null;
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type('string')]
+    #[Serializer\XmlAttribute]
+    #[Serializer\SerializedName('dmFormat')]
+    protected ?string $format = null;
 
-	#[Serializer\Type('base64File')]
-	#[Serializer\SerializedName('p:dmEncodedContent')]
-	#[Serializer\XmlElement(cdata: false)]
-	#[Serializer\SkipWhenEmpty]
-	protected ?SplFileInfo $encodedContent = null;
+    #[Serializer\Type('base64File')]
+    #[Serializer\SerializedName('p:dmEncodedContent')]
+    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SkipWhenEmpty]
+    protected ?SplFileInfo $encodedContent = null;
 
-	#[Serializer\Type('string')]
-	#[Serializer\SerializedName('p:dmXMLContent')]
-	#[Serializer\XmlElement(cdata: false)]
-	#[Serializer\SkipWhenEmpty]
-	protected ?string $xmlContent = null;
+    #[Serializer\Type('string')]
+    #[Serializer\SerializedName('p:dmXMLContent')]
+    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SkipWhenEmpty]
+    protected ?string $xmlContent = null;
 
-	public function getMimeType(): string
-	{
-		return $this->mimeType;
-	}
+    public function getMimeType(): string
+    {
+        return $this->mimeType;
+    }
 
-	public function setMimeType(string $mimeType): File
-	{
-		$this->mimeType = $mimeType;
-		return $this;
-	}
+    public function setMimeType(string $mimeType): File
+    {
+        $this->mimeType = $mimeType;
+        return $this;
+    }
 
-	public function getMetaType(): string
-	{
-		return $this->metaType;
-	}
+    public function getMetaType(): string
+    {
+        return $this->metaType;
+    }
 
-	public function setMetaType(string $metaType): File
-	{
-		$this->metaType = $metaType;
-		return $this;
-	}
+    public function setMetaType(string $metaType): File
+    {
+        $this->metaType = $metaType;
+        return $this;
+    }
 
-	public function getGuid(): ?string
-	{
-		return $this->guid;
-	}
+    public function getGuid(): ?string
+    {
+        return $this->guid;
+    }
 
-	public function setGuid(?string $guid): File
-	{
-		$this->guid = $guid;
-		return $this;
-	}
+    public function setGuid(?string $guid): File
+    {
+        $this->guid = $guid;
+        return $this;
+    }
 
-	public function getUpGuid(): ?string
-	{
-		return $this->upGuid;
-	}
+    public function getUpGuid(): ?string
+    {
+        return $this->upGuid;
+    }
 
-	public function setUpGuid(?string $upGuid): File
-	{
-		$this->upGuid = $upGuid;
-		return $this;
-	}
+    public function setUpGuid(?string $upGuid): File
+    {
+        $this->upGuid = $upGuid;
+        return $this;
+    }
 
-	public function getDescription(): string
-	{
-		return $this->description;
-	}
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
 
-	public function setDescription(string $description): File
-	{
-		$this->description = $description;
-		return $this;
-	}
+    public function setDescription(string $description): File
+    {
+        $this->description = $description;
+        return $this;
+    }
 
-	public function getFormat(): ?string
-	{
-		return $this->format;
-	}
+    public function getFormat(): ?string
+    {
+        return $this->format;
+    }
 
-	public function setFormat(?string $format): File
-	{
-		$this->format = $format;
-		return $this;
-	}
+    public function setFormat(?string $format): File
+    {
+        $this->format = $format;
+        return $this;
+    }
 
-	public function getEncodedContent(): ?SplFileInfo
-	{
-		return $this->encodedContent;
-	}
+    public function getEncodedContent(): ?SplFileInfo
+    {
+        return $this->encodedContent;
+    }
 
-	public function setEncodedContent(SplFileInfo $encodedContent): File
-	{
-		$this->encodedContent = $encodedContent;
-		return $this;
-	}
+    public function setEncodedContent(SplFileInfo $encodedContent): File
+    {
+        $this->encodedContent = $encodedContent;
+        return $this;
+    }
 
-	public function getXmlContent(): ?string
-	{
-		return $this->xmlContent;
-	}
+    public function getXmlContent(): ?string
+    {
+        return $this->xmlContent;
+    }
 
-	public function setXmlContent(string $xmlContent): File
-	{
-		$this->xmlContent = $xmlContent;
-		return $this;
-	}
+    public function setXmlContent(string $xmlContent): File
+    {
+        $this->xmlContent = $xmlContent;
+        return $this;
+    }
 }

@@ -11,22 +11,22 @@ use TomasKulhanek\CzechDataBox\Traits\DataBoxStatus;
 #[Serializer\XmlRoot(name: 'p:FindDataBoxResponse', namespace: 'http://isds.czechpoint.cz/v20')]
 class CheckDataBox extends IResponse
 {
-	use DataBoxStatus;
+    use DataBoxStatus;
 
-	#[Serializer\SkipWhenEmpty]
-	#[Serializer\Type('int')]
-	#[Serializer\SerializedName('p:dbState')]
-	#[Serializer\XmlElement(cdata: false)]
-	protected ?int $state = null;
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type('int')]
+    #[Serializer\SerializedName('p:dbState')]
+    #[Serializer\XmlElement(cdata: false)]
+    protected ?int $state = null;
 
-	public function getState(): ?int
-	{
-		return $this->state;
-	}
+    public function getState(): ?int
+    {
+        return $this->state;
+    }
 
-	public function setState(?int $state): CheckDataBox
-	{
-		$this->state = $state;
-		return $this;
-	}
+    public function setState(?int $state): CheckDataBox
+    {
+        $this->state = $state;
+        return $this;
+    }
 }

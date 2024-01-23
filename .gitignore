@@ -7,3 +7,4 @@ vendor
 tests/_data/test.p12
 tests/_reports
 .data
+compose.yaml

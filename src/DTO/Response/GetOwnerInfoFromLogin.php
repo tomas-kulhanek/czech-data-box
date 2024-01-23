@@ -13,16 +13,16 @@ use TomasKulhanek\CzechDataBox\Traits\DataBoxStatus;
 #[Serializer\XmlRoot(name: 'p:GetOwnerInfoFromLoginResponse', namespace: 'http://isds.czechpoint.cz/v20')]
 class GetOwnerInfoFromLogin extends IResponse
 {
-	use DataBoxStatus;
+    use DataBoxStatus;
 
-	#[Serializer\Type(OwnerInfo::class)]
-	#[Serializer\XmlElement(cdata: false)]
-	#[Serializer\SerializedName('p:dbOwnerInfo')]
-	#[Assert\Valid()]
-	protected OwnerInfo $ownerInfo;
+    #[Serializer\Type(OwnerInfo::class)]
+    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('p:dbOwnerInfo')]
+    #[Assert\Valid()]
+    protected OwnerInfo $ownerInfo;
 
-	public function getOwnerInfo(): OwnerInfo
-	{
-		return $this->ownerInfo;
-	}
+    public function getOwnerInfo(): OwnerInfo
+    {
+        return $this->ownerInfo;
+    }
 }

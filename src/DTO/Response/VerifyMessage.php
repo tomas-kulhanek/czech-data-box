@@ -13,28 +13,28 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 #[Serializer\XmlRoot(name: 'p:VerifyMessageResponse', namespace: 'http://isds.czechpoint.cz/v20')]
 class VerifyMessage extends IResponse
 {
-	use DataMessageStatus;
+    use DataMessageStatus;
 
-	#[Serializer\Type(Hash::class)]
-	#[Serializer\SerializedName('p:dmHash')]
-	#[Serializer\XmlElement(cdata: false)]
-	#[Assert\Valid()]
-	protected Hash $hash;
+    #[Serializer\Type(Hash::class)]
+    #[Serializer\SerializedName('p:dmHash')]
+    #[Serializer\XmlElement(cdata: false)]
+    #[Assert\Valid()]
+    protected Hash $hash;
 
-	public function setStatus(\TomasKulhanek\CzechDataBox\DTO\DataMessageStatus $status): VerifyMessage
-	{
-		$this->status = $status;
-		return $this;
-	}
+    public function setStatus(\TomasKulhanek\CzechDataBox\DTO\DataMessageStatus $status): VerifyMessage
+    {
+        $this->status = $status;
+        return $this;
+    }
 
-	public function getHash(): Hash
-	{
-		return $this->hash;
-	}
+    public function getHash(): Hash
+    {
+        return $this->hash;
+    }
 
-	public function setHash(Hash $hash): VerifyMessage
-	{
-		$this->hash = $hash;
-		return $this;
-	}
+    public function setHash(Hash $hash): VerifyMessage
+    {
+        $this->hash = $hash;
+        return $this;
+    }
 }

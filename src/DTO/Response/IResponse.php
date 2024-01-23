@@ -6,5 +6,5 @@ namespace TomasKulhanek\CzechDataBox\DTO\Response;
 
 abstract class IResponse
 {
-	abstract public function getStatus(): IResponseStatus;
+    abstract public function getStatus(): IResponseStatus;
 }

@@ -11,12 +11,12 @@ env:
   composer-install-args: "--no-progress --no-interaction --prefer-dist --no-scripts"
 
 jobs:
-  qa:
+  rector:
     name: "Quality assurance"
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: [ '8.1', '8.2', '8.3' ]
+        php-version: [ '8.3' ]
       fail-fast: false
 
     steps:
@@ -30,7 +30,28 @@ jobs:
         with:
           php_version: ${{ matrix.php-version }}
           args:  "${{ env.composer-install-args }}"
-      - run: vendor/bin/ecs check src tests
+      - run: composer check:rector
+
+  qa:
+    name: "Quality assurance"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ['8.3']
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+
+      - uses: php-actions/composer@v6
+        with:
+          php_version: ${{ matrix.php-version }}
+          args:  "${{ env.composer-install-args }}"
+      - run: composer check:cs
 
   static-analysis:
     name: "Static analysis"
@@ -53,11 +74,7 @@ jobs:
           args: "${{ env.composer-install-args }}"
 
       - name: PHPStan Static Analysis
-        uses: php-actions/phpstan@v3
-        with:
-          configuration: phpstan.neon
-          memory_limit: 256M
-          php_version: ${{ matrix.php-version }}
+        run: composer check:phpstan
 
   tests:
     name: "Tests"
@@ -109,15 +126,9 @@ jobs:
           PFO_LOGIN_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/6g5plyqgiqxexvefr4nvtos4xu/username
           PFO_PASSWORD_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/6g5plyqgiqxexvefr4nvtos4xu/password
       - name: PHPUnit
-        uses: php-actions/phpunit@v3
+        run: composer test:phpunit
         env:
           XDEBUG_MODE: coverage
           CERT_PRIV: '${{ secrets.CERT_PRIV }}'
           CERT_PUB: '${{ secrets.CERT_PUB }}'
           CERT_PASSPHRASE: '${{ secrets.CERT_PASSPHRASE }}'
-        with:
-          bootstrap: vendor/autoload.php
-          configuration: phpunit.xml
-          php_version: ${{ matrix.php-version }}
-          php_extensions: "${{ env.extensions }}"
-          version: "10.2"

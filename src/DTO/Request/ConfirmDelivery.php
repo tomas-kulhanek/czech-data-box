@@ -11,5 +11,5 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageId;
 #[Serializer\XmlRoot(name: 'p:ConfirmDelivery', namespace: 'http://isds.czechpoint.cz/v20')]
 class ConfirmDelivery implements IRequest
 {
-	use DataMessageId;
+    use DataMessageId;
 }

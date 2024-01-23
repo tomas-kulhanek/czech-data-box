@@ -13,26 +13,26 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 #[Serializer\XmlRoot(name: 'p:GetListOfReceivedMessagesResponse', namespace: 'http://isds.czechpoint.cz/v20')]
 class GetListOfReceivedMessages extends IResponse
 {
-	use DataMessageStatus;
+    use DataMessageStatus;
 
-	/**
-	 * @var MessageRecord[]
-	 */
-	#[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\MessageRecord>')]
-	#[Serializer\XmlList(entry: 'dmRecord', inline: false, namespace: 'http://isds.czechpoint.cz/v20')]
-	#[Serializer\SerializedName('dmRecords')]
-	#[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
-	#[Assert\All([
-		new Assert\Type(type: MessageRecord::class)
-	])]
-	#[Assert\Valid()]
-	protected array $record = [];
+    /**
+     * @var MessageRecord[]
+     */
+    #[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\MessageRecord>')]
+    #[Serializer\XmlList(entry: 'dmRecord', inline: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dmRecords')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Assert\All([
+        new Assert\Type(type: MessageRecord::class)
+    ])]
+    #[Assert\Valid()]
+    protected array $record = [];
 
-	/**
-	 * @return MessageRecord[]
-	 */
-	public function getRecord(): array
-	{
-		return $this->record;
-	}
+    /**
+     * @return MessageRecord[]
+     */
+    public function getRecord(): array
+    {
+        return $this->record;
+    }
 }

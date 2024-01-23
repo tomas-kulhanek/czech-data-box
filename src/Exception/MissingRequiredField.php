@@ -8,8 +8,8 @@ use Exception;
 
 class MissingRequiredField extends Exception
 {
-	public function __construct(string $fieldName)
-	{
-		parent::__construct(sprintf('The required field \'%s\' is empty.', $fieldName));
-	}
+    public function __construct(string $fieldName)
+    {
+        parent::__construct(sprintf('The required field \'%s\' is empty.', $fieldName));
+    }
 }

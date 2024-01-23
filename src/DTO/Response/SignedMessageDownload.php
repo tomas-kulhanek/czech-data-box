@@ -12,12 +12,12 @@ use TomasKulhanek\CzechDataBox\Traits\Signature;
 #[Serializer\XmlRoot(name: 'p:SignedMessageDownloadResponse', namespace: 'http://isds.czechpoint.cz/v20')]
 class SignedMessageDownload extends IResponse
 {
-	use DataMessageStatus;
-	use Signature;
+    use DataMessageStatus;
+    use Signature;
 
-	public function setStatus(\TomasKulhanek\CzechDataBox\DTO\DataMessageStatus $status): SignedMessageDownload
-	{
-		$this->status = $status;
-		return $this;
-	}
+    public function setStatus(\TomasKulhanek\CzechDataBox\DTO\DataMessageStatus $status): SignedMessageDownload
+    {
+        $this->status = $status;
+        return $this;
+    }
 }

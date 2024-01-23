@@ -13,16 +13,16 @@ use TomasKulhanek\CzechDataBox\Traits\DataBoxStatus;
 #[Serializer\XmlRoot(name: 'p:GetUserInfoFromLoginResponse', namespace: 'http://isds.czechpoint.cz/v20')]
 class GetUserInfoFromLogin extends IResponse
 {
-	use DataBoxStatus;
+    use DataBoxStatus;
 
-	#[Serializer\Type(UserInfo::class)]
-	#[Serializer\XmlElement(cdata: false)]
-	#[Serializer\SerializedName('p:dbUserInfo')]
-	#[Assert\Valid()]
-	protected UserInfo $userInfo;
-	
-	public function getUserInfo(): UserInfo
-	{
-		return $this->userInfo;
-	}
+    #[Serializer\Type(UserInfo::class)]
+    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('p:dbUserInfo')]
+    #[Assert\Valid()]
+    protected UserInfo $userInfo;
+
+    public function getUserInfo(): UserInfo
+    {
+        return $this->userInfo;
+    }
 }

@@ -11,5 +11,5 @@ use TomasKulhanek\CzechDataBox\Traits\Dummy;
 #[Serializer\XmlRoot(name: 'p:GetPasswordInfo', namespace: 'http://isds.czechpoint.cz/v20')]
 class GetPasswordInfo implements IRequest
 {
-	use Dummy;
+    use Dummy;
 }

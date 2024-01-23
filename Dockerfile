@@ -1,34 +1,13 @@
 FROM composer:2 AS composer
 
-FROM ghcr.io/tomas-kulhanek/docker-application:main AS builder
-WORKDIR /var/www
-RUN apt-get -y --no-install-recommends update && \
-    apt-get -y --no-install-recommends install git && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* /var/cache/apt/lists
+FROM php:latest
+
+RUN apt-get update \
+     && apt-get install -y libzip-dev zlib1g-dev zlib1g-dev zip git libfcgi-bin jq librabbitmq-dev libpng-dev libonig-dev unzip \
+     && apt-get clean \
+     && rm -rf /var/lib/apt/list/* \
+     && docker-php-ext-install pdo_mysql bcmath gd mysqli \
+     && docker-php-ext-configure bcmath --enable-bcmath \
+     && docker-php-ext-configure zip
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
-COPY ./composer.* ./
-RUN composer install --no-dev --no-progress --no-interaction --no-scripts
-
-
-FROM ghcr.io/tomas-kulhanek/docker-application:main AS development
-WORKDIR /var/www
-RUN apt-get -y --no-install-recommends update && \
-    apt-get -y --no-install-recommends upgrade && \
-    apt-get -y --no-install-recommends install git vim curl && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* /var/cache/apt/lists
-
-COPY --from=composer /usr/bin/composer /usr/bin/composer
-
-
-FROM ghcr.io/tomas-kulhanek/docker-application:main
-WORKDIR /var/www
-RUN apt-get -y --no-install-recommends update && \
-    apt-get -y --no-install-recommends upgrade && \
-    apt-get -y --no-install-recommends install curl && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* /var/cache/apt/lists
-COPY --from=builder /var/www .
-COPY . ./
