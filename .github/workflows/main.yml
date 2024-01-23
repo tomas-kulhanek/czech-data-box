@@ -85,23 +85,36 @@ jobs:
           echo ${{ secrets.CERT_PRIV }} | base64 -d > .data/cert.pem
           echo ${{ secrets.CERT_PUB }} | base64 -d > .data/cert.crt
 
+
+      - uses: 1password/load-secrets-action@v1
+        with:
+          # Export loaded secrets as environment variables
+          export-env: true
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+
+          OVM_CERT_ID_DS: op://mafzpsiebs3jzo6sijs5rtfeg4/nwdbxdp4vx3qcczbfee7q2jg4i/text
+          OVM_CERT_LOGIN_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/nwdbxdp4vx3qcczbfee7q2jg4i/username
+          OVM_CERT_PASSWORD_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/nwdbxdp4vx3qcczbfee7q2jg4i/password
+
+          FO_ID_DS: op://mafzpsiebs3jzo6sijs5rtfeg4/db3jkjbdwomausvvp52q3qeefi/text
+          FO_LOGIN_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/db3jkjbdwomausvvp52q3qeefi/username
+          FO_PASSWORD_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/db3jkjbdwomausvvp52q3qeefi/password
+
+          OVM_ID_DS: op://mafzpsiebs3jzo6sijs5rtfeg4/2ksmcswa4ot4nh55lcsfmnpuau/text
+          OVM_LOGIN_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/2ksmcswa4ot4nh55lcsfmnpuau/username
+          OVM_PASSWORD_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/2ksmcswa4ot4nh55lcsfmnpuau/password
+
+          PFO_ID_DS: op://mafzpsiebs3jzo6sijs5rtfeg4/6g5plyqgiqxexvefr4nvtos4xu/text
+          PFO_LOGIN_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/6g5plyqgiqxexvefr4nvtos4xu/username
+          PFO_PASSWORD_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/6g5plyqgiqxexvefr4nvtos4xu/password
       - name: PHPUnit
         uses: php-actions/phpunit@v3
         env:
           XDEBUG_MODE: coverage
-          FO_ID_DS: '${{ secrets.FO_ID_DS }}'
-          FO_LOGIN_USER: '${{ secrets.FO_LOGIN_USER }}'
-          FO_PASSWORD_USER: '${{ secrets.FO_PASSWORD_USER }}'
-          OVM_ID_DS: '${{ secrets.OVM_ID_DS }}'
-          OVM_LOGIN_USER: '${{ secrets.OVM_LOGIN_USER }}'
-          OVM_PASSWORD_USER: '${{ secrets.OVM_PASSWORD_USER }}'
-          IS_PRODUCTION: '0'
           CERT_PRIV: '${{ secrets.CERT_PRIV }}'
           CERT_PUB: '${{ secrets.CERT_PUB }}'
           CERT_PASSPHRASE: '${{ secrets.CERT_PASSPHRASE }}'
-          PFO_ID_DS: '${{ secrets.PFO_ID_DS }}'
-          PFO_LOGIN_USER: '${{ secrets.PFO_LOGIN_USER }}'
-          PFO_PASSWORD_USER: '${{ secrets.PFO_PASSWORD_USER }}'
         with:
           bootstrap: vendor/autoload.php
           configuration: phpunit.xml
