@@ -1,0 +1,21 @@
+name: ❓ Support Question
+description: ⚠️ NEVER report bug or feature
+labels: [Support]
+assignees:
+  - tomas-kulhanek
+
+body:
+  - type: input
+    id: affected-versions
+    attributes:
+      label: Fakturoid PHP lib version(s) affected
+      placeholder: x.y.z
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of the problem
+    validations:
+      required: true
