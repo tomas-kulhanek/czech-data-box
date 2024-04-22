@@ -8,7 +8,7 @@ body:
   - type: input
     id: affected-versions
     attributes:
-      label: Fakturoid PHP lib version(s) affected
+      label: Library version(s) affected
       placeholder: x.y.z
     validations:
       required: true
