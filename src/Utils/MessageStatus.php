@@ -72,7 +72,6 @@ class MessageStatus
     }
 
     /**
-     * @param int|null $type
      * @return string
      * @throws BadOptionException
      */

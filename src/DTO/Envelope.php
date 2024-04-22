@@ -217,7 +217,6 @@ class Envelope
     /**
      * Schránky typu FO, PO a PFO, které mají povoleno vystupovat jako OVM (podle § 5a) musejí již při vytváření DZ určit, v jakém režimu (OVM x ne-OVM) odesílají. Význam to má z procesních (a účetních) důvodů.
      *
-     * @param bool|null $ovm
      * @return Envelope
      */
     public function setOvm(?bool $ovm): Envelope

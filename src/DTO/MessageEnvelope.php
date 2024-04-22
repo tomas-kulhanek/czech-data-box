@@ -24,7 +24,7 @@ class MessageEnvelope
     #[Serializer\SerializedName('dmFiles')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\All([
-        new Assert\Type(type: \Hoa\File\File::class)
+        new Assert\Type(type: File::class)
     ])]
     #[Assert\Valid()]
     protected array $files = [];
