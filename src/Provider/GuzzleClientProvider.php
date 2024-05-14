@@ -8,25 +8,25 @@ use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use TomasKulhanek\CzechDataBox\Account;
+use TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum;
+use TomasKulhanek\CzechDataBox\Enum\ServiceTypeEnum;
 use TomasKulhanek\CzechDataBox\Exception\ConnectionException;
 use TomasKulhanek\CzechDataBox\Exception\FileSystemException;
 use TomasKulhanek\CzechDataBox\Exception\MissingRequiredField;
 use TomasKulhanek\CzechDataBox\Exception\SystemExclusion;
 
-class GuzzleClientProvider implements ClientProviderInterface
+readonly class GuzzleClientProvider implements ClientProviderInterface
 {
-    private Client $client;
-    private EndpointProvider $endpointProvider;
-
     public static function create(): self
     {
         return new self(new Client(), new EndpointProvider());
     }
 
-    public function __construct(Client $client, EndpointProvider $endpointProvider, private string $caCertPath = __DIR__ . '/../cacert.pem')
-    {
-        $this->client = $client;
-        $this->endpointProvider = $endpointProvider;
+    public function __construct(
+        private Client $client,
+        private EndpointProvider $endpointProvider,
+        private string $caCertPath = __DIR__ . '/../cacert.pem'
+    ) {
     }
 
     /**
@@ -34,14 +34,12 @@ class GuzzleClientProvider implements ClientProviderInterface
      */
     private function getHeaders(): array
     {
-        $headers = [
+        return [
             'Connection' => 'Keep-Alive',
             'Accept-Encoding' => 'gzip,deflate',
             'Content-Type' => 'text/xml; charset=utf-8',
             'SOAPAction' => '""',
         ];
-
-        return $headers;
     }
 
     /**
@@ -50,13 +48,13 @@ class GuzzleClientProvider implements ClientProviderInterface
     private function getAuthentication(Account $account): array
     {
         return match ($account->getLoginType()) {
-            Account::LOGIN_HOSTED_SPIS => [$account->getDataBoxId(), null],
-            Account::LOGIN_NAME_PASSWORD, Account::LOGIN_CERT_LOGIN_NAME_PASSWORD => [$account->getLoginName(), $account->getPassword()],
+            LoginTypeEnum::HOSTED_SPIS => [$account->getDataBoxId(), null],
+            LoginTypeEnum::NAME_PASSWORD, LoginTypeEnum::CERT_LOGIN_NAME_PASSWORD => [$account->getLoginName(), $account->getPassword()],
             default => [],
         };
     }
 
-    public function sendRequest(Account $account, int $serviceType, string $xmlBody): string
+    public function sendRequest(Account $account, ServiceTypeEnum $serviceType, string $xmlBody): string
     {
         $requestOptions = [
             RequestOptions::AUTH => $this->getAuthentication($account),

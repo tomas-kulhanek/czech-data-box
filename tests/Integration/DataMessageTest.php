@@ -8,6 +8,7 @@ use TomasKulhanek\CzechDataBox\DTO\Request\AuthenticateMessage;
 use TomasKulhanek\CzechDataBox\DTO\Request\VerifyMessage;
 use TomasKulhanek\CzechDataBox\DTO\Recipient;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetListOfReceivedMessages;
+use TomasKulhanek\CzechDataBox\Enum\FilterEnum;
 use TomasKulhanek\CzechDataBox\Utils\MessageStatus;
 use TomasKulhanek\CzechDataBox\DTO\Request\MarkMessageAsDownloaded;
 use TomasKulhanek\CzechDataBox\DTO\Request\MessageDownload;
@@ -71,7 +72,7 @@ class DataMessageTest extends TestCase
         $client = $this->createGuzzleConnector();
 
         $listrec = new GetListOfReceivedMessages();
-        $listrec->setStatusFilter(MessageStatus::getDecEntryForStatus(MessageStatus::FILTER_ALL))
+        $listrec->setStatusFilter(FilterEnum::ALL)
             ->setListTo(new \DateTimeImmutable())
             ->setListFrom((new \DateTimeImmutable())->modify('-30 day'));
 
@@ -100,7 +101,7 @@ class DataMessageTest extends TestCase
         $client = $this->createGuzzleConnector();
 
         $listrec = new GetListOfReceivedMessages();
-        $listrec->setStatusFilter(MessageStatus::getDecEntryForStatus(MessageStatus::FILTER_ALL))
+        $listrec->setStatusFilter(FilterEnum::ALL)
             ->setListTo(new \DateTimeImmutable())
             ->setListFrom((new \DateTimeImmutable())->modify('-30 day'));
 
@@ -127,7 +128,7 @@ class DataMessageTest extends TestCase
         $client = $this->createGuzzleConnector();
 
         $listrec = new GetListOfSentMessages();
-        $listrec->setStatusFilter(MessageStatus::getDecEntryForStatus(MessageStatus::FILTER_ALL))
+        $listrec->setStatusFilter(FilterEnum::ALL)
             ->setListTo(new \DateTimeImmutable())
             ->setListFrom((new \DateTimeImmutable())->modify('-30 day'));
 
@@ -163,7 +164,7 @@ class DataMessageTest extends TestCase
         $client = $this->createGuzzleConnector();
 
         $listrec = new GetListOfReceivedMessages();
-        $listrec->setStatusFilter(MessageStatus::getDecEntryForStatus(MessageStatus::FILTER_ALL))
+        $listrec->setStatusFilter(FilterEnum::ALL)
             ->setListTo(new \DateTimeImmutable())
             ->setListFrom((new \DateTimeImmutable())->modify('-30 day'));
 
@@ -186,7 +187,7 @@ class DataMessageTest extends TestCase
         $client = $this->createGuzzleConnector();
 
         $listrec = new GetListOfReceivedMessages();
-        $listrec->setStatusFilter(MessageStatus::getDecEntryForStatus(MessageStatus::FILTER_ALL))
+        $listrec->setStatusFilter(FilterEnum::ALL)
             ->setListTo(new \DateTimeImmutable())
             ->setListFrom((new \DateTimeImmutable())->modify('-30 day'));
 
@@ -209,7 +210,7 @@ class DataMessageTest extends TestCase
         $client = $this->createGuzzleConnector();
 
         $listrec = new GetListOfSentMessages();
-        $listrec->setStatusFilter(MessageStatus::getDecEntryForStatus(MessageStatus::FILTER_ALL))
+        $listrec->setStatusFilter(FilterEnum::ALL)
             ->setListTo(new \DateTimeImmutable())
             ->setListFrom((new \DateTimeImmutable())->modify('-30 day'));
 
@@ -232,7 +233,7 @@ class DataMessageTest extends TestCase
         $client = $this->createGuzzleConnector();
 
         $listrec = new GetListOfSentMessages();
-        $listrec->setStatusFilter(MessageStatus::getDecEntryForStatus(MessageStatus::FILTER_ALL))
+        $listrec->setStatusFilter(FilterEnum::ALL)
             ->setListTo(new \DateTimeImmutable())
             ->setListFrom((new \DateTimeImmutable())->modify('-30 day'));
 

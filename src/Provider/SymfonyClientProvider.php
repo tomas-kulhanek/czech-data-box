@@ -8,26 +8,25 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use TomasKulhanek\CzechDataBox\Account;
+use TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum;
+use TomasKulhanek\CzechDataBox\Enum\ServiceTypeEnum;
 use TomasKulhanek\CzechDataBox\Exception\ConnectionException;
 use TomasKulhanek\CzechDataBox\Exception\FileSystemException;
 use TomasKulhanek\CzechDataBox\Exception\MissingRequiredField;
 use TomasKulhanek\CzechDataBox\Exception\SystemExclusion;
 
-class SymfonyClientProvider implements ClientProviderInterface
+readonly class SymfonyClientProvider implements ClientProviderInterface
 {
-    private HttpClientInterface $client;
-    private EndpointProvider $endpointProvider;
-
-
     public static function create(): self
     {
         return new self(HttpClient::create(), new EndpointProvider());
     }
 
-    public function __construct(HttpClientInterface $client, EndpointProvider $endpointProvider, private string $caCertPath = __DIR__ . '/../cacert.pem')
-    {
-        $this->client = $client;
-        $this->endpointProvider = $endpointProvider;
+    public function __construct(
+        private HttpClientInterface $client,
+        private EndpointProvider $endpointProvider,
+        private string $caCertPath = __DIR__ . '/../cacert.pem'
+    ) {
     }
 
     /**
@@ -42,11 +41,11 @@ class SymfonyClientProvider implements ClientProviderInterface
             'SOAPAction' => '""',
         ];
         switch ($account->getLoginType()) {
-            case Account::LOGIN_HOSTED_SPIS:
+            case LoginTypeEnum::HOSTED_SPIS:
                 $headers['Authorization'] = sprintf('Basic %s', base64_encode((string) $account->getDataBoxId()));
                 break;
-            case Account::LOGIN_NAME_PASSWORD:
-            case Account::LOGIN_CERT_LOGIN_NAME_PASSWORD:
+            case LoginTypeEnum::NAME_PASSWORD:
+            case LoginTypeEnum::CERT_LOGIN_NAME_PASSWORD:
                 $headers['Authorization'] = sprintf('Basic %s', base64_encode($account->getLoginName() . ':' . $account->getPassword()));
                 break;
         }
@@ -54,7 +53,7 @@ class SymfonyClientProvider implements ClientProviderInterface
         return $headers;
     }
 
-    public function sendRequest(Account $account, int $serviceType, string $xmlBody): string
+    public function sendRequest(Account $account, ServiceTypeEnum $serviceType, string $xmlBody): string
     {
         $requestOptions = [];
         if ($account->usingCertificate()) {

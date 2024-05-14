@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TomasKulhanek\Tests\CzechDataBox\Integration;
 
 use TomasKulhanek\CzechDataBox\Account;
+use TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum;
 
 trait AccountTrait
 {
@@ -12,7 +13,7 @@ trait AccountTrait
     {
         $account = new Account();
         $account->setProduction(false);
-        $account->setLoginType($account::LOGIN_NAME_PASSWORD);
+        $account->setLoginType(LoginTypeEnum::NAME_PASSWORD);
         $account->setLoginName((string) getenv('PFO_LOGIN_USER'));
         $account->setPassword((string) getenv('PFO_PASSWORD_USER'));
         $account->setDataBoxId((string) getenv('PFO_ID_DS'));
@@ -23,7 +24,7 @@ trait AccountTrait
     {
         $account = new Account();
         $account->setProduction(false);
-        $account->setLoginType($account::LOGIN_HOSTED_SPIS);
+        $account->setLoginType(LoginTypeEnum::HOSTED_SPIS);
         $account->setPublicKey((string) file_get_contents(__DIR__ . '/../../.data/cert.crt'));
         $account->setPrivateKey((string) file_get_contents(__DIR__ . '/../../.data/cert.pem'));
         $account->setLoginName((string) getenv('PFO_LOGIN_USER'));
@@ -37,7 +38,7 @@ trait AccountTrait
     {
         $account = new Account();
         $account->setProduction(false);
-        $account->setLoginType($account::LOGIN_NAME_PASSWORD);
+        $account->setLoginType(LoginTypeEnum::NAME_PASSWORD);
         $account->setLoginName((string) getenv('FO_LOGIN_USER'));
         $account->setPassword((string) getenv('FO_PASSWORD_USER'));
         $account->setDataBoxId((string) getenv('FO_ID_DS'));
@@ -48,7 +49,7 @@ trait AccountTrait
     {
         $account = new Account();
         $account->setProduction(false);
-        $account->setLoginType($account::LOGIN_HOSTED_SPIS);
+        $account->setLoginType(LoginTypeEnum::HOSTED_SPIS);
         $account->setPublicKey((string) file_get_contents(__DIR__ . '/../../.data/cert.crt'));
         $account->setPrivateKey((string) file_get_contents(__DIR__ . '/../../.data/cert.pem'));
         $account->setLoginName((string) getenv('FO_LOGIN_USER'));
@@ -62,7 +63,7 @@ trait AccountTrait
     {
         $account = new Account();
         $account->setProduction(false);
-        $account->setLoginType($account::LOGIN_HOSTED_SPIS);
+        $account->setLoginType(LoginTypeEnum::HOSTED_SPIS);
         $account->setPublicKey((string) file_get_contents(__DIR__ . '/../../.data/cert.crt'));
         $account->setPrivateKey((string) file_get_contents(__DIR__ . '/../../.data/cert.pem'));
         $account->setLoginName((string) getenv('OVM_CERT_LOGIN_USER'));
@@ -76,7 +77,7 @@ trait AccountTrait
     {
         $account = new Account();
         $account->setProduction(false);
-        $account->setLoginType($account::LOGIN_NAME_PASSWORD);
+        $account->setLoginType(LoginTypeEnum::NAME_PASSWORD);
         $account->setLoginName((string) getenv('OVM_LOGIN_USER'));
         $account->setPassword((string) getenv('OVM_PASSWORD_USER'));
         $account->setDataBoxId((string) getenv('OVM_ID_DS'));

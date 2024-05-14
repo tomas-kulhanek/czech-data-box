@@ -6,6 +6,7 @@ namespace TomasKulhanek\Tests\CzechDataBox\Integration;
 
 use PHPUnit\Framework\TestCase;
 use TomasKulhanek\CzechDataBox\Account;
+use TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum;
 
 class SymfonyProviderTest extends TestCase
 {
@@ -35,7 +36,7 @@ class SymfonyProviderTest extends TestCase
     public function testLoginAndPasswordAndCert(): void
     {
         $account = $this->createOvmCertAccount();
-        $account->setLoginType(Account::LOGIN_CERT_LOGIN_NAME_PASSWORD);
+        $account->setLoginType(LoginTypeEnum::CERT_LOGIN_NAME_PASSWORD);
 
         $response = $this->createSymfonyConnector()
             ->getOwnerInfoFromLogin($account);
@@ -46,7 +47,7 @@ class SymfonyProviderTest extends TestCase
     public function testSpisCert(): void
     {
         $account = $this->createOvmCertAccount();
-        $account->setLoginType(Account::LOGIN_SPIS_CERT);
+        $account->setLoginType(LoginTypeEnum::SPIS_CERT);
 
         $response = $this->createSymfonyConnector()
             ->getOwnerInfoFromLogin($account);

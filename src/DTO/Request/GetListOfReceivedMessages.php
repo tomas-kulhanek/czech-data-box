@@ -6,11 +6,15 @@ namespace TomasKulhanek\CzechDataBox\DTO\Request;
 
 use DateTimeImmutable;
 use JMS\Serializer\Annotation as Serializer;
+use TomasKulhanek\CzechDataBox\Enum\FilterEnum;
+use TomasKulhanek\CzechDataBox\Traits\StatusFilter;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(name: 'p:GetListOfReceivedMessages', namespace: 'http://isds.czechpoint.cz/v20')]
 class GetListOfReceivedMessages implements IRequest
 {
+    use StatusFilter;
+
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
     #[Serializer\SerializedName('p:dmFromTime')]
@@ -29,10 +33,10 @@ class GetListOfReceivedMessages implements IRequest
     #[Serializer\SerializedName('p:dmRecipientOrgUnitNum')]
     protected ?int $recipientOrgUnitNum = null;
 
-    #[Serializer\Type('float')]
+    #[Serializer\Type('integer')]
     #[Serializer\XmlElement(cdata: false)]
     #[Serializer\SerializedName('p:dmStatusFilter')]
-    protected ?float $statusFilter = null;
+    protected int $statusFilter = -1;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
@@ -79,14 +83,17 @@ class GetListOfReceivedMessages implements IRequest
         return $this;
     }
 
-    public function getStatusFilter(): ?float
+    /**
+     * @return non-empty-list<FilterEnum>
+     */
+    public function getStatusFilter(): array
     {
-        return $this->statusFilter;
+        return $this->decodeFilters($this->statusFilter);
     }
 
-    public function setStatusFilter(float $statusFilter): GetListOfReceivedMessages
+    public function setStatusFilter(FilterEnum ...$statuses): GetListOfReceivedMessages
     {
-        $this->statusFilter = $statusFilter;
+        $this->statusFilter = $this->encodeFilters(...$statuses);
         return $this;
     }
 

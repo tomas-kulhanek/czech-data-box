@@ -33,17 +33,14 @@ Tato knihovna slouží k základní komunikaci s Informačním systémem datový
 
 ## Základní použití
 Pro každou operaci je potřebné zadat přístupové údaje
+
 ```php
 <?php
 $account = new \TomasKulhanek\CzechDataBox\Account();
-try {
-    $account->setPassword('mojeTajneHeslo')
+$account->setPassword('mojeTajneHeslo')
         ->setLoginName('mujLogin')
-            ->setLoginType($account::LOGIN_NAME_PASSWORD)
-            ->setProduction(false);
-} catch (\TomasKulhanek\CzechDataBox\Exception\BadOptionException $exception) {
-    die($exception->getMessage());
-}
+        ->setLoginType(\TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum::NAME_PASSWORD)
+        ->setProduction(false);
 ```
 Prostředí ke kterému se připojuje je definováno pomocí ``\TomasKulhanek\CzechDataBox\Account::isProduction()``
 

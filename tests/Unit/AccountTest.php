@@ -6,29 +6,28 @@ namespace TomasKulhanek\Tests\CzechDataBox\Unit;
 
 use PHPUnit\Framework\TestCase;
 use TomasKulhanek\CzechDataBox\Account;
+use TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum;
 
 class AccountTest extends TestCase
 {
     use GeneratePkcs;
 
-    private const TEST_PASS_PHRASE = 'isds';
-
     public function testCertificateLogin(): void
     {
         $account = new Account();
-        $account->setLoginType(Account::LOGIN_CERT_LOGIN_NAME_PASSWORD);
+        $account->setLoginType(LoginTypeEnum::CERT_LOGIN_NAME_PASSWORD);
         self::assertTrue($account->usingCertificate());
-        $account->setLoginType(Account::LOGIN_HOSTED_SPIS);
+        $account->setLoginType(LoginTypeEnum::HOSTED_SPIS);
         self::assertTrue($account->usingCertificate());
-        $account->setLoginType(Account::LOGIN_SPIS_CERT);
+        $account->setLoginType(LoginTypeEnum::SPIS_CERT);
         self::assertTrue($account->usingCertificate());
-        $account->setLoginType(Account::LOGIN_NAME_PASSWORD);
+        $account->setLoginType(LoginTypeEnum::NAME_PASSWORD);
         self::assertFalse($account->usingCertificate());
     }
 
     public function testPkcs12Certificate(): void
     {
-        $passPhrase = self::TEST_PASS_PHRASE;
+        $passPhrase = 'isds';
         $pkcsContent = $this->generateP12Certificate($passPhrase);
 
         $cert_array = [];

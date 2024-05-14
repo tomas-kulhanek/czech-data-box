@@ -4,29 +4,18 @@ declare(strict_types=1);
 
 namespace TomasKulhanek\CzechDataBox;
 
+use TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum;
 use TomasKulhanek\CzechDataBox\Exception\PkcsCertificateException;
 
 class Account
 {
-    public const LOGIN_NAME_PASSWORD = 'password';
-    public const LOGIN_SPIS_CERT = 'cert';
-    public const LOGIN_CERT_LOGIN_NAME_PASSWORD = 'certPassword';
-    public const LOGIN_HOSTED_SPIS = 'hosted';
-
     private ?string $loginName = null;
-
     private ?string $dataBoxId = null;
-
     private ?string $password = null;
-
-    private string $loginType = self::LOGIN_NAME_PASSWORD;
-
+    private LoginTypeEnum $loginType = LoginTypeEnum::NAME_PASSWORD;
     private bool $production = true;
-
     private ?string $publicKey = null;
-
     private ?string $privateKey = null;
-
     private ?string $privateKeyPassPhrase = null;
 
     public function getLoginName(): ?string
@@ -51,12 +40,12 @@ class Account
         return $this;
     }
 
-    public function getLoginType(): string
+    public function getLoginType(): LoginTypeEnum
     {
         return $this->loginType;
     }
 
-    public function setLoginType(string $loginType): Account
+    public function setLoginType(LoginTypeEnum $loginType): Account
     {
         $this->loginType = $loginType;
         return $this;
@@ -122,7 +111,10 @@ class Account
 
     public function usingCertificate(): bool
     {
-        return in_array($this->getLoginType(), [self::LOGIN_HOSTED_SPIS, self::LOGIN_SPIS_CERT, self::LOGIN_CERT_LOGIN_NAME_PASSWORD], true);
+        return match ($this->getLoginType()) {
+            LoginTypeEnum::HOSTED_SPIS, LoginTypeEnum::SPIS_CERT, LoginTypeEnum::CERT_LOGIN_NAME_PASSWORD => true,
+            default => false,
+        };
     }
 
     public function isProduction(): bool
