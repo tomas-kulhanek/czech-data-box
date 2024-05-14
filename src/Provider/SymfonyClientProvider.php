@@ -72,8 +72,17 @@ class SymfonyClientProvider implements ClientProviderInterface
             }
             fwrite($publicCert, $account->getPublicKey());
             fwrite($privateKey, $account->getPrivateKey());
-            $requestOptions['local_cert'] = stream_get_meta_data($publicCert)['uri'];
-            $requestOptions['local_pk'] = stream_get_meta_data($privateKey)['uri'];
+
+            $publicStream = stream_get_meta_data($publicCert);
+            if (!array_key_exists('uri', $publicStream)) {
+                throw new \LogicException('Failed to get stream metadata of public certificate');
+            }
+            $privateStream = stream_get_meta_data($privateKey);
+            if (!array_key_exists('uri', $privateStream)) {
+                throw new \LogicException('Failed to get stream metadata of private certificate');
+            }
+            $requestOptions['local_cert'] = $publicStream['uri'];
+            $requestOptions['local_pk'] = $privateStream['uri'];
             $requestOptions['passphrase'] = $account->getPrivateKeyPassPhrase();
         }
 

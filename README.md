@@ -31,8 +31,6 @@ Pokud je potřeba implementovat vlastního klienta, je potřeba implementovat ro
 ## Popis
 Tato knihovna slouží k základní komunikaci s Informačním systémem datových scrhánek [ISDS](https://mojedatovaschranka.cz) nebo [ISDS test](https://czebox.cz)
 
-Veškeré ukázky, jak pracovat s knihovnou naleznete v examples. Jediná podmínka ke zprovoznění je ta, že musíte vlastnit své přístupové údaje.
-
 ## Základní použití
 Pro každou operaci je potřebné zadat přístupové údaje
 ```php

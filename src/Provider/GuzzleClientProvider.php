@@ -76,8 +76,17 @@ class GuzzleClientProvider implements ClientProviderInterface
             }
             fwrite($publicCert, $account->getPublicKey());
             fwrite($privateKey, $account->getPrivateKey());
-            $requestOptions[RequestOptions::CERT] = [stream_get_meta_data($publicCert)['uri'], $account->getPrivateKeyPassPhrase()];
-            $requestOptions[RequestOptions::SSL_KEY] = [stream_get_meta_data($privateKey)['uri'], $account->getPrivateKeyPassPhrase()];
+
+            $publicStream = stream_get_meta_data($publicCert);
+            if (!array_key_exists('uri', $publicStream)) {
+                throw new \LogicException('Failed to get stream metadata of public certificate');
+            }
+            $privateStream = stream_get_meta_data($privateKey);
+            if (!array_key_exists('uri', $privateStream)) {
+                throw new \LogicException('Failed to get stream metadata of private certificate');
+            }
+            $requestOptions[RequestOptions::CERT] = [$publicStream['uri'], $account->getPrivateKeyPassPhrase()];
+            $requestOptions[RequestOptions::SSL_KEY] = [$privateStream['uri'], $account->getPrivateKeyPassPhrase()];
         }
 
         $requestOptions[RequestOptions::HEADERS] = $this->getHeaders();

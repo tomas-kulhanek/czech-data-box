@@ -1,13 +1,13 @@
+ARG PHP_VERSION=8.2
 FROM composer:2 AS composer
 
-FROM php:latest
+FROM php:${PHP_VERSION}
 
 RUN apt-get update \
-     && apt-get install -y libzip-dev zlib1g-dev zlib1g-dev zip git libfcgi-bin jq librabbitmq-dev libpng-dev libonig-dev unzip \
+     && apt-get install -y libzip-dev zlib1g-dev zlib1g-dev zip git libfcgi-bin jq libpng-dev libonig-dev unzip \
      && apt-get clean \
      && rm -rf /var/lib/apt/list/* \
-     && docker-php-ext-install pdo_mysql bcmath gd mysqli \
-     && docker-php-ext-configure bcmath --enable-bcmath \
-     && docker-php-ext-configure zip
+     && pecl install xdebug \
+     && docker-php-ext-enable xdebug
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
