@@ -7,7 +7,7 @@
 [![License](https://poser.pugx.org/tomas-kulhanek/czech-data-box/license)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
 
 
-⚠ **POZOR!!** Pokud implementujete napojení na ISDS, je potřeba aby jste se řídili dle [PROVOZNÍHO ŘÁDU](https://www.datoveschranky.info/dulezite-informace/provozni-rad-isds)⚠
+⚠ **POZOR!!** Pokud implementujete napojení na ISDS, je potřeba aby jste se řídili dle [PROVOZNÍHO ŘÁDU](https://info.mojedatovaschranka.cz/info/cs/80.html)⚠
 ## Instalace
 
 ### Composer
@@ -26,7 +26,7 @@ composer require tomas-kulhanek/czech-data-box guzzlehttp/guzzle:^7.0
 composer require tomas-kulhanek/czech-data-box symfony/http-client
 ```
 
-Pokud je potřeba implementovat vlastního klienta, je potřeba implementovat rozhraní `TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface` a zajistit správné nastavení hlaviček nebo SSL klientských certifikátů.
+V případě využívání vlastního http klienta, stačí implementovat rozhraní `TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface` a předat ho do konstruktoru třídy `TomasKulhanek\CzechDataBox\Connector`. Samozřejmostí je třeba zajistit správné nastavení hlaviček nebo SSL klientských certifikátů.
 
 ## Popis
 Tato knihovna slouží k základní komunikaci s Informačním systémem datových scrhánek [ISDS](https://mojedatovaschranka.cz) nebo [ISDS test](https://czebox.cz)
@@ -42,14 +42,13 @@ $account->setPassword('mojeTajneHeslo')
         ->setLoginType(\TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum::NAME_PASSWORD)
         ->setProduction(false);
 ```
-Prostředí ke kterému se připojuje je definováno pomocí ``\TomasKulhanek\CzechDataBox\Account::isProduction()``
 
-## Využití s Symfony HTPP client
+## Využití s Symfony HTTP client
 ### Instalace
 ```bash
 composer require tomas-kulhanek/czech-data-box symfony/http-client
 ```
-#### Využitví
+#### Instancování
 ```php
 $serializer = \TomasKulhanek\Serializer\SerializerFactory::create();
 $guzzleProvider = \TomasKulhanek\CzechDataBox\Provider\SymfonyClientProvider::create();
@@ -61,7 +60,7 @@ $connector = new \TomasKulhanek\CzechDataBox\Connector($serializer, $guzzleProvi
 ```bash
 composer require tomas-kulhanek/czech-data-box guzzlehttp/guzzle:^7.0
 ```
-#### Využitví 
+#### Instancování 
 ```php
 $serializer = \TomasKulhanek\Serializer\SerializerFactory::create();
 $guzzleProvider = \TomasKulhanek\CzechDataBox\Provider\GuzzleClientProvider::create();
@@ -75,9 +74,8 @@ Základní pomoc je poskytována zcela zdarma pomocí Issues.
 ## Odkazy
 - Produkční ISDS - https://mojedatoveschranky.cz
 - Testovací ISDS - https://czebox.cz
-- Software602, a.s. - https://602.cz
-- Provozní řád ISDS - https://www.datoveschranky.info/dulezite-informace/provozni-rad
-- Oznamované změny - https://www.datoveschranky.info/
+- Provozní řád ISDS - https://info.mojedatovaschranka.cz/info/cs/80.html
+- Poradna - https://poradnaisds.cz/
 
 ## Žádosti o zřízení datové schránky
 ### Produkční prostředí
@@ -85,8 +83,4 @@ Základní pomoc je poskytována zcela zdarma pomocí Issues.
 - ostatní - [odkaz](https://www.datoveschranky.info/documents/1744842/1746063/zadost_zrizeni_ds.zfo/42ee7c26-16dd-427f-94c8-319453efdae4)
 
 ### Testovací prostředí
-- všechny - [okdaz](https://www.datoveschranky.info/documents/1744842/1746073/zadost_zrizeni_testovaci_ds.zfo/4b75d5bf-0272-4305-9cef-8ec8f019e9d3)
-
-## Časté otázky
-### Proč CURL a ne SoapClient?
-Důvod je jednoduchý. Jelikož PHP nedokázalo správně zpracovávat pomocí ClassMap request/response viz [bug](https://bugs.php.net/bug.php?id=45404). Z toho důvodu, jsme zvolili využití curl a serializeru. Problém byl například v CreateMessage a proto jsme na internetu nikde nenašli knihovnu, která by umožňovala odesílání datových zpráv.
+Zřízení testovací schránky v prostředí czecbox.cz je možné skrze formulář na produkčním portalu www.mojedatoveschranky.cz po přihlášení v nastavení
