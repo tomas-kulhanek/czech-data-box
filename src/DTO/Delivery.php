@@ -16,32 +16,32 @@ class Delivery
     use QTimestamp;
 
     #[Serializer\Type(MessageEnvelope::class)]
-    #[Serializer\SerializedName('p:dmDm')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmDm')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
     protected MessageEnvelope $dataMessage;
 
     #[Serializer\Type(Hash::class)]
-    #[Serializer\SerializedName('p:dmHash')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmHash')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
     protected Hash $hash;
 
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dmDeliveryTime')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dmDeliveryTime')]
     #[Serializer\SkipWhenEmpty]
     protected ?DateTimeImmutable $deliveryTime = null;
 
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dmAcceptanceTime')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dmAcceptanceTime')]
     #[Serializer\SkipWhenEmpty]
     protected ?DateTimeImmutable $acceptanceTime = null;
 
     #[Serializer\Type('int')]
-    #[Serializer\SerializedName('p:dmMessageStatus')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmMessageStatus')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\PositiveOrZero]
     protected int $messageStatus;
 
@@ -50,7 +50,7 @@ class Delivery
      */
     #[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\DataMessageEvent>')]
     #[Serializer\XmlList(entry: 'dmEvent', inline: false)]
-    #[Serializer\SerializedName('p:dmEvents')]
+    #[Serializer\SerializedName('dmEvents')]
     #[Assert\All([
         new Assert\Type(type: DataMessageEvent::class)
     ])]

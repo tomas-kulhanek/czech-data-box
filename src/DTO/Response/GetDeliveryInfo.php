@@ -16,9 +16,9 @@ class GetDeliveryInfo extends IResponse
     use DataMessageStatus;
 
     #[Serializer\Type(Delivery::class)]
-    #[Serializer\SerializedName('p:dmDelivery')]
+    #[Serializer\SerializedName('dmDelivery')]
     #[Serializer\SkipWhenEmpty]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
     protected Delivery $delivery;
 

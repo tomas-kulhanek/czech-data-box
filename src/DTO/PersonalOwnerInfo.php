@@ -18,86 +18,86 @@ class PersonalOwnerInfo
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('bool')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:aifoIsds')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('aifoIsds')]
     protected ?bool $aifoIsds = null;
 
     #[Serializer\SkipWhenEmpty]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\Type("DateTimeImmutable<'Y-m-d'>")]
-    #[Serializer\SerializedName('p:biDate')]
+    #[Serializer\SerializedName('biDate')]
     protected ?DateTimeImmutable $biDate = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:biCity')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('biCity')]
     protected ?string $biCity = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:biCounty')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('biCounty')]
     protected ?string $biCounty = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:biState')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('biState')]
     protected ?string $biState = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:adCode')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('adCode')]
     protected ?int $adCode = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:adCity')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('adCity')]
     protected ?string $adCity = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:adStreet')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('adStreet')]
     protected ?string $adDistrict = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:adStreet')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('adStreet')]
     protected ?string $adStreet = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:adNumberInStreet')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('adNumberInStreet')]
     protected ?string $adNumberInStreet = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:adNumberInMunicipality')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('adNumberInMunicipality')]
     protected ?string $adNumberInMunicipality = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:adZipCode')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('adZipCode')]
     protected ?string $adZipCode = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:adState')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('adState')]
     protected ?string $adState = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:nationality')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('nationality')]
     protected ?string $nationality = null;
 
     public function getAifoIsds(): ?bool

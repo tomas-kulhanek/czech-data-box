@@ -50,14 +50,14 @@ class File
     protected ?string $format = null;
 
     #[Serializer\Type('base64File')]
-    #[Serializer\SerializedName('p:dmEncodedContent')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmEncodedContent')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SkipWhenEmpty]
     protected ?SplFileInfo $encodedContent = null;
 
     #[Serializer\Type('string')]
-    #[Serializer\SerializedName('p:dmXMLContent')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmXMLContent')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SkipWhenEmpty]
     protected ?string $xmlContent = null;
 

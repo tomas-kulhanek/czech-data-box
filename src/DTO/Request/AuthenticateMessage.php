@@ -13,8 +13,8 @@ use TomasKulhanek\Serializer\Utils\SplFileInfo;
 class AuthenticateMessage implements IRequest
 {
     #[Serializer\Type('base64File')]
-    #[Serializer\SerializedName('p:dmMessage')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmMessage')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected SplFileInfo $dataMessage;
 
     public function getDataMessage(): SplFileInfo

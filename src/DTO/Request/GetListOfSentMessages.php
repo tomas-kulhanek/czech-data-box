@@ -17,37 +17,37 @@ class GetListOfSentMessages implements IRequest
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
-    #[Serializer\SerializedName('p:dmFromTime')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmFromTime')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?DateTimeImmutable $listFrom = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
-    #[Serializer\SerializedName('p:dmToTime')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmToTime')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?DateTimeImmutable $listTo = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dmRecipientOrgUnitNum')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dmRecipientOrgUnitNum')]
     protected ?int $recipientOrgUnitNum = null;
 
     #[Serializer\Type('integer')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dmStatusFilter')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dmStatusFilter')]
     protected int $statusFilter = -1;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dmOffset')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dmOffset')]
     protected ?int $offset = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dmLimit')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dmLimit')]
     protected ?int $limit = null;
 
     public function getListFrom(): ?DateTimeImmutable

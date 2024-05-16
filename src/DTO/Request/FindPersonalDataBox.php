@@ -13,8 +13,8 @@ use TomasKulhanek\CzechDataBox\DTO\PersonalOwnerInfo;
 class FindPersonalDataBox implements IRequest
 {
     #[Serializer\Type(PersonalOwnerInfo::class)]
-    #[Serializer\SerializedName('p:dbOwnerInfo')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dbOwnerInfo')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
     protected PersonalOwnerInfo $ownerInfo;
 

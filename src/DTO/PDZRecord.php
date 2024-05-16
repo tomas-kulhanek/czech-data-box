@@ -13,38 +13,38 @@ use Symfony\Component\Validator\Constraints as Assert;
 class PDZRecord
 {
     #[Serializer\Type('string')]
-    #[Serializer\SerializedName('p:PDZType')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('PDZType')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\NotBlank(allowNull: false)]
     protected string $type;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
-    #[Serializer\SerializedName('p:PDZRecip')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('PDZRecip')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?string $recipient = null;
 
     #[Serializer\Type('string')]
-    #[Serializer\SerializedName('p:PDZPayer')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('PDZPayer')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\NotBlank(allowNull: false)]
     protected string $payer;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
-    #[Serializer\SerializedName('p:PDZExpire')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('PDZExpire')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?DateTimeImmutable $expire = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
-    #[Serializer\SerializedName('p:PDZCnt')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('PDZCnt')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?int $count = null;
 
     #[Serializer\Type('string')]
-    #[Serializer\SerializedName('p:ODZIdent')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('ODZIdent')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\NotBlank(allowNull: true)]
     protected ?string $ident = null;
 

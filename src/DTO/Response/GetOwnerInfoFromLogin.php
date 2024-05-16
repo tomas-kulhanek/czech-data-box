@@ -16,8 +16,8 @@ class GetOwnerInfoFromLogin extends IResponse
     use DataBoxStatus;
 
     #[Serializer\Type(OwnerInfo::class)]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dbOwnerInfo')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbOwnerInfo')]
     #[Assert\Valid()]
     protected OwnerInfo $ownerInfo;
 

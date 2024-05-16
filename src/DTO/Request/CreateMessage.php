@@ -19,8 +19,8 @@ class CreateMessage implements IRequest
     use GetMainFile;
 
     #[Serializer\Type(Envelope::class)]
-    #[Serializer\SerializedName('p:dmEnvelope')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmEnvelope')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
     protected Envelope $envelope;
 

@@ -11,34 +11,34 @@ use JMS\Serializer\Annotation as Serializer;
 class ISDSSearch3 implements IRequest
 {
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:searchText')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('searchText')]
     private string $searchText;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:searchType')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('searchType')]
     private string $searchType;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:searchScope')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('searchScope')]
     private string $searchScope;
 
     #[Serializer\Type('int')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:page')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('page')]
     private int $page = 0;
 
     #[Serializer\Type('int')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:pageSize')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('pageSize')]
     private int $pageSize = 20;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('bool')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:highlighting')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('highlighting')]
     private ?bool $highlighting = null;
 
     public function getSearchText(): string

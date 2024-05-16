@@ -14,14 +14,14 @@ class CheckDataBox implements IRequest
     use DataBoxId;
 
     #[Serializer\Type('booL')]
-    #[Serializer\SerializedName('p:dbApproved')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dbApproved')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SkipWhenEmpty]
     protected ?bool $approved = null;
 
     #[Serializer\Type('string')]
-    #[Serializer\SerializedName('p:dbExternRefNumber')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dbExternRefNumber')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SkipWhenEmpty]
     protected ?string $externalRefNumber = null;
 

@@ -22,38 +22,38 @@ class ReturnedMessageEnvelope
     protected string $type;
 
     #[Serializer\Type(MessageEnvelope::class)]
-    #[Serializer\SerializedName('p:dmDm')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmDm')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
     protected MessageEnvelope $dataMessage;
 
     #[Serializer\Type(Hash::class)]
-    #[Serializer\SerializedName('p:dmHash')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmHash')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
     protected Hash $hash;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dmDeliveryTime')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dmDeliveryTime')]
     protected ?DateTimeImmutable $deliveryTime = null;
 
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dmAcceptanceTime')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dmAcceptanceTime')]
     #[Serializer\SkipWhenEmpty]
     protected ?DateTimeImmutable $acceptanceTime = null;
 
     #[Serializer\Type('int')]
-    #[Serializer\SerializedName('p:dmMessageStatus')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmMessageStatus')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\Positive()]
     protected int $messageStatus;
 
     #[Serializer\Type('int')]
-    #[Serializer\SerializedName('p:dmAttachmentSize')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmAttachmentSize')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\Positive()]
     protected int $attachmentSize;
 

@@ -12,8 +12,8 @@ use TomasKulhanek\Serializer\Utils\SplFileInfo;
 class ResignISDSDocument implements IRequest
 {
     #[Serializer\Type('base64File')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dmDoc')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dmDoc')]
     protected SplFileInfo $document;
 
     public function getDocument(): SplFileInfo

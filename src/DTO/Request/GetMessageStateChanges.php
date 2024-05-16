@@ -13,14 +13,14 @@ class GetMessageStateChanges implements IRequest
 {
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
-    #[Serializer\SerializedName('p:dmFromTime')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmFromTime')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?DateTimeImmutable $changesFrom = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
-    #[Serializer\SerializedName('p:dmToTime')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmToTime')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?DateTimeImmutable $changesTo = null;
 
     public function getChangesFrom(): ?DateTimeImmutable

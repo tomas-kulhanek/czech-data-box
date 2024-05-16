@@ -19,98 +19,98 @@ class OwnerInfo
     use Address;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dbType')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbType')]
     protected ?string $dataBoxType = null;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:ic')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('ic')]
     #[Serializer\SkipWhenEmpty]
     protected ?string $ic = null;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:pnLastNameAtBirth')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('pnLastNameAtBirth')]
     #[Serializer\SkipWhenEmpty]
     protected ?string $lastNameAtBirth = null;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:firmName')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('firmName')]
     #[Serializer\SkipWhenEmpty]
     protected ?string $firmName = null;
 
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\Type("DateTimeImmutable<'Y-m-d'>")]
-    #[Serializer\SerializedName('p:biDate')]
+    #[Serializer\SerializedName('biDate')]
     #[Serializer\SkipWhenEmpty]
     protected ?DateTimeImmutable $biDate = null;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:biCity')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('biCity')]
     #[Serializer\SkipWhenEmpty]
     protected ?string $biCity = null;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:biCounty')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('biCounty')]
     #[Serializer\SkipWhenEmpty]
     protected ?string $biCounty = null;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:biState')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('biState')]
     #[Serializer\SkipWhenEmpty]
     protected ?string $biState = null;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:nationality')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('nationality')]
     #[Serializer\SkipWhenEmpty]
     protected ?string $nationality = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:email')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('email')]
     protected ?string $email = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:telNumber')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('telNumber')]
     protected ?string $telNumber = null;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:identifier')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('identifier')]
     #[Serializer\SkipWhenEmpty]
     protected ?string $identifier = null;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:registryCode')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('registryCode')]
     #[Serializer\SkipWhenEmpty]
     protected ?string $registryCode = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dbState')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbState')]
     protected ?int $dataBoxState = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('bool')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dbEffectiveOVM')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbEffectiveOVM')]
     protected ?bool $dataBoxEffectiveOvm = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('bool')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dbOpenAddressing')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbOpenAddressing')]
     protected ?bool $dataBoxOpenAddressing = null;
 
     public function getDataBoxType(): ?string

@@ -17,26 +17,26 @@ class Envelope
     #[Serializer\Type('string')]
     #[Serializer\SkipWhenEmpty]
     #[Serializer\SerializedName('dmType')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\XmlAttribute]
     protected ?string $type = null;
 
     #[Serializer\Type('bool')]
     #[Serializer\SkipWhenEmpty]
-    #[Serializer\SerializedName('p:dmAllowSubstDelivery')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmAllowSubstDelivery')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?bool $allowSubstDelivery = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('bool')]
-    #[Serializer\SerializedName('p:dmOVM')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmOVM')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?bool $ovm = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('bool')]
-    #[Serializer\SerializedName('p:dmPublishOwnID')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmPublishOwnID')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?bool $publishOwnId = null;
 
     public function getType(): ?string

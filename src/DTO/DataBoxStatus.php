@@ -13,21 +13,21 @@ use TomasKulhanek\CzechDataBox\DTO\Response\IResponseStatus;
 class DataBoxStatus implements IResponseStatus
 {
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dbStatusCode')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbStatusCode')]
     #[Assert\NotBlank(allowNull: false)]
     protected string $code;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dbStatusMessage')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbStatusMessage')]
     #[Assert\NotBlank(allowNull: false)]
     protected string $message;
 
     #[Serializer\Type('string')]
     #[Serializer\SkipWhenEmpty]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dbStatusRefNumber')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbStatusRefNumber')]
     protected ?string $refNumber = null;
 
     public function getCode(): string

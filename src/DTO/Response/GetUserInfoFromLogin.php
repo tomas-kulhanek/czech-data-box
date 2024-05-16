@@ -16,8 +16,8 @@ class GetUserInfoFromLogin extends IResponse
     use DataBoxStatus;
 
     #[Serializer\Type(UserInfo::class)]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dbUserInfo')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbUserInfo')]
     #[Assert\Valid()]
     protected UserInfo $userInfo;
 

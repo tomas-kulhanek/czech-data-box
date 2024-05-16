@@ -14,8 +14,8 @@ class PDZSendInfo extends IResponse
     use DataBoxStatus;
 
     #[Serializer\Type('bool')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:PDZsiResult')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('PDZsiResult')]
     protected bool $result;
 
     public function isResult(): bool

@@ -17,14 +17,14 @@ class DataBoxCreditInfo extends IResponse
 
     #[Serializer\Type('int')]
     #[Serializer\SkipWhenEmpty]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:currentCredit')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('currentCredit')]
     protected ?int $currentCredit = null;
 
     #[Serializer\Type('string')]
     #[Serializer\SkipWhenEmpty]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:notifEmail')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('notifEmail')]
     protected ?string $notifyEmail = null;
 
     /**

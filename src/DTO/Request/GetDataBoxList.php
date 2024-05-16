@@ -11,8 +11,8 @@ use JMS\Serializer\Annotation as Serializer;
 class GetDataBoxList implements IRequest
 {
     #[Serializer\Type('string')]
-    #[Serializer\SerializedName('p:dblType')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dblType')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected string $type;
 
     public function getType(): string

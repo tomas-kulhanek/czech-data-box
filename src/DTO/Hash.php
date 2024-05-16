@@ -13,7 +13,7 @@ use TomasKulhanek\Serializer\Utils\SplFileInfo;
 class Hash
 {
     #[Serializer\Type('base64File')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\XmlValue]
     protected SplFileInfo $value;
 

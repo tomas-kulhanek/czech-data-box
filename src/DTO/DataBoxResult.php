@@ -16,43 +16,43 @@ class DataBoxResult
     use DataBoxId;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dbType')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbType')]
     #[Assert\NotBlank(allowNull: false)]
     protected string $dataBoxType;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dbName')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbName')]
     #[Assert\NotBlank(allowNull: false)]
     protected string $dataBoxName;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dbAddress')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbAddress')]
     protected ?string $dataBoxAddress = null;
 
     #[Serializer\Type("DateTimeImmutable<'Y-m-d'>")]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dbBiDate')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbBiDate')]
     #[Serializer\SkipWhenEmpty]
     protected ?DateTimeImmutable $dataBoxBiDate = null;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dbICO')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbICO')]
     #[Serializer\SkipWhenEmpty]
     protected ?string $dataBoxIco = null;
 
     #[Serializer\Type('bool')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dbEffectiveOVM')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbEffectiveOVM')]
     #[Serializer\SkipWhenEmpty]
     protected ?bool $dataBoxEffectiveOvm = null;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dbSendOptions')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbSendOptions')]
     #[Serializer\SkipWhenEmpty]
     protected ?string $dataBoxSendOptions = null;
 

@@ -10,20 +10,20 @@ trait PersonName
 {
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:pnFirstName')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('pnFirstName')]
     protected ?string $firstName = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:pnMiddleName')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('pnMiddleName')]
     protected ?string $middleName = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:pnLastName')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('pnLastName')]
     protected ?string $lastName = null;
 
     public function getFirstName(): ?string

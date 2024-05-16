@@ -20,7 +20,7 @@ class GetMessageStateChanges extends IResponse
      */
     #[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\StateChangeRecord>')]
     #[Serializer\XmlList(entry: 'dmRecord', inline: false)]
-    #[Serializer\SerializedName('p:dmRecords')]
+    #[Serializer\SerializedName('dmRecords')]
     #[Assert\All([
         new Assert\Type(StateChangeRecord::class)
     ])]

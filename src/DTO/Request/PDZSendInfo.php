@@ -12,13 +12,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 class PDZSendInfo implements IRequest
 {
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dbId')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbId')]
     protected string $dataBoxId;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:PDZType')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('PDZType')]
     #[Assert\NotBlank(allowNull: false)]
     protected string $type = 'Normal';
 

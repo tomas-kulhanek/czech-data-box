@@ -16,13 +16,13 @@ class DataBoxCreditInfo implements IRequest
     use DataBoxId;
 
     #[Serializer\Type("DateTimeImmutable<'Y-m-d'>")]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:ciFromDate')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('ciFromDate')]
     private DateTimeImmutable $fromDate;
 
     #[Serializer\Type("DateTimeImmutable<'Y-m-d'>")]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:ciTodate')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('ciTodate')]
     private DateTimeImmutable $toDate;
 
     public function __construct(DateTimeImmutable $fromDate, DateTimeImmutable $toDate)

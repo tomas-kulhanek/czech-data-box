@@ -10,8 +10,8 @@ use TomasKulhanek\CzechDataBox\DTO\Response\IResponseStatus;
 trait DataBoxStatus
 {
     #[Serializer\Type(\TomasKulhanek\CzechDataBox\DTO\DataBoxStatus::class)]
-    #[Serializer\SerializedName('p:dbStatus')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dbStatus')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected IResponseStatus $status;
 
     public function getStatus(): IResponseStatus

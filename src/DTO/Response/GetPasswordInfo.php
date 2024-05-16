@@ -15,8 +15,8 @@ class GetPasswordInfo extends IResponse
     use DataBoxStatus;
 
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:pswExpDate')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('pswExpDate')]
     protected ?DateTimeImmutable $passwordExpiry = null;
 
     public function getPasswordExpiry(): ?DateTimeImmutable

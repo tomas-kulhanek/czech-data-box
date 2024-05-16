@@ -11,8 +11,8 @@ use TomasKulhanek\CzechDataBox\DTO\Response\IResponseStatus;
 trait DataMessageStatus
 {
     #[Serializer\Type(\TomasKulhanek\CzechDataBox\DTO\DataMessageStatus::class)]
-    #[Serializer\SerializedName('p:dmStatus')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmStatus')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
     protected IResponseStatus $status;
 

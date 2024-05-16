@@ -16,13 +16,13 @@ class StateChangeRecord
     use DataMessageId;
 
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dmEventTime')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dmEventTime')]
     protected DateTimeImmutable $eventTime;
 
     #[Serializer\Type('int')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dmMessageStatus')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dmMessageStatus')]
     #[Assert\PositiveOrZero]
     protected int $messageStatus;
 

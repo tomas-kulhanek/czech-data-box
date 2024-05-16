@@ -11,8 +11,8 @@ use JMS\Serializer\Annotation as Serializer;
 class PDZInfo implements IRequest
 {
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:PDZSender')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('PDZSender')]
     protected string $sender;
 
     public function getSender(): string

@@ -12,53 +12,53 @@ trait DataMessageEnvelope
     use DataMessageId;
 
     #[Serializer\Type('string')]
-    #[Serializer\SerializedName('p:dbIDSender')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dbIDSender')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected string $senderId;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
-    #[Serializer\SerializedName('p:dbIDRecipient')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dbIDRecipient')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?string $recipientId = null;
 
     #[Serializer\Type('string')]
     #[Serializer\SkipWhenEmpty]
-    #[Serializer\SerializedName('p:dmToHands')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmToHands')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?string $toHands = null;
 
     #[Serializer\Type('string')]
-    #[Serializer\SerializedName('p:dmSender')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmSender')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected string $sender;
 
     #[Serializer\Type('string')]
-    #[Serializer\SerializedName('p:dmSenderAddress')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmSenderAddress')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SkipWhenEmpty]
     protected ?string $senderAddress = null;
 
     #[Serializer\Type('int')]
-    #[Serializer\SerializedName('p:dmSenderType')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmSenderType')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected int $senderType;
 
     #[Serializer\Type('string')]
-    #[Serializer\SerializedName('p:dmRecipient')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmRecipient')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected string $recipient;
 
     #[Serializer\Type('string')]
-    #[Serializer\SerializedName('p:dmRecipientAddress')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmRecipientAddress')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SkipWhenEmpty]
     protected ?string $recipientAddress = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('bool')]
-    #[Serializer\SerializedName('p:dmAmbiguousRecipient')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmAmbiguousRecipient')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?bool $ambiguousRecipient = null;
 
     public function getSenderId(): string

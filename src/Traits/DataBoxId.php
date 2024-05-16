@@ -9,8 +9,8 @@ use JMS\Serializer\Annotation as Serializer;
 trait DataBoxId
 {
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dbID')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbID')]
     protected string $dataBoxId;
 
     public function getDataBoxId(): string

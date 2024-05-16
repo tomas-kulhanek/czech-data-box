@@ -17,31 +17,31 @@ class MessageRecord
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
-    #[Serializer\SerializedName('p:dmOrdinal')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmOrdinal')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?int $ordinal = null;
 
     #[Serializer\Type('int')]
-    #[Serializer\SerializedName('p:dmMessageStatus')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmMessageStatus')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\PositiveOrZero()]
     protected int $messageStatus;
 
     #[Serializer\Type('int')]
-    #[Serializer\SerializedName('p:dmAttachmentSize')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmAttachmentSize')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\Positive()]
     protected int $attachmentSize;
 
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dmDeliveryTime')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dmDeliveryTime')]
     #[Serializer\SkipWhenEmpty]
     protected ?DateTimeImmutable $deliveryTime = null;
 
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dmAcceptanceTime')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dmAcceptanceTime')]
     #[Serializer\SkipWhenEmpty]
     protected ?DateTimeImmutable $acceptanceTime = null;
 
@@ -53,8 +53,8 @@ class MessageRecord
 
     #[Serializer\Type('bool')]
     #[Serializer\SkipWhenEmpty]
-    #[Serializer\SerializedName('p:dmAllowSubstDelivery')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmAllowSubstDelivery')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?bool $allowSubstDelivery = null;
 
     public function getOrdinal(): ?int

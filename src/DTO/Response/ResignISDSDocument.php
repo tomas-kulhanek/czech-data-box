@@ -16,14 +16,14 @@ class ResignISDSDocument extends IResponse
     use DataMessageStatus;
 
     #[Serializer\Type('base64File')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dmResultDoc')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dmResultDoc')]
     protected SplFileInfo $document;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type("DateTimeImmutable<'Y-m-d'>")]
-    #[Serializer\SerializedName('p:dmValidTo')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmValidTo')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?DateTimeImmutable $validTo = null;
 
     public function setStatus(\TomasKulhanek\CzechDataBox\DTO\DataMessageStatus $status): ResignISDSDocument

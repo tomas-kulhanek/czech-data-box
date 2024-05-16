@@ -17,8 +17,8 @@ class MessageDownload extends IResponse
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type(ReturnedMessage::class)]
-    #[Serializer\SerializedName('p:dmReturnedMessage')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmReturnedMessage')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
     protected ?ReturnedMessage $returnedMessage = null;
 

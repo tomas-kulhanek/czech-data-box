@@ -10,8 +10,8 @@ trait DataMessageId
 {
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
-    #[Serializer\SerializedName('p:dmID')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmID')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?string $dataMessageId = null;
 
     public function getDataMessageId(): ?string

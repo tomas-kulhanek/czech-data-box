@@ -17,8 +17,8 @@ class MessageEnvelopeDownload extends IResponse
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type(ReturnedMessageEnvelope::class)]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dmReturnedMessageEnvelope')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dmReturnedMessageEnvelope')]
     #[Assert\Valid()]
     protected ?ReturnedMessageEnvelope $message = null;
 

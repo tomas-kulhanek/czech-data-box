@@ -16,8 +16,8 @@ class GetDataBoxList extends IResponse
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('base64File')]
-    #[Serializer\SerializedName('p:dblData')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dblData')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?SplFileInfo $data = null;
 
     public function getData(): ?SplFileInfo

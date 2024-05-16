@@ -14,7 +14,7 @@ class AuthenticateMessage extends IResponse
     use DataMessageStatus;
 
     #[Serializer\Type('bool')]
-    #[Serializer\SerializedName('p:dmAuthResult')]
+    #[Serializer\SerializedName('dmAuthResult')]
     protected bool $authenticated;
 
     public function isAuthenticated(): bool

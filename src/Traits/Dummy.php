@@ -10,8 +10,8 @@ trait Dummy
 {
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
-    #[Serializer\SerializedName('p:dbDummy')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dbDummy')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?string $dummy = null;
 
     public function getDummy(): ?string

@@ -15,8 +15,8 @@ class CheckDataBox extends IResponse
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
-    #[Serializer\SerializedName('p:dbState')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dbState')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?int $state = null;
 
     public function getState(): ?int

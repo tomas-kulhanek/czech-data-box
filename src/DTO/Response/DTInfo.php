@@ -19,62 +19,62 @@ class DTInfo extends IResponse
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:ActDTType')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('ActDTType')]
     protected ?int $actDtType = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:ActDTCapacity')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('ActDTCapacity')]
     protected ?int $actDtCapacity = null;
 
     #[Serializer\Type("DateTimeImmutable<'Y-m-d'>")]
     #[Serializer\SkipWhenEmpty]
-    #[Serializer\SerializedName('p:ActDTFrom')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('ActDTFrom')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?DateTimeImmutable $actDtFrom = null;
 
     #[Serializer\Type("DateTimeImmutable<'Y-m-d'>")]
     #[Serializer\SkipWhenEmpty]
-    #[Serializer\SerializedName('p:ActDTTo')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('ActDTTo')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?DateTimeImmutable $actDtTo = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:ActDTCapUsed')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('ActDTCapUsed')]
     protected ?int $actDtCapUsed = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:FutDTType')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('FutDTType')]
     protected ?int $futDtType = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:FutDTCapacity')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('FutDTCapacity')]
     protected ?int $futDtCapacity = null;
 
     #[Serializer\Type("DateTimeImmutable<'Y-m-d'>")]
     #[Serializer\SkipWhenEmpty]
-    #[Serializer\SerializedName('p:FutDTFrom')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('FutDTFrom')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?DateTimeImmutable $futDtFrom = null;
 
     #[Serializer\Type("DateTimeImmutable<'Y-m-d'>")]
     #[Serializer\SkipWhenEmpty]
-    #[Serializer\SerializedName('p:FutDTTo')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('FutDTTo')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?DateTimeImmutable $futDtTo = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:FutDTPaid')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('FutDTPaid')]
     protected ?int $futDtPaid = null;
 
     public function getActDtType(): ?int

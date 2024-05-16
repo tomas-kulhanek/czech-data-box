@@ -16,8 +16,8 @@ class VerifyMessage extends IResponse
     use DataMessageStatus;
 
     #[Serializer\Type(Hash::class)]
-    #[Serializer\SerializedName('p:dmHash')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dmHash')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
     protected Hash $hash;
 

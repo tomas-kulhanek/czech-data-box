@@ -13,13 +13,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 class DataMessageEvent
 {
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dnEventTime')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dnEventTime')]
     protected DateTimeImmutable $time;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false)]
-    #[Serializer\SerializedName('p:dmEventDescr')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dmEventDescr')]
     #[Assert\NotBlank(allowNull: false)]
     protected string $description;
 

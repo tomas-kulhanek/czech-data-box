@@ -15,14 +15,14 @@ use function mb_substr;
 class ChangeISDSPassword implements IRequest
 {
     #[Serializer\Type('string')]
-    #[Serializer\SerializedName('p:dbOldPassword')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dbOldPassword')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\NotBlank(allowNull: false)]
     protected string $oldPassword;
 
     #[Serializer\Type('string')]
-    #[Serializer\SerializedName('p:dbNewPassword')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('dbNewPassword')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\NotBlank(allowNull: false)]
     protected string $newPassword;
 

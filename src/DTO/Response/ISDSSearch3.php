@@ -17,26 +17,26 @@ class ISDSSearch3 extends IResponse
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
-    #[Serializer\SerializedName('p:totalCount')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('totalCount')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?int $totalCount = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
-    #[Serializer\SerializedName('p:currentCount')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('currentCount')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?int $currentCount = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
-    #[Serializer\SerializedName('p:position')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('position')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?int $position = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('bool')]
-    #[Serializer\SerializedName('p:lastPage')]
-    #[Serializer\XmlElement(cdata: false)]
+    #[Serializer\SerializedName('lastPage')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?bool $lastPage = null;
 
     /**
