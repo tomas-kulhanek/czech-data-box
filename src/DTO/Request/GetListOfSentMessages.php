@@ -30,8 +30,8 @@ class GetListOfSentMessages implements IRequest
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
-    #[Serializer\SerializedName('dmRecipientOrgUnitNum')]
-    protected ?int $recipientOrgUnitNum = null;
+    #[Serializer\SerializedName('dmSenderOrgUnitNum')]
+    protected ?int $senderOrgUnitNum = null;
 
     #[Serializer\Type('integer')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
@@ -72,14 +72,14 @@ class GetListOfSentMessages implements IRequest
         return $this;
     }
 
-    public function getRecipientOrgUnitNum(): ?int
+    public function getSenderOrgUnitNum(): ?int
     {
-        return $this->recipientOrgUnitNum;
+        return $this->senderOrgUnitNum;
     }
 
-    public function setRecipientOrgUnitNum(?int $recipientOrgUnitNum): GetListOfSentMessages
+    public function setSenderOrgUnitNum(?int $senderOrgUnitNum): GetListOfSentMessages
     {
-        $this->recipientOrgUnitNum = $recipientOrgUnitNum;
+        $this->senderOrgUnitNum = $senderOrgUnitNum;
         return $this;
     }
 
