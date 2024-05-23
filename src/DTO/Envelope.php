@@ -7,8 +7,8 @@ namespace TomasKulhanek\CzechDataBox\DTO;
 use JMS\Serializer\Annotation as Serializer;
 use TomasKulhanek\CzechDataBox\Traits\DataMessageEnvelopeSub;
 
-#[Serializer\XmlRoot(name: 'p:dmEnvelope')]
-#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'dmEnvelope')]
+#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\AccessorOrder(order: 'custom', custom: ['senderOrgUnit', 'senderOrgUnitNum', 'annotation', 'recipientRefNumber', 'senderRefNumber', 'recipientIdent', 'senderIdent', 'legalTitleLaw', 'legalTitleYear', 'legalTitleSect', 'legalTitlePar', 'legalTitlePoint', 'personalDelivery', 'allowSubstDelivery', 'ovm', 'publishOwnId'])]
 class Envelope
 {
@@ -17,26 +17,26 @@ class Envelope
     #[Serializer\Type('string')]
     #[Serializer\SkipWhenEmpty]
     #[Serializer\SerializedName('dmType')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\XmlAttribute]
     protected ?string $type = null;
 
     #[Serializer\Type('bool')]
     #[Serializer\SkipWhenEmpty]
     #[Serializer\SerializedName('dmAllowSubstDelivery')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     protected ?bool $allowSubstDelivery = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('bool')]
     #[Serializer\SerializedName('dmOVM')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     protected ?bool $ovm = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('bool')]
     #[Serializer\SerializedName('dmPublishOwnID')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     protected ?bool $publishOwnId = null;
 
     public function getType(): ?string

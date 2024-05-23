@@ -9,15 +9,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\DTO\Hash;
 use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 
-#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(name: 'p:VerifyMessageResponse', namespace: 'http://isds.czechpoint.cz/v20')]
+#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'VerifyMessageResponse')]
 class VerifyMessage extends IResponse
 {
     use DataMessageStatus;
 
     #[Serializer\Type(Hash::class)]
     #[Serializer\SerializedName('dmHash')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
     protected Hash $hash;
 

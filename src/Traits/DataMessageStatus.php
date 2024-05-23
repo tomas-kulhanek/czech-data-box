@@ -12,7 +12,7 @@ trait DataMessageStatus
 {
     #[Serializer\Type(\TomasKulhanek\CzechDataBox\DTO\DataMessageStatus::class)]
     #[Serializer\SerializedName('dmStatus')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
     protected IResponseStatus $status;
 

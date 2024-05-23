@@ -9,8 +9,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\DTO\MessageRecord;
 use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 
-#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(name: 'p:GetListOfSentMessagesResponse', namespace: 'http://isds.czechpoint.cz/v20')]
+#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'GetListOfSentMessagesResponse')]
 class GetListOfSentMessages extends IResponse
 {
     use DataMessageStatus;
@@ -19,9 +19,9 @@ class GetListOfSentMessages extends IResponse
      * @var MessageRecord[]
      */
     #[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\MessageRecord>')]
-    #[Serializer\XmlList(entry: 'dmRecord', inline: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlList(entry: 'dmRecord', inline: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dmRecords')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Assert\All([
         new Assert\Type(type: MessageRecord::class)
     ])]

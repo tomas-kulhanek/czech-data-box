@@ -9,49 +9,49 @@ use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\Traits\DataBoxId;
 
-#[Serializer\XmlRoot(name: 'p:dbResult')]
-#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'dbResult')]
+#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 class DataBoxResult
 {
     use DataBoxId;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dbType')]
     #[Assert\NotBlank(allowNull: false)]
     protected string $dataBoxType;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dbName')]
     #[Assert\NotBlank(allowNull: false)]
     protected string $dataBoxName;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dbAddress')]
     protected ?string $dataBoxAddress = null;
 
     #[Serializer\Type("DateTimeImmutable<'Y-m-d'>")]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dbBiDate')]
     #[Serializer\SkipWhenEmpty]
     protected ?DateTimeImmutable $dataBoxBiDate = null;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dbICO')]
     #[Serializer\SkipWhenEmpty]
     protected ?string $dataBoxIco = null;
 
     #[Serializer\Type('bool')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dbEffectiveOVM')]
     #[Serializer\SkipWhenEmpty]
     protected ?bool $dataBoxEffectiveOvm = null;
 
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dbSendOptions')]
     #[Serializer\SkipWhenEmpty]
     protected ?string $dataBoxSendOptions = null;

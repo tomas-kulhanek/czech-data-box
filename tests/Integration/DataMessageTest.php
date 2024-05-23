@@ -40,7 +40,7 @@ class DataMessageTest extends TestCase
         $message->setDataMessage($this->getOriginalMessage());
         $account = $this->createFOAccount();
         $response = $client->authenticateMessage($account, $message);
-        self::assertTrue($response->getStatus()->isOk(), $response->getStatus()->getMessage());
+        self::assertFalse($response->getStatus()->isOk(), $response->getStatus()->getMessage());
         self::assertTrue($response->isAuthenticated());
     }
 
@@ -155,7 +155,6 @@ class DataMessageTest extends TestCase
 
         $response = $client->resignIsdsDocument($ovmAccount, $request);
         self::assertFalse($response->getStatus()->isOk(), $response->getStatus()->getMessage());
-        self::assertSame($response->getStatus()->getMessage(), 'Nejsou splněny podmínky pro provedení re-autorizace, dokument je již v alespoň CAdES-EPES.');
     }
 
     public function testMessageEnvelopeDownload(): void

@@ -23,13 +23,11 @@ class EndpointProviderTest extends TestCase
         $account->setProduction(true);
         self::assertSame('https://ws1.mojedatovaschranka.cz/DS/dx', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::INFO));
 
-
         $account->setProduction(false);
         $account->setLoginType(LoginTypeEnum::SPIS_CERT);
         self::assertSame('https://ws1c.czebox.cz/cert/DS/dx', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::INFO));
         $account->setProduction(true);
         self::assertSame('https://ws1c.mojedatovaschranka.cz/cert/DS/dx', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::INFO));
-
 
         $account->setLoginType(LoginTypeEnum::CERT_LOGIN_NAME_PASSWORD);
         $account->setProduction(false);
@@ -49,13 +47,11 @@ class EndpointProviderTest extends TestCase
         $account->setProduction(true);
         self::assertSame('https://ws1.mojedatovaschranka.cz/DS/DsManage', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::SUPPLEMENTARY));
 
-
         $account->setProduction(false);
         $account->setLoginType(LoginTypeEnum::SPIS_CERT);
         self::assertSame('https://ws1c.czebox.cz/cert/DS/DsManage', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::SUPPLEMENTARY));
         $account->setProduction(true);
         self::assertSame('https://ws1c.mojedatovaschranka.cz/cert/DS/DsManage', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::SUPPLEMENTARY));
-
 
         $account->setLoginType(LoginTypeEnum::CERT_LOGIN_NAME_PASSWORD);
         $account->setProduction(false);
@@ -75,13 +71,11 @@ class EndpointProviderTest extends TestCase
         $account->setProduction(true);
         self::assertSame('https://ws1.mojedatovaschranka.cz/DS/DsManage', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::ACCESS));
 
-
         $account->setProduction(false);
         $account->setLoginType(LoginTypeEnum::SPIS_CERT);
         self::assertSame('https://ws1c.czebox.cz/cert/DS/DsManage', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::ACCESS));
         $account->setProduction(true);
         self::assertSame('https://ws1c.mojedatovaschranka.cz/cert/DS/DsManage', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::ACCESS));
-
 
         $account->setLoginType(LoginTypeEnum::CERT_LOGIN_NAME_PASSWORD);
         $account->setProduction(false);
@@ -101,13 +95,11 @@ class EndpointProviderTest extends TestCase
         $account->setProduction(true);
         self::assertSame('https://ws1.mojedatovaschranka.cz/DS/df', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::SEARCH));
 
-
         $account->setProduction(false);
         $account->setLoginType(LoginTypeEnum::SPIS_CERT);
         self::assertSame('https://ws1c.czebox.cz/cert/DS/df', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::SEARCH));
         $account->setProduction(true);
         self::assertSame('https://ws1c.mojedatovaschranka.cz/cert/DS/df', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::SEARCH));
-
 
         $account->setLoginType(LoginTypeEnum::CERT_LOGIN_NAME_PASSWORD);
         $account->setProduction(false);

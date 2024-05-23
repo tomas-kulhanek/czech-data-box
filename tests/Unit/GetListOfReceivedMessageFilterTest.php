@@ -54,9 +54,9 @@ class GetListOfReceivedMessageFilterTest extends TestCase
         $a->setStatusFilter(FilterEnum::ALL, FilterEnum::DELETED);
         $expectingXml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<p:GetListOfReceivedMessages xmlns:p="http://isds.czechpoint.cz/v20">
-  <p:dmStatusFilter>-1</p:dmStatusFilter>
-</p:GetListOfReceivedMessages>
+<GetListOfReceivedMessages xmlns="https://isds.czechpoint.cz/v20" xmlns:p="https://isds.czechpoint.cz/v20">
+  <dmStatusFilter>-1</dmStatusFilter>
+</GetListOfReceivedMessages>
 
 XML;
         $this->assertSame($expectingXml, $serializer->serialize($a, 'xml'));
@@ -69,9 +69,9 @@ XML;
         $a->setStatusFilter(FilterEnum::DELETED);
         $expectingXml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<p:GetListOfReceivedMessages xmlns:p="http://isds.czechpoint.cz/v20">
-  <p:dmStatusFilter>512</p:dmStatusFilter>
-</p:GetListOfReceivedMessages>
+<GetListOfReceivedMessages xmlns="https://isds.czechpoint.cz/v20" xmlns:p="https://isds.czechpoint.cz/v20">
+  <dmStatusFilter>512</dmStatusFilter>
+</GetListOfReceivedMessages>
 
 XML;
         $this->assertSame($expectingXml, $serializer->serialize($a, 'xml'));
@@ -83,9 +83,9 @@ XML;
         $a = new GetListOfReceivedMessages();
         $expectingXml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<p:GetListOfReceivedMessages xmlns:p="http://isds.czechpoint.cz/v20">
-  <p:dmStatusFilter>-1</p:dmStatusFilter>
-</p:GetListOfReceivedMessages>
+<GetListOfReceivedMessages xmlns="https://isds.czechpoint.cz/v20" xmlns:p="https://isds.czechpoint.cz/v20">
+  <dmStatusFilter>-1</dmStatusFilter>
+</GetListOfReceivedMessages>
 
 XML;
         $this->assertSame($expectingXml, $serializer->serialize($a, 'xml'));

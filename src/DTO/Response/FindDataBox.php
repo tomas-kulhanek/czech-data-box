@@ -9,8 +9,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\DTO\OwnerInfo;
 use TomasKulhanek\CzechDataBox\Traits\DataBoxStatus;
 
-#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(name: 'p:FindDataBoxResponse', namespace: 'http://isds.czechpoint.cz/v20')]
+#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'FindDataBoxResponse')]
 class FindDataBox extends IResponse
 {
     use DataBoxStatus;
@@ -19,9 +19,9 @@ class FindDataBox extends IResponse
      * @var OwnerInfo[]
      */
     #[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\OwnerInfo>')]
-    #[Serializer\XmlList(entry: 'dbOwnerInfo', inline: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlList(entry: 'dbOwnerInfo', inline: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dbResults')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Assert\All([
         new Assert\Type(type: OwnerInfo::class)
     ])]

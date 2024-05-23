@@ -9,8 +9,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\DTO\MessageStatus;
 use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 
-#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(name: 'p:CreateMultipleMessageResponse', namespace: 'http://isds.czechpoint.cz/v20')]
+#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'CreateMultipleMessageResponse')]
 #[Serializer\AccessorOrder(order: 'custom', custom: ['messageStatus', 'status'])]
 class CreateMessage extends IResponse
 {
@@ -20,9 +20,9 @@ class CreateMessage extends IResponse
      * @var MessageStatus[]
      */
     #[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\MessageStatus>')]
-    #[Serializer\XmlList(entry: 'dmSingleStatus', inline: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlList(entry: 'dmSingleStatus', inline: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dmMultipleStatus')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Assert\All([
         new Assert\Type(type: MessageStatus::class)
     ])]

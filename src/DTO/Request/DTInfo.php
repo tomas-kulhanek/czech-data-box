@@ -10,8 +10,8 @@ use TomasKulhanek\CzechDataBox\Traits\DataBoxId;
 /**
  * Class DTInfo
  */
-#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(name: 'p:DTInfo', namespace: 'http://isds.czechpoint.cz/v20')]
+#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'DTInfo')]
 class DTInfo implements IRequest
 {
     use DataBoxId;

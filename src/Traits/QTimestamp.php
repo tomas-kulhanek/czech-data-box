@@ -9,7 +9,7 @@ use JMS\Serializer\Annotation as Serializer;
 trait QTimestamp
 {
     #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dmQTimestamp')]
     protected string $qTimestamp;
 }

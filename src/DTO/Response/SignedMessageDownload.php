@@ -8,8 +8,8 @@ use JMS\Serializer\Annotation as Serializer;
 use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 use TomasKulhanek\CzechDataBox\Traits\Signature;
 
-#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(name: 'p:SignedMessageDownloadResponse', namespace: 'http://isds.czechpoint.cz/v20')]
+#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'SignedMessageDownloadResponse')]
 class SignedMessageDownload extends IResponse
 {
     use DataMessageStatus;

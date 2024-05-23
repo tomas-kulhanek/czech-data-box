@@ -11,7 +11,7 @@ trait DataBoxStatus
 {
     #[Serializer\Type(\TomasKulhanek\CzechDataBox\DTO\DataBoxStatus::class)]
     #[Serializer\SerializedName('dbStatus')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     protected IResponseStatus $status;
 
     public function getStatus(): IResponseStatus

@@ -9,14 +9,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\DTO\OwnerInfo;
 use TomasKulhanek\CzechDataBox\Traits\DataBoxStatus;
 
-#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(name: 'p:GetOwnerInfoFromLoginResponse', namespace: 'http://isds.czechpoint.cz/v20')]
+#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'GetOwnerInfoFromLoginResponse')]
 class GetOwnerInfoFromLogin extends IResponse
 {
     use DataBoxStatus;
 
     #[Serializer\Type(OwnerInfo::class)]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dbOwnerInfo')]
     #[Assert\Valid()]
     protected OwnerInfo $ownerInfo;

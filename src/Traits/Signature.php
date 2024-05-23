@@ -12,7 +12,7 @@ trait Signature
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('base64File')]
     #[Serializer\SerializedName('dmSignature')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     protected ?SplFileInfo $signature = null;
 
     public function getSignature(): ?SplFileInfo

@@ -10,19 +10,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 use function mb_substr;
 
-#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(name: 'p:ChangeISDSPassword', namespace: 'http://isds.czechpoint.cz/v20')]
+#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'ChangeISDSPassword')]
 class ChangeISDSPassword implements IRequest
 {
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dbOldPassword')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Assert\NotBlank(allowNull: false)]
     protected string $oldPassword;
 
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dbNewPassword')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Assert\NotBlank(allowNull: false)]
     protected string $newPassword;
 

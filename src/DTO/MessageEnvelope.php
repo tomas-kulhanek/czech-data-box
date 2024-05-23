@@ -9,8 +9,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\Traits\DataMessageEnvelope;
 use TomasKulhanek\CzechDataBox\Traits\GetMainFile;
 
-#[Serializer\XmlRoot(name: 'p:dmDm')]
-#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'dmDm')]
+#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 class MessageEnvelope
 {
     use GetMainFile;
@@ -20,9 +20,9 @@ class MessageEnvelope
      * @var File[]
      */
     #[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\File>')]
-    #[Serializer\XmlList(entry: 'dmFile', inline: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlList(entry: 'dmFile', inline: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dmFiles')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Assert\All([
         new Assert\Type(type: File::class)
     ])]

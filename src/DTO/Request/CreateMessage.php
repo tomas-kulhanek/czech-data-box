@@ -11,8 +11,8 @@ use TomasKulhanek\CzechDataBox\DTO\File;
 use TomasKulhanek\CzechDataBox\DTO\Recipient;
 use TomasKulhanek\CzechDataBox\Traits\GetMainFile;
 
-#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(name: 'p:CreateMultipleMessage', namespace: 'http://isds.czechpoint.cz/v20')]
+#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'CreateMultipleMessage')]
 #[Serializer\AccessorOrder(order: 'custom', custom: ['recipients', 'envelope', 'files'])]
 class CreateMessage implements IRequest
 {
@@ -20,7 +20,7 @@ class CreateMessage implements IRequest
 
     #[Serializer\Type(Envelope::class)]
     #[Serializer\SerializedName('dmEnvelope')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
     protected Envelope $envelope;
 
@@ -28,9 +28,9 @@ class CreateMessage implements IRequest
      * @var File[]
      */
     #[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\File>')]
-    #[Serializer\XmlList(entry: 'dmFile', inline: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlList(entry: 'dmFile', inline: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dmFiles')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Assert\All([
         new Assert\Type(File::class)
     ])]
@@ -41,9 +41,9 @@ class CreateMessage implements IRequest
      * @var Recipient[]
      */
     #[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\Recipient>')]
-    #[Serializer\XmlList(entry: 'dmRecipient', inline: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlList(entry: 'dmRecipient', inline: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dmRecipients')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Assert\All([
         new Assert\Type(Recipient::class)
     ])]

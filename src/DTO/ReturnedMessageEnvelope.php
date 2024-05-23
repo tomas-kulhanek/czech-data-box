@@ -9,8 +9,8 @@ use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\Traits\QTimestamp;
 
-#[Serializer\XmlRoot(name: 'p:dmReturnedMessageEnvelope')]
-#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'dmReturnedMessageEnvelope')]
+#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 class ReturnedMessageEnvelope
 {
     use QTimestamp;
@@ -23,37 +23,37 @@ class ReturnedMessageEnvelope
 
     #[Serializer\Type(MessageEnvelope::class)]
     #[Serializer\SerializedName('dmDm')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
     protected MessageEnvelope $dataMessage;
 
     #[Serializer\Type(Hash::class)]
     #[Serializer\SerializedName('dmHash')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
     protected Hash $hash;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dmDeliveryTime')]
     protected ?DateTimeImmutable $deliveryTime = null;
 
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dmAcceptanceTime')]
     #[Serializer\SkipWhenEmpty]
     protected ?DateTimeImmutable $acceptanceTime = null;
 
     #[Serializer\Type('int')]
     #[Serializer\SerializedName('dmMessageStatus')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Assert\Positive()]
     protected int $messageStatus;
 
     #[Serializer\Type('int')]
     #[Serializer\SerializedName('dmAttachmentSize')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Assert\Positive()]
     protected int $attachmentSize;
 

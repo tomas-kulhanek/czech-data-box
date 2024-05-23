@@ -368,7 +368,7 @@ readonly class Connector
             $dom->documentElement->setAttributeNS(
                 'http://www.w3.org/2000/xmlns/',
                 'xmlns:p',
-                'http://isds.czechpoint.cz/v20'
+                'https://isds.czechpoint.cz/v20'
             );
             /** @var string $response */
             $response = $dom->saveXML();

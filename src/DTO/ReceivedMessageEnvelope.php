@@ -18,9 +18,9 @@ class ReceivedMessageEnvelope
      * @var File[]
      */
     #[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\File>')]
-    #[Serializer\XmlList(entry: 'dmFile', inline: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlList(entry: 'dmFile', inline: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dmFiles')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Assert\All([
         new Assert\Type(type: File::class)
     ])]
