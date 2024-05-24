@@ -8,7 +8,7 @@ use JMS\Serializer\Annotation as Serializer;
 use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(name: 'AuthenticateMessageResponse')]
+#[Serializer\XmlRoot(name: 'AuthenticateMessageResponse', namespace: 'https://isds.czechpoint.cz/v20')]
 class AuthenticateMessage extends IResponse
 {
     use DataMessageStatus;

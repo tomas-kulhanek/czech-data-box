@@ -9,7 +9,7 @@ use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\Traits\QTimestamp;
 
-#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'dmReturnedMessage')]
+#[Serializer\XmlRoot(name: 'dmReturnedMessage', namespace: 'https://isds.czechpoint.cz/v20')]
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 class ReturnedMessage
 {

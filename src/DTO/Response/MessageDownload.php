@@ -10,7 +10,7 @@ use TomasKulhanek\CzechDataBox\DTO\ReturnedMessage;
 use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'MessageDownloadResponse')]
+#[Serializer\XmlRoot(name: 'MessageDownloadResponse', namespace: 'https://isds.czechpoint.cz/v20')]
 class MessageDownload extends IResponse
 {
     use DataMessageStatus;

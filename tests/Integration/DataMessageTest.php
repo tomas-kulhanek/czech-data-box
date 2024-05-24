@@ -40,8 +40,8 @@ class DataMessageTest extends TestCase
         $message->setDataMessage($this->getOriginalMessage());
         $account = $this->createFOAccount();
         $response = $client->authenticateMessage($account, $message);
-        self::assertFalse($response->getStatus()->isOk(), $response->getStatus()->getMessage());
-        self::assertTrue($response->isAuthenticated());
+        self::assertTrue($response->getStatus()->isOk(), $response->getStatus()->getMessage());
+        self::assertFalse($response->isAuthenticated());
     }
 
     public function testVerifyMessage(): void
@@ -79,14 +79,15 @@ class DataMessageTest extends TestCase
         $listrecRes = $client->getListOfReceivedMessages($ovmAccount, $listrec);
         self::assertTrue($listrecRes->getStatus()->isOk(), $listrecRes->getStatus()->getMessage());
 
-        $client = $this->createGuzzleConnector();
+        $messageId = $listrecRes->getRecord()[0]->getDataMessageId();
+
         $message = new MarkMessageAsDownloaded();
-        $message->setDataMessageId($listrecRes->getRecord()[0]->getDataMessageId());
+        $message->setDataMessageId($messageId);
         $response = $client->markMessageAsDownloaded($ovmAccount, $message);
         self::assertTrue($response->getStatus()->isOk(), $response->getStatus()->getMessage());
 
         $request = new MessageDownload();
-        $request->setDataMessageId($listrecRes->getRecord()[0]->getDataMessageId());
+        $request->setDataMessageId($messageId);
 
         $response = $client->messageDownload($ovmAccount, $request);
 

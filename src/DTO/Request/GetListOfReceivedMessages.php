@@ -10,7 +10,7 @@ use TomasKulhanek\CzechDataBox\Enum\FilterEnum;
 use TomasKulhanek\CzechDataBox\Traits\StatusFilter;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'GetListOfReceivedMessages')]
+#[Serializer\XmlRoot(name: 'GetListOfReceivedMessages', namespace: 'https://isds.czechpoint.cz/v20')]
 class GetListOfReceivedMessages implements IRequest
 {
     use StatusFilter;

@@ -379,6 +379,8 @@ readonly class Connector
         if (empty($response)) {
             throw new ConnectionException('The response is empty');
         }
+        $response = str_replace('http://isds.czechpoint.cz/v20', 'https://isds.czechpoint.cz/v20', $response);
+
         return $this->serializer->deserialize($response, $responseClass, 'xml');
     }
 }
