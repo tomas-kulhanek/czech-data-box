@@ -1,10 +1,16 @@
-name: "main"
+name: Run base actions
+run-name: ${{ github.actor }} running base actions
+
+concurrency:
+  group: "${{ github.ref }}-${{ github.workflow }}"
+  cancel-in-progress: true
 
 on:
+  workflow_dispatch:
   pull_request:
   push:
   schedule:
-    - cron: "0 7 * * 1"
+    - cron: "0 7 * * MON"
 
 env:
   extensions: "xml mbstring curl openssl dom xdebug"
