@@ -9,7 +9,7 @@ return static function (\Rector\Config\RectorConfig $containerConfigurator): voi
 		__DIR__ . '/src'
 	]);
 
-	$containerConfigurator->import(LevelSetList::UP_TO_PHP_80);
+	$containerConfigurator->import(LevelSetList::UP_TO_PHP_82);
 
 	$containerConfigurator->phpstanConfig( __DIR__ . '/phpstan.neon');
     $containerConfigurator->skip([
