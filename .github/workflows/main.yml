@@ -131,7 +131,7 @@ jobs:
           PFO_LOGIN_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/6g5plyqgiqxexvefr4nvtos4xu/username
           PFO_PASSWORD_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/6g5plyqgiqxexvefr4nvtos4xu/password
       - name: PHPUnit
-        run: composer test:phpunit
+        run: composer test:phpunit tests/Unit
         env:
           XDEBUG_MODE: coverage
           CERT_PRIV: '${{ secrets.CERT_PRIV }}'
