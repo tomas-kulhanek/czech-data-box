@@ -11,7 +11,6 @@ use TomasKulhanek\CzechDataBox\DTO\File;
 use TomasKulhanek\CzechDataBox\DTO\Recipient;
 use TomasKulhanek\CzechDataBox\DTO\Request\CreateMessage;
 use TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum;
-use TomasKulhanek\CzechDataBox\Enum\ServiceTypeEnum;
 use TomasKulhanek\CzechDataBox\Exception\AttachmentCountOverflow;
 use TomasKulhanek\CzechDataBox\Exception\DisallowedAttachmentFormat;
 use TomasKulhanek\CzechDataBox\Exception\FileSizeOverflow;
@@ -23,12 +22,8 @@ class CreateMessageValidationTest extends TestCase
 {
     private function createConnector(): Connector
     {
-        $provider = new class () implements ClientProviderInterface {
-            public function sendRequest(Account $account, ServiceTypeEnum $serviceType, string $xmlBody): string
-            {
-                throw new \LogicException('Request must not be sent in validation tests.');
-            }
-        };
+        $provider = $this->createMock(ClientProviderInterface::class);
+        $provider->expects(self::never())->method('sendRequest');
         return new Connector(SerializerFactory::create(), $provider);
     }
 
