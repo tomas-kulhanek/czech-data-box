@@ -32,14 +32,18 @@ readonly class SymfonyClientProvider implements ClientProviderInterface
     /**
      * @return array<string, string>
      */
-    private function getHeaders(Account $account): array
+    private function getHeaders(Account $account, ServiceTypeEnum $serviceType): array
     {
         $headers = [
             'Connection' => 'Keep-Alive',
             'Accept-Encoding' => 'gzip,deflate',
-            'Content-Type' => 'text/xml; charset=utf-8',
-            'SOAPAction' => '""',
         ];
+        if ($serviceType->usesSoap12()) {
+            $headers['Content-Type'] = 'application/soap+xml; charset=utf-8';
+        } else {
+            $headers['Content-Type'] = 'text/xml; charset=utf-8';
+            $headers['SOAPAction'] = '""';
+        }
         switch ($account->getLoginType()) {
             case LoginTypeEnum::HOSTED_SPIS:
                 $headers['Authorization'] = sprintf('Basic %s', base64_encode((string) $account->getDataBoxId()));
@@ -85,7 +89,7 @@ readonly class SymfonyClientProvider implements ClientProviderInterface
             $requestOptions['passphrase'] = $account->getPrivateKeyPassPhrase();
         }
 
-        $requestOptions['headers'] = $this->getHeaders($account);
+        $requestOptions['headers'] = $this->getHeaders($account, $serviceType);
         $requestOptions['body'] = $xmlBody;
         if (file_exists($this->caCertPath)) {
             $requestOptions['cafile'] = $this->caCertPath;

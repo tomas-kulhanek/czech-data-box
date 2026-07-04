@@ -13,10 +13,15 @@ use DOMNodeList;
 use DOMXPath;
 use JMS\Serializer\SerializerInterface;
 use TomasKulhanek\CzechDataBox\DTO\File;
+use TomasKulhanek\CzechDataBox\DTO\Request\ArchiveISDSDocument;
+use TomasKulhanek\CzechDataBox\DTO\Request\AuthenticateBigMessage;
 use TomasKulhanek\CzechDataBox\DTO\Request\AuthenticateMessage;
+use TomasKulhanek\CzechDataBox\DTO\Request\BigMessageDownload;
 use TomasKulhanek\CzechDataBox\DTO\Request\ChangeISDSPassword;
 use TomasKulhanek\CzechDataBox\DTO\Request\CheckDataBox;
+use TomasKulhanek\CzechDataBox\DTO\Request\CreateBigMessage;
 use TomasKulhanek\CzechDataBox\DTO\Request\CreateMessage;
+use TomasKulhanek\CzechDataBox\DTO\Request\DownloadAttachment;
 use TomasKulhanek\CzechDataBox\DTO\Request\DataBoxCreditInfo;
 use TomasKulhanek\CzechDataBox\DTO\Request\DTInfo;
 use TomasKulhanek\CzechDataBox\DTO\Request\EraseMessage;
@@ -44,9 +49,12 @@ use TomasKulhanek\CzechDataBox\DTO\Request\PickUpAsyncResponse;
 use TomasKulhanek\CzechDataBox\DTO\Request\RegisterForNotifications;
 use TomasKulhanek\CzechDataBox\DTO\Request\ResignISDSDocument;
 use TomasKulhanek\CzechDataBox\DTO\Request\SentMessageEnvelopeDownload;
+use TomasKulhanek\CzechDataBox\DTO\Request\SignedBigMessageDownload;
 use TomasKulhanek\CzechDataBox\DTO\Request\SignedMessageDownload;
+use TomasKulhanek\CzechDataBox\DTO\Request\SignedSentBigMessageDownload;
 use TomasKulhanek\CzechDataBox\DTO\Request\SignedSentMessageDownload;
 use TomasKulhanek\CzechDataBox\DTO\Request\SuspMessageReport;
+use TomasKulhanek\CzechDataBox\DTO\Request\UploadAttachment;
 use TomasKulhanek\CzechDataBox\DTO\Request\VerifyMessage;
 use TomasKulhanek\CzechDataBox\DTO\Response\GetOwnerInfoFromLogin;
 use TomasKulhanek\CzechDataBox\DTO\Response\GetPasswordInfo;
@@ -395,15 +403,66 @@ readonly class Connector
         );
     }
 
-    private function getXmlDocument(?string $xmlContent = null): DOMDocument
+    public function uploadAttachment(Account $account, UploadAttachment $input): DTO\Response\UploadAttachment
+    {
+        return $this->send($account, ServiceTypeEnum::VODZ, $input, DTO\Response\UploadAttachment::class);
+    }
+
+    public function downloadAttachment(Account $account, DownloadAttachment $input): DTO\Response\DownloadAttachment
+    {
+        return $this->send($account, ServiceTypeEnum::VODZ, $input, DTO\Response\DownloadAttachment::class);
+    }
+
+    public function createBigMessage(Account $account, CreateBigMessage $input): DTO\Response\CreateBigMessage
+    {
+        return $this->send($account, ServiceTypeEnum::VODZ, $input, DTO\Response\CreateBigMessage::class);
+    }
+
+    public function authenticateBigMessage(
+        Account $account,
+        AuthenticateBigMessage $input
+    ): DTO\Response\AuthenticateBigMessage {
+        return $this->send($account, ServiceTypeEnum::VODZ, $input, DTO\Response\AuthenticateBigMessage::class);
+    }
+
+    public function bigMessageDownload(Account $account, BigMessageDownload $input): DTO\Response\BigMessageDownload
+    {
+        return $this->send($account, ServiceTypeEnum::VODZ, $input, DTO\Response\BigMessageDownload::class);
+    }
+
+    public function signedBigMessageDownload(
+        Account $account,
+        SignedBigMessageDownload $input
+    ): DTO\Response\SignedBigMessageDownload {
+        return $this->send($account, ServiceTypeEnum::VODZ, $input, DTO\Response\SignedBigMessageDownload::class);
+    }
+
+    public function signedSentBigMessageDownload(
+        Account $account,
+        SignedSentBigMessageDownload $input
+    ): DTO\Response\SignedSentBigMessageDownload {
+        return $this->send($account, ServiceTypeEnum::VODZ, $input, DTO\Response\SignedSentBigMessageDownload::class);
+    }
+
+    public function archiveIsdsDocument(
+        Account $account,
+        ArchiveISDSDocument $input
+    ): DTO\Response\ArchiveISDSDocument {
+        return $this->send($account, ServiceTypeEnum::ARCHIVE, $input, DTO\Response\ArchiveISDSDocument::class);
+    }
+
+    private function getXmlDocument(?string $xmlContent = null, bool $soap12 = false): DOMDocument
     {
         $document = new DOMDocument('1.0', 'UTF-8');
         if ($xmlContent !== null) {
             $document->loadXML($xmlContent);
             return $document;
         }
+        $soapNamespace = $soap12
+            ? 'http://www.w3.org/2003/05/soap-envelope'
+            : 'http://schemas.xmlsoap.org/soap/envelope/';
         $document->loadXML(
-            '<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Header/><SOAP-ENV:Body></SOAP-ENV:Body></SOAP-ENV:Envelope>'
+            '<SOAP-ENV:Envelope xmlns:SOAP-ENV="' . $soapNamespace . '"><SOAP-ENV:Header/><SOAP-ENV:Body></SOAP-ENV:Body></SOAP-ENV:Envelope>'
         );
         return $document;
     }
@@ -451,7 +510,7 @@ readonly class Connector
         $request = $this->serializer->serialize($request, 'xml');
         $request = $this->getXmlDocument($request);
 
-        $requestDocument = $this->getXmlDocument();
+        $requestDocument = $this->getXmlDocument(null, $serviceType->usesSoap12());
         $requestDocumentXpath = new DOMXPath($requestDocument);
         if (empty($requestDocument->documentElement)) {
             throw new ConnectionException();

@@ -32,14 +32,20 @@ readonly class GuzzleClientProvider implements ClientProviderInterface
     /**
      * @return array<string, string>
      */
-    private function getHeaders(): array
+    private function getHeaders(ServiceTypeEnum $serviceType): array
     {
-        return [
+        $headers = [
             'Connection' => 'Keep-Alive',
             'Accept-Encoding' => 'gzip,deflate',
-            'Content-Type' => 'text/xml; charset=utf-8',
-            'SOAPAction' => '""',
         ];
+        if ($serviceType->usesSoap12()) {
+            $headers['Content-Type'] = 'application/soap+xml; charset=utf-8';
+        } else {
+            $headers['Content-Type'] = 'text/xml; charset=utf-8';
+            $headers['SOAPAction'] = '""';
+        }
+
+        return $headers;
     }
 
     /**
@@ -87,7 +93,7 @@ readonly class GuzzleClientProvider implements ClientProviderInterface
             $requestOptions[RequestOptions::SSL_KEY] = [$privateStream['uri'], $account->getPrivateKeyPassPhrase()];
         }
 
-        $requestOptions[RequestOptions::HEADERS] = $this->getHeaders();
+        $requestOptions[RequestOptions::HEADERS] = $this->getHeaders($serviceType);
         $requestOptions[RequestOptions::BODY] = $xmlBody;
         if (file_exists($this->caCertPath)) {
             $requestOptions['cafile'] = $this->caCertPath;
