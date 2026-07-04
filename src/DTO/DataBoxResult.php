@@ -44,11 +44,11 @@ class DataBoxResult
     #[Serializer\SkipWhenEmpty]
     protected ?string $dataBoxIco = null;
 
-    #[Serializer\Type('bool')]
+    #[Serializer\Type('string')]
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
-    #[Serializer\SerializedName('dbEffectiveOVM')]
+    #[Serializer\SerializedName('dbIdOVM')]
     #[Serializer\SkipWhenEmpty]
-    protected ?bool $dataBoxEffectiveOvm = null;
+    protected ?string $dataBoxIdOvm = null;
 
     #[Serializer\Type('string')]
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
@@ -111,14 +111,14 @@ class DataBoxResult
         return $this;
     }
 
-    public function getDataBoxEffectiveOvm(): ?bool
+    public function getDataBoxIdOvm(): ?string
     {
-        return $this->dataBoxEffectiveOvm;
+        return $this->dataBoxIdOvm;
     }
 
-    public function setDataBoxEffectiveOvm(?bool $dataBoxEffectiveOvm): DataBoxResult
+    public function setDataBoxIdOvm(?string $dataBoxIdOvm): DataBoxResult
     {
-        $this->dataBoxEffectiveOvm = $dataBoxEffectiveOvm;
+        $this->dataBoxIdOvm = $dataBoxIdOvm;
         return $this;
     }
 

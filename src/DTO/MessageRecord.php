@@ -31,7 +31,7 @@ class MessageRecord
     #[Serializer\SerializedName('dmAttachmentSize')]
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Assert\Positive()]
-    protected int $attachmentSize;
+    protected ?int $attachmentSize = null;
 
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
@@ -79,12 +79,12 @@ class MessageRecord
         return $this;
     }
 
-    public function getAttachmentSize(): int
+    public function getAttachmentSize(): ?int
     {
         return $this->attachmentSize;
     }
 
-    public function setAttachmentSize(int $attachmentSize): MessageRecord
+    public function setAttachmentSize(?int $attachmentSize): MessageRecord
     {
         $this->attachmentSize = $attachmentSize;
         return $this;

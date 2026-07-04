@@ -49,8 +49,9 @@ class Delivery
      * @var DataMessageEvent[]
      */
     #[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\DataMessageEvent>')]
-    #[Serializer\XmlList(entry: 'dmEvent', inline: false)]
+    #[Serializer\XmlList(entry: 'dmEvent', inline: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dmEvents')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Assert\All([
         new Assert\Type(type: DataMessageEvent::class)
     ])]

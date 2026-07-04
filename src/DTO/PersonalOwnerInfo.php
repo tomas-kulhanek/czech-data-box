@@ -61,7 +61,7 @@ class PersonalOwnerInfo
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
-    #[Serializer\SerializedName('adStreet')]
+    #[Serializer\SerializedName('adDistrict')]
     protected ?string $adDistrict = null;
 
     #[Serializer\SkipWhenEmpty]

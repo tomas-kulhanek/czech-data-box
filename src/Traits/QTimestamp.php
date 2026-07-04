@@ -11,5 +11,10 @@ trait QTimestamp
     #[Serializer\Type('string')]
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dmQTimestamp')]
-    protected string $qTimestamp;
+    protected ?string $qTimestamp = null;
+
+    public function getQTimestamp(): ?string
+    {
+        return $this->qTimestamp;
+    }
 }
