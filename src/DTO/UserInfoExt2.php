@@ -45,6 +45,10 @@ class UserInfoExt2
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('adDistrict')]
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+<<<<<<<< HEAD:src/DTO/UserInfoExt2.php
+========
+    #[Serializer\SerializedName('adDistrict')]
+>>>>>>>> origin/main:src/DTO/PersonalOwnerInfo.php
     protected ?string $adDistrict = null;
 
     #[Serializer\SkipWhenEmpty]
