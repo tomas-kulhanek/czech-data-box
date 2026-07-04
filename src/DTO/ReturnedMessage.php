@@ -21,6 +21,12 @@ class ReturnedMessage
     #[Assert\NotBlank(allowNull: false)]
     protected string $type;
 
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type('int')]
+    #[Serializer\SerializedName('specMessFlag')]
+    #[Serializer\XmlAttribute]
+    protected ?int $specMessFlag = null;
+
     #[Serializer\Type(MessageEnvelope::class)]
     #[Serializer\SerializedName('dmDm')]
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
@@ -132,5 +138,21 @@ class ReturnedMessage
     {
         $this->attachmentSize = $attachmentSize;
         return $this;
+    }
+
+    public function getSpecMessFlag(): ?int
+    {
+        return $this->specMessFlag;
+    }
+
+    public function setSpecMessFlag(?int $specMessFlag): ReturnedMessage
+    {
+        $this->specMessFlag = $specMessFlag;
+        return $this;
+    }
+
+    public function isSuspicious(): bool
+    {
+        return $this->specMessFlag === 1;
     }
 }

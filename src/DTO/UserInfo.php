@@ -70,6 +70,12 @@ class UserInfo
     #[Serializer\SerializedName('caZipCode')]
     protected ?string $caZipCode = null;
 
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type('string')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('caState')]
+    protected ?string $caState = null;
+
     public function getBiDate(): ?DateTimeImmutable
     {
         return $this->biDate;
@@ -166,6 +172,17 @@ class UserInfo
     public function setCaZipCode(?string $caZipCode): UserInfo
     {
         $this->caZipCode = $caZipCode;
+        return $this;
+    }
+
+    public function getCaState(): ?string
+    {
+        return $this->caState;
+    }
+
+    public function setCaState(?string $caState): UserInfo
+    {
+        $this->caState = $caState;
         return $this;
     }
 

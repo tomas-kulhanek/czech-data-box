@@ -26,6 +26,12 @@ trait PersonName
     #[Serializer\SerializedName('pnLastName')]
     protected ?string $lastName = null;
 
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type('string')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('pnLastNameAtBirth')]
+    protected ?string $lastNameAtBirth = null;
+
     public function getFirstName(): ?string
     {
         return $this->firstName;
@@ -56,6 +62,17 @@ trait PersonName
     public function setLastName(?string $lastName): self
     {
         $this->lastName = $lastName;
+        return $this;
+    }
+
+    public function getLastNameAtBirth(): ?string
+    {
+        return $this->lastNameAtBirth;
+    }
+
+    public function setLastNameAtBirth(?string $lastNameAtBirth): self
+    {
+        $this->lastNameAtBirth = $lastNameAtBirth;
         return $this;
     }
 }
