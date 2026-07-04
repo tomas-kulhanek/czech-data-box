@@ -16,13 +16,11 @@ use TomasKulhanek\CzechDataBox\DTO\File;
 use TomasKulhanek\CzechDataBox\DTO\Request\AuthenticateMessage;
 use TomasKulhanek\CzechDataBox\DTO\Request\ChangeISDSPassword;
 use TomasKulhanek\CzechDataBox\DTO\Request\CheckDataBox;
-use TomasKulhanek\CzechDataBox\DTO\Request\ConfirmDelivery;
 use TomasKulhanek\CzechDataBox\DTO\Request\CreateMessage;
 use TomasKulhanek\CzechDataBox\DTO\Request\DataBoxCreditInfo;
 use TomasKulhanek\CzechDataBox\DTO\Request\DTInfo;
 use TomasKulhanek\CzechDataBox\DTO\Request\EraseMessage;
-use TomasKulhanek\CzechDataBox\DTO\Request\FindDataBox;
-use TomasKulhanek\CzechDataBox\DTO\Request\FindPersonalDataBox;
+use TomasKulhanek\CzechDataBox\DTO\Request\FindDataBox2;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetConstants;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetDataBoxActivityStatus;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetDataBoxAddress;
@@ -74,9 +72,9 @@ readonly class Connector
     ) {
     }
 
-    public function findDataBox(Account $account, FindDataBox $input): DTO\Response\FindDataBox
+    public function findDataBox2(Account $account, FindDataBox2 $input): DTO\Response\FindDataBox2
     {
-        return $this->send($account, ServiceTypeEnum::SEARCH, $input, DTO\Response\FindDataBox::class);
+        return $this->send($account, ServiceTypeEnum::SEARCH, $input, DTO\Response\FindDataBox2::class);
     }
 
     public function pdzInfo(Account $account, PDZInfo $input): DTO\Response\PDZInfo
@@ -109,11 +107,6 @@ readonly class Connector
     public function pdzSendInfo(Account $account, PDZSendInfo $input): DTO\Response\PDZSendInfo
     {
         return $this->send($account, ServiceTypeEnum::SEARCH, $input, DTO\Response\PDZSendInfo::class);
-    }
-
-    public function findPersonalDataBox(Account $account, FindPersonalDataBox $input): DTO\Response\FindPersonalDataBox
-    {
-        return $this->send($account, ServiceTypeEnum::SEARCH, $input, DTO\Response\FindPersonalDataBox::class);
     }
 
     public function getDataBoxList(Account $account, GetDataBoxList $input): DTO\Response\GetDataBoxList
@@ -310,14 +303,6 @@ readonly class Connector
         GetMessageStateChanges $input
     ): DTO\Response\GetMessageStateChanges {
         return $this->send($account, ServiceTypeEnum::INFO, $input, DTO\Response\GetMessageStateChanges::class);
-    }
-
-    /**
-     * @deprecated
-     */
-    public function confirmDelivery(Account $account, ConfirmDelivery $input): DTO\Response\ConfirmDelivery
-    {
-        return $this->send($account, ServiceTypeEnum::INFO, $input, DTO\Response\ConfirmDelivery::class);
     }
 
     public function sentMessageEnvelopeDownload(

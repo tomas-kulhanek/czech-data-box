@@ -9,7 +9,6 @@ use TomasKulhanek\CzechDataBox\DTO\Request\VerifyMessage;
 use TomasKulhanek\CzechDataBox\DTO\Recipient;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetListOfReceivedMessages;
 use TomasKulhanek\CzechDataBox\Enum\FilterEnum;
-use TomasKulhanek\CzechDataBox\Utils\MessageStatus;
 use TomasKulhanek\CzechDataBox\DTO\Request\MarkMessageAsDownloaded;
 use TomasKulhanek\CzechDataBox\DTO\Request\MessageDownload;
 use TomasKulhanek\CzechDataBox\DTO\Request\SignedMessageDownload;
