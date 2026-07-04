@@ -1,4 +1,4 @@
-# PHP knihovna pro komunikaci s Informačním systémem datových schránek (ISDS) Ministerstva vnitra
+# PHP knihovna pro komunikaci s Informačním systémem datových schránek (ISDS) Digitální a informační agentury
 
 ![DEV branch workflows](https://github.com/tomas-kulhanek/czech-data-box/actions/workflows/main.yml/badge.svg)
 [![Latest Stable Version](https://poser.pugx.org/tomas-kulhanek/czech-data-box/v/stable)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
@@ -7,7 +7,7 @@
 [![License](https://poser.pugx.org/tomas-kulhanek/czech-data-box/license)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
 
 
-⚠ **POZOR!!** Pokud implementujete napojení na ISDS, je potřeba aby jste se řídili dle [PROVOZNÍHO ŘÁDU](https://info.mojedatovaschranka.cz/info/cs/80.html)⚠
+⚠ **POZOR!!** Pokud implementujete napojení na ISDS, je potřeba aby jste se řídili dle [PROVOZNÍHO ŘÁDU](https://datovka.gov.cz/info/cs/80.html)⚠
 ## Instalace
 
 ### Composer
@@ -29,7 +29,7 @@ composer require tomas-kulhanek/czech-data-box symfony/http-client
 V případě využívání vlastního http klienta, stačí implementovat rozhraní `TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface` a předat ho do konstruktoru třídy `TomasKulhanek\CzechDataBox\Connector`. Samozřejmostí je třeba zajistit správné nastavení hlaviček nebo SSL klientských certifikátů.
 
 ## Popis
-Tato knihovna slouží k základní komunikaci s Informačním systémem datových scrhánek [ISDS](https://mojedatovaschranka.cz) nebo [ISDS test](https://czebox.cz)
+Tato knihovna slouží k základní komunikaci s Informačním systémem datových schránek [ISDS](https://www.datovka.gov.cz) nebo [ISDS test](https://datovka-test.gov.cz)
 
 ## Základní použití
 Pro každou operaci je potřebné zadat přístupové údaje
@@ -72,9 +72,10 @@ V případě že potřebujete poradit, nebo při implementaci Vám třída zobra
 Základní pomoc je poskytována zcela zdarma pomocí Issues.
 
 ## Odkazy
-- Produkční ISDS - https://mojedatoveschranky.cz
-- Testovací ISDS - https://czebox.cz
-- Provozní řád ISDS - https://info.mojedatovaschranka.cz/info/cs/80.html
+- Produkční ISDS - https://www.datovka.gov.cz
+- Testovací ISDS - https://datovka-test.gov.cz
+- Provozní řád ISDS - https://datovka.gov.cz/info/cs/80.html
+- Změny pro dodavatele aplikací - https://datovka.gov.cz/info/cs/74.html
 - Poradna - https://poradnaisds.cz/
 
 ## Žádosti o zřízení datové schránky
@@ -83,4 +84,4 @@ Základní pomoc je poskytována zcela zdarma pomocí Issues.
 - ostatní - [odkaz](https://www.datoveschranky.info/documents/1744842/1746063/zadost_zrizeni_ds.zfo/42ee7c26-16dd-427f-94c8-319453efdae4)
 
 ### Testovací prostředí
-Zřízení testovací schránky v prostředí czecbox.cz je možné skrze formulář na produkčním portalu www.mojedatoveschranky.cz po přihlášení v nastavení
+Zřízení testovací schránky v prostředí datovka-test.gov.cz je možné skrze formulář na produkčním portálu www.datovka.gov.cz po přihlášení v nastavení

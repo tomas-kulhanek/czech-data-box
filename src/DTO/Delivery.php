@@ -54,7 +54,6 @@ class Delivery
     #[Assert\All([
         new Assert\Type(type: DataMessageEvent::class)
     ])]
-    #[Assert\All()]
     protected array $events = [];
 
     public function getHash(): Hash
