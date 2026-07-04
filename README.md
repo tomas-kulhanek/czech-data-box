@@ -66,12 +66,26 @@ $serializer = \TomasKulhanek\Serializer\SerializerFactory::create();
 $guzzleProvider = \TomasKulhanek\CzechDataBox\Provider\GuzzleClientProvider::create();
 $connector = new \TomasKulhanek\CzechDataBox\Connector($serializer, $guzzleProvider);
 ```
+## Povinnosti aplikace dle Provozního řádu ISDS
+
+Knihovna řeší komunikaci s ISDS, ale některé povinnosti [Provozního řádu](https://datovka.gov.cz/info/cs/80.html) musí zajistit až vaše aplikace:
+
+- **Evidujte již stažené zprávy a stahujte jen nové** (kap. II.17 „Dodržování přiměřenosti"). Aplikace nesmí opakovaně stahovat celé seznamy a obsahy zpráv — použijte filtry `GetListOfReceivedMessages`/`GetListOfSentMessages` (od–do, stavy) a vlastní evidenci zpracovaných `dmID`.
+- **Lokální (desktopové) aplikace se smí přihlašovat pouze na manuální pokyn uživatele.** Serverové aplikace se mohou přihlašovat automatizovaně, ale jen v nezbytné frekvenci.
+- **Počítejte s omezením počtu dotazů.** Při překračování denních limitů ISDS nejprve zasílá systémovou zprávu, poté odpovědi zdržuje o 3 sekundy a souběžný požadavek ze stejného účtu odmítá. Nespouštějte paralelní požadavky pod jedním účtem a implementujte přiměřený retry.
+- **⚠ Přístupové údaje nesmí opustit zařízení pod plnou kontrolou uživatele.** Předání jména a hesla cloudové/webové aplikaci třetí strany je porušením § 9 odst. 2 zákona č. 300/2008 Sb. — Správce může takové údaje zneplatnit. Doporučená autentizace pro externí systémy je systémový certifikát (`LoginTypeEnum::SPIS_CERT`).
+- **Doručení přihlášením** (§ 17 odst. 3) způsobuje výhradně volání `GetListOfReceivedMessages` — ostatní operace doručení nezpůsobí.
+- **Údržba ISDS** probíhá zpravidla v pátek 0:00–1:00 (možná krátká nedostupnost); knihovna při HTTP 503 vyhazuje `SystemExclusion`.
+- **Zprávy nad 20 MB** odesílejte jako velkoobjemové (VoDZ, do 100 MB) přes `uploadAttachment()` + `createBigMessage()`; hromadné odeslání u VoDZ není podporováno.
+- Změny webových služeb oznamuje DIA zpravidla 2 měsíce předem na [stránce pro dodavatele](https://datovka.gov.cz/info/cs/74.html); dodavatelům aplikací se doporučuje [registrace do pracovního prostoru](https://registrace.poradnaisds.cz).
+
 ## Pomoc a řešní chyb
 
 V případě že potřebujete poradit, nebo při implementaci Vám třída zobrazuje chybu vytvořte prosím nové Issues.
 Základní pomoc je poskytována zcela zdarma pomocí Issues.
 
 ## Odkazy
+- Changelog knihovny - [CHANGELOG.md](CHANGELOG.md)
 - Produkční ISDS - https://www.datovka.gov.cz
 - Testovací ISDS - https://datovka-test.gov.cz
 - Provozní řád ISDS - https://datovka.gov.cz/info/cs/80.html
