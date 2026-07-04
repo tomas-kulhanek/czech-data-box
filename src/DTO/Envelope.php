@@ -34,10 +34,10 @@ class Envelope
     protected ?bool $ovm = null;
 
     #[Serializer\SkipWhenEmpty]
-    #[Serializer\Type('bool')]
+    #[Serializer\Type(PublishOwnId::class)]
     #[Serializer\SerializedName('dmPublishOwnID')]
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
-    protected ?bool $publishOwnId = null;
+    protected ?PublishOwnId $publishOwnId = null;
 
     public function getType(): ?string
     {
@@ -225,13 +225,16 @@ class Envelope
         return $this;
     }
 
-    public function getPublishOwnId(): ?bool
+    public function getPublishOwnId(): ?PublishOwnId
     {
         return $this->publishOwnId;
     }
 
-    public function setPublishOwnId(?bool $publishOwnId): Envelope
+    public function setPublishOwnId(PublishOwnId|bool|null $publishOwnId): Envelope
     {
+        if (is_bool($publishOwnId)) {
+            $publishOwnId = (new PublishOwnId())->setValue($publishOwnId);
+        }
         $this->publishOwnId = $publishOwnId;
         return $this;
     }

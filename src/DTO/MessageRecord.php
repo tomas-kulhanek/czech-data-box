@@ -51,6 +51,18 @@ class MessageRecord
     #[Assert\NotBlank(allowNull: false)]
     protected string $type;
 
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type('bool')]
+    #[Serializer\SerializedName('dmVODZ')]
+    #[Serializer\XmlAttribute]
+    protected ?bool $vodz = null;
+
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type('int')]
+    #[Serializer\SerializedName('specMessFlag')]
+    #[Serializer\XmlAttribute]
+    protected ?int $specMessFlag = null;
+
     #[Serializer\Type('bool')]
     #[Serializer\SkipWhenEmpty]
     #[Serializer\SerializedName('dmAllowSubstDelivery')]
@@ -121,6 +133,33 @@ class MessageRecord
     {
         $this->type = $type;
         return $this;
+    }
+
+    public function isVodz(): bool
+    {
+        return $this->vodz === true;
+    }
+
+    public function setVodz(?bool $vodz): MessageRecord
+    {
+        $this->vodz = $vodz;
+        return $this;
+    }
+
+    public function getSpecMessFlag(): ?int
+    {
+        return $this->specMessFlag;
+    }
+
+    public function setSpecMessFlag(?int $specMessFlag): MessageRecord
+    {
+        $this->specMessFlag = $specMessFlag;
+        return $this;
+    }
+
+    public function isSuspicious(): bool
+    {
+        return $this->specMessFlag === 1;
     }
 
     public function getAllowSubstDelivery(): ?bool

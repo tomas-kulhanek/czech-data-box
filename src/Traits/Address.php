@@ -17,6 +17,12 @@ trait Address
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('adDistrict')]
+    protected ?string $adDistrict = null;
+
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type('string')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('adStreet')]
     protected ?string $adStreet = null;
 
@@ -43,6 +49,12 @@ trait Address
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('adState')]
     protected ?string $adState = null;
+
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type('string')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('adAMCode')]
+    protected ?string $adAMCode = null;
 
     public function getAdCity(): ?string
     {
@@ -107,6 +119,28 @@ trait Address
     public function setAdState(?string $adState): self
     {
         $this->adState = $adState;
+        return $this;
+    }
+
+    public function getAdDistrict(): ?string
+    {
+        return $this->adDistrict;
+    }
+
+    public function setAdDistrict(?string $adDistrict): self
+    {
+        $this->adDistrict = $adDistrict;
+        return $this;
+    }
+
+    public function getAdAMCode(): ?string
+    {
+        return $this->adAMCode;
+    }
+
+    public function setAdAMCode(?string $adAMCode): self
+    {
+        $this->adAMCode = $adAMCode;
         return $this;
     }
 }
