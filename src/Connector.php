@@ -42,12 +42,15 @@ use TomasKulhanek\CzechDataBox\DTO\Response\GetPasswordInfo;
 use TomasKulhanek\CzechDataBox\DTO\Response\GetUserInfoFromLogin;
 use TomasKulhanek\CzechDataBox\DTO\Response\IResponse;
 use TomasKulhanek\CzechDataBox\Enum\ServiceTypeEnum;
+use TomasKulhanek\CzechDataBox\Exception\AttachmentCountOverflow;
 use TomasKulhanek\CzechDataBox\Exception\ConnectionException;
+use TomasKulhanek\CzechDataBox\Exception\DisallowedAttachmentFormat;
 use TomasKulhanek\CzechDataBox\Exception\FileSizeOverflow;
 use TomasKulhanek\CzechDataBox\Exception\MissingMainFile;
 use TomasKulhanek\CzechDataBox\Exception\MissingRequiredField;
 use TomasKulhanek\CzechDataBox\Exception\RecipientCountOverflow;
 use TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface;
+use TomasKulhanek\CzechDataBox\Utils\AllowedAttachmentFormats;
 use TomasKulhanek\CzechDataBox\Utils\BinarySuffix;
 
 readonly class Connector
@@ -169,14 +172,39 @@ readonly class Connector
                 sprintf('More than 50 recipients are assigned. Currently, %d are added.', $recipientsCount)
             );
         }
+        $filesCount = count($input->getFiles());
+        if ($filesCount > 100) {
+            throw new AttachmentCountOverflow(
+                sprintf('A message can contain at most 100 attachments. Currently, %d are added.', $filesCount)
+            );
+        }
         $sumFileSize = 0;
+        $containerCount = 0;
         /** @var DTO\File $file */
         foreach ($input->getFiles() as $file) {
+            if (!AllowedAttachmentFormats::isAllowed($file->getDescription())) {
+                throw new DisallowedAttachmentFormat(
+                    sprintf('The attachment "%s" has a format disallowed by the ISDS decree.', $file->getDescription())
+                );
+            }
+            if (AllowedAttachmentFormats::isContainer($file->getDescription())) {
+                $containerCount++;
+            }
             if ($file->getEncodedContent() instanceof \SplFileInfo) {
                 $sumFileSize += $file->getEncodedContent()->getSize();
+            } elseif ($file->getXmlContent() !== null) {
+                $sumFileSize += strlen($file->getXmlContent());
             }
         }
-        $maxSize = 25 * 1024 ** 2;
+        if ($containerCount > 10) {
+            throw new AttachmentCountOverflow(
+                sprintf(
+                    'A message can contain at most 10 container (ZIP/ASiC) attachments. Currently, %d are added.',
+                    $containerCount
+                )
+            );
+        }
+        $maxSize = 20 * 1024 ** 2;
         if ($sumFileSize > $maxSize) {
             throw new FileSizeOverflow(
                 sprintf(
