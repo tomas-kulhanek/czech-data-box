@@ -59,6 +59,60 @@ class EndpointProviderTest extends TestCase
         self::assertSame('https://ws1c.datovka.gov.cz/certds/DS/DsManage', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::ACCESS));
     }
 
+    public function testVodzServices(): void
+    {
+        $account = new Account();
+        $account->setProduction(false);
+        $account->setLoginType(LoginTypeEnum::NAME_PASSWORD);
+
+        $endpointProvider = new EndpointProvider();
+        self::assertSame('https://ws2.datovka-test.gov.cz/DS/vodz', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::VODZ));
+        $account->setProduction(true);
+        self::assertSame('https://ws2.datovka.gov.cz/DS/vodz', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::VODZ));
+
+        $account->setProduction(false);
+        $account->setLoginType(LoginTypeEnum::SPIS_CERT);
+        self::assertSame('https://ws2c.datovka-test.gov.cz/cert/DS/vodz', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::VODZ));
+        $account->setProduction(true);
+        self::assertSame('https://ws2c.datovka.gov.cz/cert/DS/vodz', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::VODZ));
+
+        $account->setLoginType(LoginTypeEnum::CERT_LOGIN_NAME_PASSWORD);
+        $account->setProduction(false);
+        self::assertSame('https://ws2c.datovka-test.gov.cz/certds/DS/vodz', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::VODZ));
+        $account->setProduction(true);
+        self::assertSame('https://ws2c.datovka.gov.cz/certds/DS/vodz', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::VODZ));
+
+        $account->setLoginType(LoginTypeEnum::HOSTED_SPIS);
+        $account->setProduction(false);
+        self::assertSame('https://ws2c.datovka-test.gov.cz/hspis/DS/vodz', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::VODZ));
+        $account->setProduction(true);
+        self::assertSame('https://ws2c.datovka.gov.cz/hspis/DS/vodz', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::VODZ));
+    }
+
+    public function testArchiveServices(): void
+    {
+        $account = new Account();
+        $account->setProduction(false);
+        $account->setLoginType(LoginTypeEnum::NAME_PASSWORD);
+
+        $endpointProvider = new EndpointProvider();
+        self::assertSame('https://ws2.datovka-test.gov.cz/DS/arch', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::ARCHIVE));
+        $account->setProduction(true);
+        self::assertSame('https://ws2.datovka.gov.cz/DS/arch', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::ARCHIVE));
+
+        $account->setProduction(false);
+        $account->setLoginType(LoginTypeEnum::SPIS_CERT);
+        self::assertSame('https://ws2c.datovka-test.gov.cz/cert/DS/arch', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::ARCHIVE));
+        $account->setProduction(true);
+        self::assertSame('https://ws2c.datovka.gov.cz/cert/DS/arch', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::ARCHIVE));
+
+        $account->setLoginType(LoginTypeEnum::CERT_LOGIN_NAME_PASSWORD);
+        $account->setProduction(false);
+        self::assertSame('https://ws2c.datovka-test.gov.cz/certds/DS/arch', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::ARCHIVE));
+        $account->setProduction(true);
+        self::assertSame('https://ws2c.datovka.gov.cz/certds/DS/arch', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::ARCHIVE));
+    }
+
     public function testSearchServices(): void
     {
         $account = new Account();

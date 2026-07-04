@@ -24,13 +24,15 @@ class EndpointProvider
             ServiceTypeEnum::OPERATIONS => 'dz',
             ServiceTypeEnum::INFO => 'dx',
             ServiceTypeEnum::SEARCH => 'df',
-            ServiceTypeEnum::ACCESS => 'DsManage'
+            ServiceTypeEnum::ACCESS => 'DsManage',
+            ServiceTypeEnum::VODZ => 'vodz',
+            ServiceTypeEnum::ARCHIVE => 'arch',
         };
     }
 
     public function getServiceLocation(Account $account, ServiceTypeEnum $ServiceType): string
     {
-        $res = 'https://ws1';
+        $res = 'https://ws' . ($ServiceType->usesSoap12() ? '2' : '1');
         if ($account->getLoginType() !== LoginTypeEnum::NAME_PASSWORD) {
             $res .= 'c';
         }
