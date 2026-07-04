@@ -55,7 +55,7 @@ class ReturnedMessage
     #[Serializer\SerializedName('dmAttachmentSize')]
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Assert\Positive]
-    protected int $attachmentSize;
+    protected ?int $attachmentSize = null;
 
     public function getType(): string
     {
@@ -123,12 +123,12 @@ class ReturnedMessage
         return $this;
     }
 
-    public function getAttachmentSize(): int
+    public function getAttachmentSize(): ?int
     {
         return $this->attachmentSize;
     }
 
-    public function setAttachmentSize(int $attachmentSize): ReturnedMessage
+    public function setAttachmentSize(?int $attachmentSize): ReturnedMessage
     {
         $this->attachmentSize = $attachmentSize;
         return $this;

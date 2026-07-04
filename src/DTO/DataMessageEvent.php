@@ -14,8 +14,8 @@ class DataMessageEvent
 {
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
-    #[Serializer\SerializedName('dnEventTime')]
-    protected DateTimeImmutable $time;
+    #[Serializer\SerializedName('dmEventTime')]
+    protected ?DateTimeImmutable $time = null;
 
     #[Serializer\Type('string')]
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
@@ -23,7 +23,7 @@ class DataMessageEvent
     #[Assert\NotBlank(allowNull: false)]
     protected string $description;
 
-    public function getTime(): DateTimeImmutable
+    public function getTime(): ?DateTimeImmutable
     {
         return $this->time;
     }
