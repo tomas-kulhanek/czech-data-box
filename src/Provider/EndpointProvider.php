@@ -13,9 +13,9 @@ class EndpointProvider
     private function getServiceDomain(bool $isProduction): string
     {
         if ($isProduction) {
-            return 'mojedatovaschranka.cz';
+            return 'datovka.gov.cz';
         }
-        return 'czebox.cz';
+        return 'datovka-test.gov.cz';
     }
 
     private function getServiceUrl(ServiceTypeEnum $serviceType): string
