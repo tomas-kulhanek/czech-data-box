@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace TomasKulhanek\CzechDataBox;
 
+use TomasKulhanek\CzechDataBox\DTO\Response\DummyOperation;
+use TomasKulhanek\CzechDataBox\DTO\Response\GetOwnerInfoFromLogin2;
+use TomasKulhanek\CzechDataBox\DTO\Response\GetUserInfoFromLogin2;
 use DOMDocument;
 use DOMElement;
 use DOMNodeList;
@@ -17,13 +20,19 @@ use TomasKulhanek\CzechDataBox\DTO\Request\ConfirmDelivery;
 use TomasKulhanek\CzechDataBox\DTO\Request\CreateMessage;
 use TomasKulhanek\CzechDataBox\DTO\Request\DataBoxCreditInfo;
 use TomasKulhanek\CzechDataBox\DTO\Request\DTInfo;
+use TomasKulhanek\CzechDataBox\DTO\Request\EraseMessage;
 use TomasKulhanek\CzechDataBox\DTO\Request\FindDataBox;
 use TomasKulhanek\CzechDataBox\DTO\Request\FindPersonalDataBox;
+use TomasKulhanek\CzechDataBox\DTO\Request\GetConstants;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetDataBoxActivityStatus;
+use TomasKulhanek\CzechDataBox\DTO\Request\GetDataBoxAddress;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetDataBoxList;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetDeliveryInfo;
+use TomasKulhanek\CzechDataBox\DTO\Request\GetListForNotifications;
+use TomasKulhanek\CzechDataBox\DTO\Request\GetListOfErasedMessages;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetListOfReceivedMessages;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetListOfSentMessages;
+use TomasKulhanek\CzechDataBox\DTO\Request\GetMessageAuthor2;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetMessageStateChanges;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetSignedDeliveryInfo;
 use TomasKulhanek\CzechDataBox\DTO\Request\IRequest;
@@ -33,9 +42,13 @@ use TomasKulhanek\CzechDataBox\DTO\Request\MessageDownload;
 use TomasKulhanek\CzechDataBox\DTO\Request\MessageEnvelopeDownload;
 use TomasKulhanek\CzechDataBox\DTO\Request\PDZInfo;
 use TomasKulhanek\CzechDataBox\DTO\Request\PDZSendInfo;
+use TomasKulhanek\CzechDataBox\DTO\Request\PickUpAsyncResponse;
+use TomasKulhanek\CzechDataBox\DTO\Request\RegisterForNotifications;
 use TomasKulhanek\CzechDataBox\DTO\Request\ResignISDSDocument;
+use TomasKulhanek\CzechDataBox\DTO\Request\SentMessageEnvelopeDownload;
 use TomasKulhanek\CzechDataBox\DTO\Request\SignedMessageDownload;
 use TomasKulhanek\CzechDataBox\DTO\Request\SignedSentMessageDownload;
+use TomasKulhanek\CzechDataBox\DTO\Request\SuspMessageReport;
 use TomasKulhanek\CzechDataBox\DTO\Request\VerifyMessage;
 use TomasKulhanek\CzechDataBox\DTO\Response\GetOwnerInfoFromLogin;
 use TomasKulhanek\CzechDataBox\DTO\Response\GetPasswordInfo;
@@ -305,6 +318,96 @@ readonly class Connector
     public function confirmDelivery(Account $account, ConfirmDelivery $input): DTO\Response\ConfirmDelivery
     {
         return $this->send($account, ServiceTypeEnum::INFO, $input, DTO\Response\ConfirmDelivery::class);
+    }
+
+    public function sentMessageEnvelopeDownload(
+        Account $account,
+        SentMessageEnvelopeDownload $input
+    ): DTO\Response\SentMessageEnvelopeDownload {
+        return $this->send($account, ServiceTypeEnum::INFO, $input, DTO\Response\SentMessageEnvelopeDownload::class);
+    }
+
+    public function getMessageAuthor2(Account $account, GetMessageAuthor2 $input): DTO\Response\GetMessageAuthor2
+    {
+        return $this->send($account, ServiceTypeEnum::INFO, $input, DTO\Response\GetMessageAuthor2::class);
+    }
+
+    public function eraseMessage(Account $account, EraseMessage $input): DTO\Response\EraseMessage
+    {
+        return $this->send($account, ServiceTypeEnum::INFO, $input, DTO\Response\EraseMessage::class);
+    }
+
+    public function getListOfErasedMessages(
+        Account $account,
+        GetListOfErasedMessages $input
+    ): DTO\Response\GetListOfErasedMessages {
+        return $this->send($account, ServiceTypeEnum::INFO, $input, DTO\Response\GetListOfErasedMessages::class);
+    }
+
+    public function pickUpAsyncResponse(
+        Account $account,
+        PickUpAsyncResponse $input
+    ): DTO\Response\PickUpAsyncResponse {
+        return $this->send($account, ServiceTypeEnum::INFO, $input, DTO\Response\PickUpAsyncResponse::class);
+    }
+
+    public function getListForNotifications(
+        Account $account,
+        GetListForNotifications $input
+    ): DTO\Response\GetListForNotifications {
+        return $this->send($account, ServiceTypeEnum::INFO, $input, DTO\Response\GetListForNotifications::class);
+    }
+
+    public function registerForNotifications(
+        Account $account,
+        RegisterForNotifications $input
+    ): DTO\Response\RegisterForNotifications {
+        return $this->send($account, ServiceTypeEnum::INFO, $input, DTO\Response\RegisterForNotifications::class);
+    }
+
+    public function suspMessageReport(Account $account, SuspMessageReport $input): DTO\Response\SuspMessageReport
+    {
+        return $this->send($account, ServiceTypeEnum::INFO, $input, DTO\Response\SuspMessageReport::class);
+    }
+
+    public function dummyOperation(Account $account): DummyOperation
+    {
+        return $this->send(
+            $account,
+            ServiceTypeEnum::OPERATIONS,
+            (new DTO\Request\DummyOperation()),
+            DummyOperation::class
+        );
+    }
+
+    public function getConstants(Account $account, GetConstants $input): DTO\Response\GetConstants
+    {
+        return $this->send($account, ServiceTypeEnum::SEARCH, $input, DTO\Response\GetConstants::class);
+    }
+
+    public function getDataBoxAddress(Account $account, GetDataBoxAddress $input): DTO\Response\GetDataBoxAddress
+    {
+        return $this->send($account, ServiceTypeEnum::SEARCH, $input, DTO\Response\GetDataBoxAddress::class);
+    }
+
+    public function getOwnerInfoFromLogin2(Account $account): GetOwnerInfoFromLogin2
+    {
+        return $this->send(
+            $account,
+            ServiceTypeEnum::ACCESS,
+            (new DTO\Request\GetOwnerInfoFromLogin2()),
+            GetOwnerInfoFromLogin2::class
+        );
+    }
+
+    public function getUserInfoFromLogin2(Account $account): GetUserInfoFromLogin2
+    {
+        return $this->send(
+            $account,
+            ServiceTypeEnum::ACCESS,
+            (new DTO\Request\GetUserInfoFromLogin2()),
+            GetUserInfoFromLogin2::class
+        );
     }
 
     private function getXmlDocument(?string $xmlContent = null): DOMDocument
