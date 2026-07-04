@@ -13,7 +13,7 @@ final class AllowedAttachmentFormats
     /**
      * @var string[]
      */
-    public const array EXTENSIONS = [
+    public const EXTENSIONS = [
         'asice',
         'asics',
         'cer',
@@ -92,7 +92,7 @@ final class AllowedAttachmentFormats
      *
      * @var string[]
      */
-    public const array CONTAINER_EXTENSIONS = [
+    public const CONTAINER_EXTENSIONS = [
         'asice',
         'asics',
         'sce',
