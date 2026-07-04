@@ -35,31 +35,6 @@ class EndpointProviderTest extends TestCase
         $account->setProduction(true);
         self::assertSame('https://ws1c.datovka.gov.cz/certds/DS/dx', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::INFO));
     }
-
-    public function testSupplementaryServices(): void
-    {
-        $account = new Account();
-        $account->setProduction(false);
-        $account->setLoginType(LoginTypeEnum::NAME_PASSWORD);
-
-        $endpointProvider = new EndpointProvider();
-        self::assertSame('https://ws1.datovka-test.gov.cz/DS/DsManage', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::SUPPLEMENTARY));
-        $account->setProduction(true);
-        self::assertSame('https://ws1.datovka.gov.cz/DS/DsManage', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::SUPPLEMENTARY));
-
-        $account->setProduction(false);
-        $account->setLoginType(LoginTypeEnum::SPIS_CERT);
-        self::assertSame('https://ws1c.datovka-test.gov.cz/cert/DS/DsManage', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::SUPPLEMENTARY));
-        $account->setProduction(true);
-        self::assertSame('https://ws1c.datovka.gov.cz/cert/DS/DsManage', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::SUPPLEMENTARY));
-
-        $account->setLoginType(LoginTypeEnum::CERT_LOGIN_NAME_PASSWORD);
-        $account->setProduction(false);
-        self::assertSame('https://ws1c.datovka-test.gov.cz/certds/DS/DsManage', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::SUPPLEMENTARY));
-        $account->setProduction(true);
-        self::assertSame('https://ws1c.datovka.gov.cz/certds/DS/DsManage', $endpointProvider->getServiceLocation($account, ServiceTypeEnum::SUPPLEMENTARY));
-    }
-
     public function testAccessServices(): void
     {
         $account = new Account();

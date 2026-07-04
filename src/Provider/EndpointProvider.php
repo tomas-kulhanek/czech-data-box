@@ -24,7 +24,7 @@ class EndpointProvider
             ServiceTypeEnum::OPERATIONS => 'dz',
             ServiceTypeEnum::INFO => 'dx',
             ServiceTypeEnum::SEARCH => 'df',
-            ServiceTypeEnum::SUPPLEMENTARY, ServiceTypeEnum::ACCESS => 'DsManage'
+            ServiceTypeEnum::ACCESS => 'DsManage'
         };
     }
 
