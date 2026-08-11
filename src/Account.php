@@ -10,9 +10,6 @@ use TomasKulhanek\CzechDataBox\Exception\PkcsCertificateException;
 
 class Account
 {
-    /**
-     * Placeholder shown instead of credentials when the account is dumped.
-     */
     private const string REDACTED = '***';
 
     private ?string $loginName = null;
@@ -125,8 +122,6 @@ class Account
     }
 
     /**
-     * Keeps credentials out of var_dump()/print_r() output and of anything built on top of them.
-     *
      * @return array<string, mixed>
      */
     public function __debugInfo(): array

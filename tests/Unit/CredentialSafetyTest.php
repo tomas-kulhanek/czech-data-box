@@ -35,10 +35,6 @@ final class CredentialSafetyTest extends TestCase
 
     private ?string $ignoreArgs = null;
 
-    /**
-     * Every assertion below only makes sense when the arguments really are captured in the stack
-     * trace, which is what php.ini-development and the PHP default do.
-     */
     protected function setUp(): void
     {
         $current = ini_get('zend.exception_ignore_args');
