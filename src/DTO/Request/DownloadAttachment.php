@@ -7,8 +7,8 @@ namespace TomasKulhanek\CzechDataBox\DTO\Request;
 use JMS\Serializer\Annotation as Serializer;
 use TomasKulhanek\CzechDataBox\Traits\DataMessageId;
 
-#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'DownloadAttachment')]
+#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'DownloadAttachment')]
 #[Serializer\AccessorOrder(order: 'custom', custom: ['dataMessageId', 'attachmentNumber'])]
 class DownloadAttachment implements Request
 {
@@ -16,7 +16,7 @@ class DownloadAttachment implements Request
 
     #[Serializer\Type('int')]
     #[Serializer\SerializedName('attNum')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected int $attachmentNumber;
 
     public function getAttachmentNumber(): int

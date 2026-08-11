@@ -18,7 +18,7 @@ class DtoXsdMappingTest extends TestCase
     {
         $xml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<p:dmDelivery xmlns:p="https://isds.czechpoint.cz/v20">
+<p:dmDelivery xmlns:p="http://isds.czechpoint.cz/v20">
   <p:dmDm>
     <p:dmID>1234567</p:dmID>
   </p:dmDm>
@@ -54,7 +54,7 @@ XML;
     {
         $xml = <<<XML_WRAP
 <?xml version="1.0" encoding="UTF-8"?>
-<p:dbResult xmlns:p="https://isds.czechpoint.cz/v20">
+<p:dbResult xmlns:p="http://isds.czechpoint.cz/v20">
   <p:dbID>abcdefg</p:dbID>
   <p:dbType>OVM</p:dbType>
   <p:dbName>Testovací úřad</p:dbName>
