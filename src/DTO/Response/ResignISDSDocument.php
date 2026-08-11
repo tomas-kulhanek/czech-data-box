@@ -18,7 +18,7 @@ class ResignISDSDocument extends Response
     #[Serializer\Type('base64File')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dmResultDoc')]
-    protected SplFileInfo $document;
+    protected ?SplFileInfo $document = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type("DateTimeImmutable<'Y-m-d'>")]
@@ -32,12 +32,12 @@ class ResignISDSDocument extends Response
         return $this;
     }
 
-    public function getDocument(): SplFileInfo
+    public function getDocument(): ?SplFileInfo
     {
         return $this->document;
     }
 
-    public function setDocument(SplFileInfo $document): ResignISDSDocument
+    public function setDocument(?SplFileInfo $document): ResignISDSDocument
     {
         $this->document = $document;
         return $this;

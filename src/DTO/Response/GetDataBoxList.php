@@ -25,7 +25,7 @@ class GetDataBoxList extends Response
         return $this->data;
     }
 
-    public function setData(SplFileInfo $data): GetDataBoxList
+    public function setData(?SplFileInfo $data): GetDataBoxList
     {
         $this->data = $data;
         return $this;

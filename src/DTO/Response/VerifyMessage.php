@@ -19,7 +19,7 @@ class VerifyMessage extends Response
     #[Serializer\SerializedName('dmHash')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
-    protected Hash $hash;
+    protected ?Hash $hash = null;
 
     public function setStatus(\TomasKulhanek\CzechDataBox\DTO\DataMessageStatus $status): VerifyMessage
     {
@@ -27,12 +27,12 @@ class VerifyMessage extends Response
         return $this;
     }
 
-    public function getHash(): Hash
+    public function getHash(): ?Hash
     {
         return $this->hash;
     }
 
-    public function setHash(Hash $hash): VerifyMessage
+    public function setHash(?Hash $hash): VerifyMessage
     {
         $this->hash = $hash;
         return $this;

@@ -25,7 +25,7 @@ class MessageRecord
     #[Serializer\SerializedName('dmMessageStatus')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\PositiveOrZero()]
-    protected int $messageStatus;
+    protected ?int $messageStatus = null;
 
     #[Serializer\Type('int')]
     #[Serializer\SerializedName('dmAttachmentSize')]
@@ -49,7 +49,7 @@ class MessageRecord
     #[Serializer\SerializedName('dmType')]
     #[Serializer\XmlAttribute]
     #[Assert\NotBlank(allowNull: false)]
-    protected string $type;
+    protected ?string $type = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('bool')]
@@ -80,12 +80,12 @@ class MessageRecord
         return $this;
     }
 
-    public function getMessageStatus(): int
+    public function getMessageStatus(): ?int
     {
         return $this->messageStatus;
     }
 
-    public function setMessageStatus(int $messageStatus): MessageRecord
+    public function setMessageStatus(?int $messageStatus): MessageRecord
     {
         $this->messageStatus = $messageStatus;
         return $this;
@@ -124,12 +124,12 @@ class MessageRecord
         return $this;
     }
 
-    public function getType(): string
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    public function setType(string $type): MessageRecord
+    public function setType(?string $type): MessageRecord
     {
         $this->type = $type;
         return $this;
@@ -173,7 +173,7 @@ class MessageRecord
         return $this;
     }
 
-    public function getSenderId(): string
+    public function getSenderId(): ?string
     {
         return $this->senderId;
     }
@@ -184,7 +184,7 @@ class MessageRecord
         return $this;
     }
 
-    public function getSender(): string
+    public function getSender(): ?string
     {
         return $this->sender;
     }
@@ -206,7 +206,7 @@ class MessageRecord
         return $this;
     }
 
-    public function getSenderType(): int
+    public function getSenderType(): ?int
     {
         return $this->senderType;
     }
@@ -217,7 +217,7 @@ class MessageRecord
         return $this;
     }
 
-    public function getRecipient(): string
+    public function getRecipient(): ?string
     {
         return $this->recipient;
     }

@@ -20,9 +20,9 @@ class GetDeliveryInfo extends Response
     #[Serializer\SkipWhenEmpty]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
-    protected Delivery $delivery;
+    protected ?Delivery $delivery = null;
 
-    public function getDelivery(): Delivery
+    public function getDelivery(): ?Delivery
     {
         return $this->delivery;
     }

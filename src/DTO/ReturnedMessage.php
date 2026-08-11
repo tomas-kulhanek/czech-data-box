@@ -19,7 +19,7 @@ class ReturnedMessage
     #[Serializer\SerializedName('dmType')]
     #[Serializer\XmlAttribute]
     #[Assert\NotBlank(allowNull: false)]
-    protected string $type;
+    protected ?string $type = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
@@ -63,12 +63,12 @@ class ReturnedMessage
     #[Assert\Positive]
     protected ?int $attachmentSize = null;
 
-    public function getType(): string
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    public function setType(string $type): ReturnedMessage
+    public function setType(?string $type): ReturnedMessage
     {
         $this->type = $type;
         return $this;
