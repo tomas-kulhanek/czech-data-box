@@ -29,7 +29,6 @@
     "ext-xml": "*",
     "composer/ca-bundle": "^1.5",
     "jms/serializer": "^3.32",
-    "symfony/validator": "^7.0",
     "tomas-kulhanek/serializer": "^2.0.3"
   },
   "autoload": {
@@ -45,13 +44,15 @@
   "suggest": {
     "ext-curl": "for comunication with czech databox servers",
     "guzzlehttp/guzzle": "for usage with guzzle",
-    "symfony/http-client": "for usage with symfony"
+    "symfony/http-client": "for usage with symfony",
+    "symfony/validator": "to validate request DTOs yourself against the #[Assert\\*] constraints shipped with them"
   },
   "require-dev": {
     "guzzlehttp/guzzle": "^8.0",
     "nyholm/psr7": "^1.8",
     "php-http/httplug": "^2.4",
     "symfony/http-client": "7.*|8.*",
+    "symfony/validator": "^7.0 || ^8.0",
     "phpstan/phpstan": "^2.2",
     "phpunit/phpunit": "^13.3",
     "rector/rector": "^2.6",
