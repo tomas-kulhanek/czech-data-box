@@ -6,6 +6,6 @@ namespace TomasKulhanek\CzechDataBox\Exception;
 
 use Exception;
 
-class FileSizeOverflow extends Exception
+class FileSizeOverflow extends Exception implements CzechDataBoxException
 {
 }

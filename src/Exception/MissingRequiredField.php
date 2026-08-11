@@ -6,7 +6,7 @@ namespace TomasKulhanek\CzechDataBox\Exception;
 
 use Exception;
 
-class MissingRequiredField extends Exception
+class MissingRequiredField extends Exception implements CzechDataBoxException
 {
     public function __construct(string $fieldName)
     {

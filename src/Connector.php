@@ -76,6 +76,7 @@ use TomasKulhanek\CzechDataBox\Exception\FileSizeOverflow;
 use TomasKulhanek\CzechDataBox\Exception\MissingMainFile;
 use TomasKulhanek\CzechDataBox\Exception\MissingRequiredField;
 use TomasKulhanek\CzechDataBox\Exception\RecipientCountOverflow;
+use TomasKulhanek\CzechDataBox\Exception\SoapFault;
 use TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface;
 use TomasKulhanek\CzechDataBox\Utils\AllowedAttachmentFormats;
 use TomasKulhanek\CzechDataBox\Utils\BinarySuffix;
@@ -647,6 +648,38 @@ readonly class Connector
         return $result;
     }
 
+    private function throwOnSoapFault(DOMDocument $document): void
+    {
+        $xpath = new DOMXPath($document);
+        $xpath->registerNamespace('soap11', 'http://schemas.xmlsoap.org/soap/envelope/');
+        $xpath->registerNamespace('soap12', 'http://www.w3.org/2003/05/soap-envelope');
+
+        $faults = $xpath->query('//soap11:Fault');
+        $fault = $faults instanceof DOMNodeList ? $faults->item(0) : null;
+        if ($fault instanceof DOMNode) {
+            throw new SoapFault(
+                $this->evaluateXpathString($xpath, 'string(faultcode)', $fault) ?? 'SOAP-ENV:Server',
+                $this->evaluateXpathString($xpath, 'string(faultstring)', $fault) ?? 'Unknown SOAP fault'
+            );
+        }
+
+        $faults = $xpath->query('//soap12:Fault');
+        $fault = $faults instanceof DOMNodeList ? $faults->item(0) : null;
+        if ($fault instanceof DOMNode) {
+            throw new SoapFault(
+                $this->evaluateXpathString($xpath, 'string(soap12:Code/soap12:Value)', $fault) ?? 'env:Receiver',
+                $this->evaluateXpathString($xpath, 'string(soap12:Reason/soap12:Text)', $fault) ?? 'Unknown SOAP fault'
+            );
+        }
+    }
+
+    private function evaluateXpathString(DOMXPath $xpath, string $expression, DOMNode $context): ?string
+    {
+        $value = $xpath->evaluate($expression, $context);
+
+        return is_string($value) && trim($value) !== '' ? trim($value) : null;
+    }
+
     /**
      * @template T of DTO\Response\Response
      * @return Response
@@ -701,6 +734,7 @@ readonly class Connector
             );
         }
         $soapResponse = $this->getXmlDocument($response);
+        $this->throwOnSoapFault($soapResponse);
         if (empty($soapResponse->documentElement)) {
             throw new ConnectionException('The response is empty');
         }
