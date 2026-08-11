@@ -2,12 +2,81 @@
 
 declare(strict_types=1);
 
-namespace TomasKulhanek\CzechDataBox\Traits;
+namespace TomasKulhanek\CzechDataBox\DTO;
 
 use JMS\Serializer\Annotation as Serializer;
+use TomasKulhanek\CzechDataBox\Traits\DataMessageId;
 
-trait DataMessageEnvelopeSub
+#[Serializer\AccessorOrder(order: 'custom', custom: [
+    'dataMessageId',
+    'senderId',
+    'sender',
+    'senderAddress',
+    'senderType',
+    'recipient',
+    'recipientAddress',
+    'ambiguousRecipient',
+    'senderOrgUnit',
+    'senderOrgUnitNum',
+    'recipientId',
+    'recipientOrgUnit',
+    'recipientOrgUnitNum',
+    'toHands',
+    'annotation',
+    'recipientRefNumber',
+    'senderRefNumber',
+    'recipientIdent',
+    'senderIdent',
+    'legalTitleLaw',
+    'legalTitleYear',
+    'legalTitleSect',
+    'legalTitlePar',
+    'legalTitlePoint',
+    'personalDelivery',
+    'allowSubstDelivery',
+])]
+abstract class AbstractMessageEnvelope
 {
+    use DataMessageId;
+
+    #[Serializer\Type('string')]
+    #[Serializer\SerializedName('dbIDSender')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    protected ?string $senderId = null;
+
+    #[Serializer\Type('string')]
+    #[Serializer\SerializedName('dmSender')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    protected ?string $sender = null;
+
+    #[Serializer\Type('string')]
+    #[Serializer\SerializedName('dmSenderAddress')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SkipWhenEmpty]
+    protected ?string $senderAddress = null;
+
+    #[Serializer\Type('int')]
+    #[Serializer\SerializedName('dmSenderType')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    protected ?int $senderType = null;
+
+    #[Serializer\Type('string')]
+    #[Serializer\SerializedName('dmRecipient')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    protected ?string $recipient = null;
+
+    #[Serializer\Type('string')]
+    #[Serializer\SerializedName('dmRecipientAddress')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SkipWhenEmpty]
+    protected ?string $recipientAddress = null;
+
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type('bool')]
+    #[Serializer\SerializedName('dmAmbiguousRecipient')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    protected ?bool $ambiguousRecipient = null;
+
     #[Serializer\Type('string')]
     #[Serializer\SkipWhenEmpty]
     #[Serializer\SerializedName('dmSenderOrgUnit')]
@@ -20,6 +89,12 @@ trait DataMessageEnvelopeSub
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?int $senderOrgUnitNum = null;
 
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type('string')]
+    #[Serializer\SerializedName('dbIDRecipient')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    protected ?string $recipientId = null;
+
     #[Serializer\Type('string')]
     #[Serializer\SkipWhenEmpty]
     #[Serializer\SerializedName('dmRecipientOrgUnit')]
@@ -31,6 +106,12 @@ trait DataMessageEnvelopeSub
     #[Serializer\SerializedName('dmRecipientOrgUnitNum')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?int $recipientOrgUnitNum = null;
+
+    #[Serializer\Type('string')]
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\SerializedName('dmToHands')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    protected ?string $toHands = null;
 
     #[Serializer\Type('string')]
     #[Serializer\SkipWhenEmpty]
@@ -104,12 +185,89 @@ trait DataMessageEnvelopeSub
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?bool $allowSubstDelivery = null;
 
+    public function getSenderId(): ?string
+    {
+        return $this->senderId;
+    }
+
+    public function setSenderId(?string $senderId): static
+    {
+        $this->senderId = $senderId;
+        return $this;
+    }
+
+    public function getSender(): ?string
+    {
+        return $this->sender;
+    }
+
+    public function setSender(?string $sender): static
+    {
+        $this->sender = $sender;
+        return $this;
+    }
+
+    public function getSenderAddress(): ?string
+    {
+        return $this->senderAddress;
+    }
+
+    public function setSenderAddress(?string $senderAddress): static
+    {
+        $this->senderAddress = $senderAddress;
+        return $this;
+    }
+
+    public function getSenderType(): ?int
+    {
+        return $this->senderType;
+    }
+
+    public function setSenderType(?int $senderType): static
+    {
+        $this->senderType = $senderType;
+        return $this;
+    }
+
+    public function getRecipient(): ?string
+    {
+        return $this->recipient;
+    }
+
+    public function setRecipient(?string $recipient): static
+    {
+        $this->recipient = $recipient;
+        return $this;
+    }
+
+    public function getRecipientAddress(): ?string
+    {
+        return $this->recipientAddress;
+    }
+
+    public function setRecipientAddress(?string $recipientAddress): static
+    {
+        $this->recipientAddress = $recipientAddress;
+        return $this;
+    }
+
+    public function getAmbiguousRecipient(): ?bool
+    {
+        return $this->ambiguousRecipient;
+    }
+
+    public function setAmbiguousRecipient(?bool $ambiguousRecipient): static
+    {
+        $this->ambiguousRecipient = $ambiguousRecipient;
+        return $this;
+    }
+
     public function getSenderOrgUnit(): ?string
     {
         return $this->senderOrgUnit;
     }
 
-    public function setSenderOrgUnit(?string $senderOrgUnit): self
+    public function setSenderOrgUnit(?string $senderOrgUnit): static
     {
         $this->senderOrgUnit = $senderOrgUnit;
         return $this;
@@ -120,9 +278,20 @@ trait DataMessageEnvelopeSub
         return $this->senderOrgUnitNum;
     }
 
-    public function setSenderOrgUnitNum(?int $senderOrgUnitNum): self
+    public function setSenderOrgUnitNum(?int $senderOrgUnitNum): static
     {
         $this->senderOrgUnitNum = $senderOrgUnitNum;
+        return $this;
+    }
+
+    public function getRecipientId(): ?string
+    {
+        return $this->recipientId;
+    }
+
+    public function setRecipientId(?string $recipientId): static
+    {
+        $this->recipientId = $recipientId;
         return $this;
     }
 
@@ -131,7 +300,7 @@ trait DataMessageEnvelopeSub
         return $this->recipientOrgUnit;
     }
 
-    public function setRecipientOrgUnit(?string $recipientOrgUnit): self
+    public function setRecipientOrgUnit(?string $recipientOrgUnit): static
     {
         $this->recipientOrgUnit = $recipientOrgUnit;
         return $this;
@@ -142,9 +311,20 @@ trait DataMessageEnvelopeSub
         return $this->recipientOrgUnitNum;
     }
 
-    public function setRecipientOrgUnitNum(?int $recipientOrgUnitNum): self
+    public function setRecipientOrgUnitNum(?int $recipientOrgUnitNum): static
     {
         $this->recipientOrgUnitNum = $recipientOrgUnitNum;
+        return $this;
+    }
+
+    public function getToHands(): ?string
+    {
+        return $this->toHands;
+    }
+
+    public function setToHands(?string $toHands): static
+    {
+        $this->toHands = $toHands;
         return $this;
     }
 
@@ -153,7 +333,7 @@ trait DataMessageEnvelopeSub
         return $this->annotation;
     }
 
-    public function setAnnotation(?string $annotation): self
+    public function setAnnotation(?string $annotation): static
     {
         $this->annotation = $annotation;
         return $this;
@@ -164,7 +344,7 @@ trait DataMessageEnvelopeSub
         return $this->recipientRefNumber;
     }
 
-    public function setRecipientRefNumber(?string $recipientRefNumber): self
+    public function setRecipientRefNumber(?string $recipientRefNumber): static
     {
         $this->recipientRefNumber = $recipientRefNumber;
         return $this;
@@ -175,7 +355,7 @@ trait DataMessageEnvelopeSub
         return $this->senderRefNumber;
     }
 
-    public function setSenderRefNumber(?string $senderRefNumber): self
+    public function setSenderRefNumber(?string $senderRefNumber): static
     {
         $this->senderRefNumber = $senderRefNumber;
         return $this;
@@ -186,7 +366,7 @@ trait DataMessageEnvelopeSub
         return $this->recipientIdent;
     }
 
-    public function setRecipientIdent(?string $recipientIdent): self
+    public function setRecipientIdent(?string $recipientIdent): static
     {
         $this->recipientIdent = $recipientIdent;
         return $this;
@@ -197,7 +377,7 @@ trait DataMessageEnvelopeSub
         return $this->senderIdent;
     }
 
-    public function setSenderIdent(?string $senderIdent): self
+    public function setSenderIdent(?string $senderIdent): static
     {
         $this->senderIdent = $senderIdent;
         return $this;
@@ -208,7 +388,7 @@ trait DataMessageEnvelopeSub
         return $this->legalTitleLaw;
     }
 
-    public function setLegalTitleLaw(?int $legalTitleLaw): self
+    public function setLegalTitleLaw(?int $legalTitleLaw): static
     {
         $this->legalTitleLaw = $legalTitleLaw;
         return $this;
@@ -219,7 +399,7 @@ trait DataMessageEnvelopeSub
         return $this->legalTitleYear;
     }
 
-    public function setLegalTitleYear(?int $legalTitleYear): self
+    public function setLegalTitleYear(?int $legalTitleYear): static
     {
         $this->legalTitleYear = $legalTitleYear;
         return $this;
@@ -230,7 +410,7 @@ trait DataMessageEnvelopeSub
         return $this->legalTitleSect;
     }
 
-    public function setLegalTitleSect(?string $legalTitleSect): self
+    public function setLegalTitleSect(?string $legalTitleSect): static
     {
         $this->legalTitleSect = $legalTitleSect;
         return $this;
@@ -241,7 +421,7 @@ trait DataMessageEnvelopeSub
         return $this->legalTitlePar;
     }
 
-    public function setLegalTitlePar(?string $legalTitlePar): self
+    public function setLegalTitlePar(?string $legalTitlePar): static
     {
         $this->legalTitlePar = $legalTitlePar;
         return $this;
@@ -252,7 +432,7 @@ trait DataMessageEnvelopeSub
         return $this->legalTitlePoint;
     }
 
-    public function setLegalTitlePoint(?string $legalTitlePoint): self
+    public function setLegalTitlePoint(?string $legalTitlePoint): static
     {
         $this->legalTitlePoint = $legalTitlePoint;
         return $this;
@@ -263,7 +443,7 @@ trait DataMessageEnvelopeSub
         return $this->personalDelivery;
     }
 
-    public function setPersonalDelivery(?bool $personalDelivery): self
+    public function setPersonalDelivery(?bool $personalDelivery): static
     {
         $this->personalDelivery = $personalDelivery;
         return $this;
@@ -274,7 +454,7 @@ trait DataMessageEnvelopeSub
         return $this->allowSubstDelivery;
     }
 
-    public function setAllowSubstDelivery(?bool $allowSubstDelivery): self
+    public function setAllowSubstDelivery(?bool $allowSubstDelivery): static
     {
         $this->allowSubstDelivery = $allowSubstDelivery;
         return $this;

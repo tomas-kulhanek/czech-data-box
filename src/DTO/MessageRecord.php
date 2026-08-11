@@ -7,14 +7,44 @@ namespace TomasKulhanek\CzechDataBox\DTO;
 use DateTimeImmutable;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
-use TomasKulhanek\CzechDataBox\Traits\DataMessageEnvelope;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'dmRecord')]
-class MessageRecord
+#[Serializer\AccessorOrder(order: 'custom', custom: [
+    'ordinal',
+    'dataMessageId',
+    'senderId',
+    'sender',
+    'senderAddress',
+    'senderType',
+    'recipient',
+    'recipientAddress',
+    'ambiguousRecipient',
+    'senderOrgUnit',
+    'senderOrgUnitNum',
+    'recipientId',
+    'recipientOrgUnit',
+    'recipientOrgUnitNum',
+    'toHands',
+    'annotation',
+    'recipientRefNumber',
+    'senderRefNumber',
+    'recipientIdent',
+    'senderIdent',
+    'legalTitleLaw',
+    'legalTitleYear',
+    'legalTitleSect',
+    'legalTitlePar',
+    'legalTitlePoint',
+    'personalDelivery',
+    'allowSubstDelivery',
+    'messageStatus',
+    'attachmentSize',
+    'deliveryTime',
+    'acceptanceTime',
+])]
+class MessageRecord extends AbstractMessageEnvelope
 {
-    use DataMessageEnvelope;
-
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
     #[Serializer\SerializedName('dmOrdinal')]
@@ -62,12 +92,6 @@ class MessageRecord
     #[Serializer\SerializedName('specMessFlag')]
     #[Serializer\XmlAttribute]
     protected ?int $specMessFlag = null;
-
-    #[Serializer\Type('bool')]
-    #[Serializer\SkipWhenEmpty]
-    #[Serializer\SerializedName('dmAllowSubstDelivery')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
-    protected ?bool $allowSubstDelivery = null;
 
     public function getOrdinal(): ?int
     {
@@ -160,93 +184,5 @@ class MessageRecord
     public function isSuspicious(): bool
     {
         return $this->specMessFlag === 1;
-    }
-
-    public function getAllowSubstDelivery(): ?bool
-    {
-        return $this->allowSubstDelivery;
-    }
-
-    public function setAllowSubstDelivery(?bool $allowSubstDelivery): MessageRecord
-    {
-        $this->allowSubstDelivery = $allowSubstDelivery;
-        return $this;
-    }
-
-    public function getSenderId(): ?string
-    {
-        return $this->senderId;
-    }
-
-    public function setSenderId(string $senderID): MessageRecord
-    {
-        $this->senderId = $senderID;
-        return $this;
-    }
-
-    public function getSender(): ?string
-    {
-        return $this->sender;
-    }
-
-    public function setSender(string $sender): MessageRecord
-    {
-        $this->sender = $sender;
-        return $this;
-    }
-
-    public function getSenderAddress(): ?string
-    {
-        return $this->senderAddress;
-    }
-
-    public function setSenderAddress(?string $senderAddress): MessageRecord
-    {
-        $this->senderAddress = $senderAddress;
-        return $this;
-    }
-
-    public function getSenderType(): ?int
-    {
-        return $this->senderType;
-    }
-
-    public function setSenderType(int $senderType): MessageRecord
-    {
-        $this->senderType = $senderType;
-        return $this;
-    }
-
-    public function getRecipient(): ?string
-    {
-        return $this->recipient;
-    }
-
-    public function setRecipient(string $recipient): MessageRecord
-    {
-        $this->recipient = $recipient;
-        return $this;
-    }
-
-    public function getRecipientAddress(): ?string
-    {
-        return $this->recipientAddress;
-    }
-
-    public function setRecipientAddress(?string $recipientAddress): MessageRecord
-    {
-        $this->recipientAddress = $recipientAddress;
-        return $this;
-    }
-
-    public function getAmbiguousRecipient(): ?bool
-    {
-        return $this->ambiguousRecipient;
-    }
-
-    public function setAmbiguousRecipient(?bool $ambiguousRecipient): MessageRecord
-    {
-        $this->ambiguousRecipient = $ambiguousRecipient;
-        return $this;
     }
 }

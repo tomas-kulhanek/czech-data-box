@@ -9,15 +9,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\DTO\Envelope;
 use TomasKulhanek\CzechDataBox\DTO\File;
 use TomasKulhanek\CzechDataBox\DTO\Recipient;
-use TomasKulhanek\CzechDataBox\Traits\GetMainFile;
+use TomasKulhanek\CzechDataBox\Utils\MainFileResolver;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'CreateMultipleMessage')]
 #[Serializer\AccessorOrder(order: 'custom', custom: ['recipients', 'envelope', 'files'])]
 class CreateMessage implements Request
 {
-    use GetMainFile;
-
     #[Serializer\Type(Envelope::class)]
     #[Serializer\SerializedName('dmEnvelope')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
@@ -106,5 +104,10 @@ class CreateMessage implements Request
     {
         $this->files[] = $file;
         return $this;
+    }
+
+    public function getMainFile(): ?File
+    {
+        return MainFileResolver::resolve($this->files);
     }
 }
