@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TomasKulhanek\Tests\CzechDataBox\Integration;
 
+use DateTimeImmutable;
 use TomasKulhanek\CzechDataBox\DTO\Request\AuthenticateMessage;
 use TomasKulhanek\CzechDataBox\DTO\Request\VerifyMessage;
 use TomasKulhanek\CzechDataBox\DTO\Recipient;
@@ -22,9 +23,8 @@ use TomasKulhanek\CzechDataBox\DTO\Request\GetMessageStateChanges;
 use TomasKulhanek\CzechDataBox\DTO\Request\CreateMessage;
 use TomasKulhanek\CzechDataBox\DTO\Envelope;
 use TomasKulhanek\CzechDataBox\DTO\File;
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use PHPUnit\Framework\TestCase;
-use TomasKulhanek\CzechDataBox\DTO;
-use TomasKulhanek\CzechDataBox\Utils;
 use TomasKulhanek\Serializer\Utils\SplFileInfo;
 
 class DataMessageTest extends TestCase
@@ -43,6 +43,7 @@ class DataMessageTest extends TestCase
         self::assertFalse($response->isAuthenticated());
     }
 
+    #[IgnoreDeprecations]
     public function testVerifyMessage(): void
     {
         $client = $this->createGuzzleConnector();
@@ -72,8 +73,8 @@ class DataMessageTest extends TestCase
 
         $listrec = new GetListOfReceivedMessages();
         $listrec->setStatusFilter(FilterEnum::ALL)
-            ->setListTo(new \DateTimeImmutable())
-            ->setListFrom((new \DateTimeImmutable())->modify('-30 day'));
+            ->setListTo(new DateTimeImmutable())
+            ->setListFrom(new DateTimeImmutable()->modify('-30 day'));
 
         $listrecRes = $client->getListOfReceivedMessages($ovmAccount, $listrec);
         self::assertTrue($listrecRes->getStatus()->isOk(), $listrecRes->getStatus()->getMessage());
@@ -102,8 +103,8 @@ class DataMessageTest extends TestCase
 
         $listrec = new GetListOfReceivedMessages();
         $listrec->setStatusFilter(FilterEnum::ALL)
-            ->setListTo(new \DateTimeImmutable())
-            ->setListFrom((new \DateTimeImmutable())->modify('-30 day'));
+            ->setListTo(new DateTimeImmutable())
+            ->setListFrom(new DateTimeImmutable()->modify('-30 day'));
 
         $listrecRes = $client->getListOfReceivedMessages($ovmAccount, $listrec);
         self::assertTrue($listrecRes->getStatus()->isOk(), $listrecRes->getStatus()->getMessage());
@@ -129,8 +130,8 @@ class DataMessageTest extends TestCase
 
         $listrec = new GetListOfSentMessages();
         $listrec->setStatusFilter(FilterEnum::ALL)
-            ->setListTo(new \DateTimeImmutable())
-            ->setListFrom((new \DateTimeImmutable())->modify('-30 day'));
+            ->setListTo(new DateTimeImmutable())
+            ->setListFrom(new DateTimeImmutable()->modify('-30 day'));
 
         $listrecRes = $client->getListOfSentMessages($account, $listrec);
         self::assertTrue($listrecRes->getStatus()->isOk(), $listrecRes->getStatus()->getMessage());
@@ -164,8 +165,8 @@ class DataMessageTest extends TestCase
 
         $listrec = new GetListOfReceivedMessages();
         $listrec->setStatusFilter(FilterEnum::ALL)
-            ->setListTo(new \DateTimeImmutable())
-            ->setListFrom((new \DateTimeImmutable())->modify('-30 day'));
+            ->setListTo(new DateTimeImmutable())
+            ->setListFrom(new DateTimeImmutable()->modify('-30 day'));
 
         $listrecRes = $client->getListOfReceivedMessages($account, $listrec);
         self::assertTrue($listrecRes->getStatus()->isOk(), $listrecRes->getStatus()->getMessage());
@@ -187,8 +188,8 @@ class DataMessageTest extends TestCase
 
         $listrec = new GetListOfReceivedMessages();
         $listrec->setStatusFilter(FilterEnum::ALL)
-            ->setListTo(new \DateTimeImmutable())
-            ->setListFrom((new \DateTimeImmutable())->modify('-30 day'));
+            ->setListTo(new DateTimeImmutable())
+            ->setListFrom(new DateTimeImmutable()->modify('-30 day'));
 
         $listrecRes = $client->getListOfReceivedMessages($account, $listrec);
         self::assertTrue($listrecRes->getStatus()->isOk(), $listrecRes->getStatus()->getMessage());
@@ -210,8 +211,8 @@ class DataMessageTest extends TestCase
 
         $listrec = new GetListOfSentMessages();
         $listrec->setStatusFilter(FilterEnum::ALL)
-            ->setListTo(new \DateTimeImmutable())
-            ->setListFrom((new \DateTimeImmutable())->modify('-30 day'));
+            ->setListTo(new DateTimeImmutable())
+            ->setListFrom(new DateTimeImmutable()->modify('-30 day'));
 
         $listrecRes = $client->getListOfSentMessages($account, $listrec);
         self::assertTrue($listrecRes->getStatus()->isOk(), $listrecRes->getStatus()->getMessage());
@@ -233,8 +234,8 @@ class DataMessageTest extends TestCase
 
         $listrec = new GetListOfSentMessages();
         $listrec->setStatusFilter(FilterEnum::ALL)
-            ->setListTo(new \DateTimeImmutable())
-            ->setListFrom((new \DateTimeImmutable())->modify('-30 day'));
+            ->setListTo(new DateTimeImmutable())
+            ->setListFrom(new DateTimeImmutable()->modify('-30 day'));
 
         $listrecRes = $client->getListOfSentMessages($account, $listrec);
         self::assertTrue($listrecRes->getStatus()->isOk(), $listrecRes->getStatus()->getMessage());
@@ -256,8 +257,8 @@ class DataMessageTest extends TestCase
 
         $request = new GetMessageStateChanges();
         $request
-            ->setChangesTo(new \DateTimeImmutable())
-            ->setChangesFrom((new \DateTimeImmutable())->modify('-30 day'));
+            ->setChangesTo(new DateTimeImmutable())
+            ->setChangesFrom(new DateTimeImmutable()->modify('-30 day'));
 
         $response = $client->getMessageStateChanges($account, $request);
 

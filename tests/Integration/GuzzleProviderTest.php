@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace TomasKulhanek\Tests\CzechDataBox\Integration;
 
 use PHPUnit\Framework\TestCase;
-use TomasKulhanek\CzechDataBox\Account;
 use TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum;
 
 class GuzzleProviderTest extends TestCase
@@ -18,7 +17,7 @@ class GuzzleProviderTest extends TestCase
         $account = $this->createFOAccount();
 
         $response = $this->createGuzzleConnector()
-            ->getOwnerInfoFromLogin($account);
+            ->getOwnerInfoFromLogin2($account);
 
         self::assertTrue($response->getStatus()->isOk());
     }
@@ -28,7 +27,7 @@ class GuzzleProviderTest extends TestCase
         $account = $this->createFOCertAccount();
 
         $response = $this->createGuzzleConnector()
-            ->getOwnerInfoFromLogin($account);
+            ->getOwnerInfoFromLogin2($account);
 
         self::assertTrue($response->getStatus()->isOk());
     }
@@ -39,7 +38,7 @@ class GuzzleProviderTest extends TestCase
         $account->setLoginType(LoginTypeEnum::CERT_LOGIN_NAME_PASSWORD);
 
         $response = $this->createGuzzleConnector()
-            ->getOwnerInfoFromLogin($account);
+            ->getOwnerInfoFromLogin2($account);
 
         self::assertTrue($response->getStatus()->isOk());
     }
@@ -50,7 +49,7 @@ class GuzzleProviderTest extends TestCase
         $account->setLoginType(LoginTypeEnum::SPIS_CERT);
 
         $response = $this->createGuzzleConnector()
-            ->getOwnerInfoFromLogin($account);
+            ->getOwnerInfoFromLogin2($account);
 
         self::assertTrue($response->getStatus()->isOk());
     }

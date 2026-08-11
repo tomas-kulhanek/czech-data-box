@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TomasKulhanek\Tests\CzechDataBox\Integration;
 
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use PHPUnit\Framework\TestCase;
 
 class DataBoxTest extends TestCase
@@ -11,6 +12,7 @@ class DataBoxTest extends TestCase
     use AccountTrait;
     use ConnectorTrait;
 
+    #[IgnoreDeprecations]
     public function testOwnerInfoFromLogin(): void
     {
         $account = $this->createFOCertAccount();
