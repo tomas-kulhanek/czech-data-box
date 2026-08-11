@@ -66,7 +66,6 @@ class ConnectorXmlErrorTest extends TestCase
             $connector->messageEnvelopeDownload($this->createAccount(), $this->createRequest());
             self::fail('A malformed response must be rejected with a ConnectionException.');
         } catch (ConnectionException) {
-            // očekávaný stav
         } finally {
             restore_error_handler();
         }

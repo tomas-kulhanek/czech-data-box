@@ -31,8 +31,7 @@ jobs:
           php-version: '8.5'
           coverage: none
 
-      # composer.lock není součástí knihovny, audit proto běží nad sadou
-      # nainstalovanou z aktuálních constraintů v composer.json.
+      # composer.lock není součástí knihovny, audit proto potřebuje nejdřív instalaci.
       - run: composer validate --strict
       - uses: php-actions/composer@8a65f0d3c6a1d17ca4800491a40b5756a4c164f3 # v6
         with:

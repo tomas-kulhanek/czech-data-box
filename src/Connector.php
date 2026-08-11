@@ -82,38 +82,16 @@ use TomasKulhanek\CzechDataBox\Utils\BinarySuffix;
 
 readonly class Connector
 {
-    /**
-     * Jedna hromadná zpráva může mít nejvýše 50 adresátů
-     * (Provozní řád ISDS, část II, kap. 5, Hromadná datová zpráva).
-     */
     public const int MAX_RECIPIENT_COUNT = 50;
 
-    /**
-     * Maximální počet příloh v jedné datové zprávě
-     * (Provozní řád ISDS, část II, kap. 5, Omezení velikosti datové zprávy).
-     */
     public const int MAX_ATTACHMENT_COUNT = 100;
 
-    /**
-     * Kontejnerových příloh (ZIP/ASiC) smí být v jedné zprávě nejvýše 10.
-     */
-    public const int MAX_CONTAINER_COUNT = 10;
+    public const int MAX_CONTAINER_ATTACHMENT_COUNT = 10;
 
-    /**
-     * Maximální souhrnná velikost příloh běžné datové zprávy.
-     */
-    public const int MAX_MESSAGE_SIZE = 20 * 1024 ** 2;
+    public const int MAX_MESSAGE_ATTACHMENTS_SIZE = 20 * 1024 ** 2;
 
-    /**
-     * Maximální souhrnná velikost příloh velkoobjemové datové zprávy (VoDZ).
-     */
-    public const int MAX_BIG_MESSAGE_SIZE = 100 * 1024 ** 2;
+    public const int MAX_BIG_MESSAGE_ATTACHMENTS_SIZE = 100 * 1024 ** 2;
 
-    /**
-     * Horní mez velikosti SOAP odpovědi, kterou je knihovna ochotná parsovat.
-     * VoDZ o 100 MB narůstá Base64 kódováním zhruba o třetinu, k tomu se
-     * připočítává obálka, proto je výchozí limit nastavený s rezervou.
-     */
     public const int DEFAULT_MAX_RESPONSE_SIZE = 256 * 1024 ** 2;
 
     public function __construct(
@@ -254,8 +232,12 @@ readonly class Connector
             );
         }
         $this->assertAttachmentCount(count($input->getFiles()));
-        $sumFileSize = $this->assertAttachmentFormats($input->getFiles());
-        $this->assertAttachmentSize($sumFileSize, self::MAX_MESSAGE_SIZE);
+        $this->assertAllowedFormats($input->getFiles());
+        $this->assertContainerCount($input->getFiles());
+        $this->assertAttachmentSize(
+            $this->sumAttachmentSize($input->getFiles()),
+            self::MAX_MESSAGE_ATTACHMENTS_SIZE
+        );
         if (!$input->getMainFile() instanceof File) {
             throw new MissingMainFile('The message can\'t be send without main attachment');
         }
@@ -446,7 +428,7 @@ readonly class Connector
         if (!$content instanceof SplFileInfo) {
             throw new MissingRequiredField('dmEncodedContent');
         }
-        $this->assertAttachmentSize((int) $content->getSize(), self::MAX_BIG_MESSAGE_SIZE);
+        $this->assertAttachmentSize((int) $content->getSize(), self::MAX_BIG_MESSAGE_ATTACHMENTS_SIZE);
 
         return $this->send($account, ServiceTypeEnum::VODZ, $input, DTO\Response\UploadAttachment::class);
     }
@@ -464,9 +446,11 @@ readonly class Connector
             throw new MissingRequiredField('dmExtFile');
         }
         $this->assertAttachmentCount(count($extFiles) + count($inlineFiles));
+        $this->assertAllowedFormats($inlineFiles);
+        $this->assertContainerCount($inlineFiles);
         $this->assertAttachmentSize(
-            $this->assertAttachmentFormats($inlineFiles),
-            self::MAX_BIG_MESSAGE_SIZE
+            $this->sumAttachmentSize($inlineFiles),
+            self::MAX_BIG_MESSAGE_ATTACHMENTS_SIZE
         );
         if (!$this->hasMainAttachment($extFiles, $inlineFiles)) {
             throw new MissingMainFile('The message can\'t be send without main attachment');
@@ -515,9 +499,6 @@ readonly class Connector
         return $this->send($account, ServiceTypeEnum::ARCHIVE, $input, DTO\Response\ArchiveISDSDocument::class);
     }
 
-    /**
-     * @throws AttachmentCountOverflow
-     */
     private function assertAttachmentCount(int $count): void
     {
         if ($count > self::MAX_ATTACHMENT_COUNT) {
@@ -532,46 +513,57 @@ readonly class Connector
     }
 
     /**
-     * Ověří formát a počet kontejnerových příloh a vrátí souhrnnou velikost jejich obsahu v bajtech.
-     *
      * @param File[] $files
-     * @throws AttachmentCountOverflow
-     * @throws DisallowedAttachmentFormat
      */
-    private function assertAttachmentFormats(array $files): int
+    private function assertAllowedFormats(array $files): void
     {
-        $sumFileSize = 0;
-        $containerCount = 0;
         foreach ($files as $file) {
             if (!AllowedAttachmentFormats::isAllowed($file->getDescription())) {
                 throw new DisallowedAttachmentFormat(
                     sprintf('The attachment "%s" has a format disallowed by the ISDS decree.', $file->getDescription())
                 );
             }
-            if (AllowedAttachmentFormats::isContainer($file->getDescription())) {
-                $containerCount++;
-            }
+        }
+    }
+
+    /**
+     * @param File[] $files
+     */
+    private function assertContainerCount(array $files): void
+    {
+        $containerCount = count(
+            array_filter($files, static fn (File $file): bool => AllowedAttachmentFormats::isContainer(
+                $file->getDescription()
+            ))
+        );
+        if ($containerCount > self::MAX_CONTAINER_ATTACHMENT_COUNT) {
+            throw new AttachmentCountOverflow(
+                sprintf(
+                    'A message can contain at most %d container (ZIP/ASiC) attachments. Currently, %d are added.',
+                    self::MAX_CONTAINER_ATTACHMENT_COUNT,
+                    $containerCount
+                )
+            );
+        }
+    }
+
+    /**
+     * @param File[] $files
+     */
+    private function sumAttachmentSize(array $files): int
+    {
+        $sumFileSize = 0;
+        foreach ($files as $file) {
             if ($file->getEncodedContent() instanceof SplFileInfo) {
                 $sumFileSize += $file->getEncodedContent()->getSize();
             } elseif ($file->getXmlContent() !== null) {
                 $sumFileSize += strlen($file->getXmlContent());
             }
         }
-        if ($containerCount > self::MAX_CONTAINER_COUNT) {
-            throw new AttachmentCountOverflow(
-                sprintf(
-                    'A message can contain at most %d container (ZIP/ASiC) attachments. Currently, %d are added.',
-                    self::MAX_CONTAINER_COUNT,
-                    $containerCount
-                )
-            );
-        }
+
         return $sumFileSize;
     }
 
-    /**
-     * @throws FileSizeOverflow
-     */
     private function assertAttachmentSize(int $size, int $maxSize): void
     {
         if ($size > $maxSize) {
@@ -596,30 +588,21 @@ readonly class Connector
         return array_any($extFiles, $isMain) || array_any($inlineFiles, $isMain);
     }
 
-    /**
-     * @throws ConnectionException
-     */
     private function getXmlDocument(?string $xmlContent = null, bool $soap12 = false): DOMDocument
     {
         if ($xmlContent !== null) {
-            return $this->loadXmlDocument($xmlContent);
+            return $this->loadXmlDocumentOrFail($xmlContent);
         }
         $soapNamespace = $soap12
             ? 'http://www.w3.org/2003/05/soap-envelope'
             : 'http://schemas.xmlsoap.org/soap/envelope/';
 
-        return $this->loadXmlDocument(
+        return $this->loadXmlDocumentOrFail(
             '<SOAP-ENV:Envelope xmlns:SOAP-ENV="' . $soapNamespace . '"><SOAP-ENV:Header/><SOAP-ENV:Body></SOAP-ENV:Body></SOAP-ENV:Envelope>'
         );
     }
 
-    /**
-     * Načte XML s vypnutým reportováním libxml chyb, aby se poškozená odpověď ISDS
-     * projevila jako ConnectionException a ne jako PHP warning v outputu.
-     *
-     * @throws ConnectionException
-     */
-    private function loadXmlDocument(string $xmlContent): DOMDocument
+    private function loadXmlDocumentOrFail(string $xmlContent): DOMDocument
     {
         $document = new DOMDocument('1.0', 'UTF-8');
         $previousState = libxml_use_internal_errors(true);

@@ -28,9 +28,6 @@ class VodzValidationTest extends TestCase
 {
     use SerializerTrait;
 
-    /**
-     * Konektor, jehož provider nesmí být zavolán — validace musí zabránit síťovému volání.
-     */
     private function createConnector(): Connector
     {
         $provider = $this->createMock(ClientProviderInterface::class);
@@ -49,10 +46,6 @@ class VodzValidationTest extends TestCase
         return $account;
     }
 
-    /**
-     * Velké přílohy se v testech nevytvářejí doopravdy — velikost jen deklaruje
-     * potomek SplFileInfo, aby testy limitů nezapisovaly stovky MB na disk.
-     */
     private function createContent(string $content = 'obsah', ?int $reportedSize = null): SplFileInfo
     {
         if ($reportedSize === null) {
@@ -172,7 +165,7 @@ class VodzValidationTest extends TestCase
             $this->createAccount(),
             $this->createUploadRequest(
                 'priloha.pdf',
-                $this->createContent('obsah', Connector::MAX_BIG_MESSAGE_SIZE + 1)
+                $this->createContent('obsah', Connector::MAX_BIG_MESSAGE_ATTACHMENTS_SIZE + 1)
             )
         );
     }
@@ -198,7 +191,10 @@ XML;
 
         $response = $connector->uploadAttachment(
             $this->createAccount(),
-            $this->createUploadRequest('priloha.pdf', $this->createContent('obsah', Connector::MAX_BIG_MESSAGE_SIZE))
+            $this->createUploadRequest(
+                'priloha.pdf',
+                $this->createContent('obsah', Connector::MAX_BIG_MESSAGE_ATTACHMENTS_SIZE)
+            )
         );
 
         self::assertNotNull($provider->capturedBody);
@@ -288,7 +284,7 @@ XML;
         $file->setMimeType('application/pdf')
             ->setMetaType('main')
             ->setDescription('hlavni.pdf')
-            ->setEncodedContent($this->createContent('obsah', Connector::MAX_BIG_MESSAGE_SIZE + 1));
+            ->setEncodedContent($this->createContent('obsah', Connector::MAX_BIG_MESSAGE_ATTACHMENTS_SIZE + 1));
 
         $files = new BigMessageFiles();
         $files->addExtFile($this->createExtFile());
