@@ -6,17 +6,12 @@ namespace TomasKulhanek\CzechDataBox\DTO\Request;
 
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
-use TomasKulhanek\CzechDataBox\Traits\DataBoxId;
-use TomasKulhanek\CzechDataBox\Traits\ExtApproval;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'DeleteDataBoxUser2')]
 #[Serializer\AccessorOrder(order: 'custom', custom: ['dataBoxId', 'isdsId', 'approved', 'externRefNumber'])]
-class DeleteDataBoxUser2 implements Request
+class DeleteDataBoxUser2 extends DataBoxManagementRequest
 {
-    use DataBoxId;
-    use ExtApproval;
-
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('isdsID')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
