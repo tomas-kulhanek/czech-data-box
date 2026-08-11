@@ -35,6 +35,11 @@ readonly class SymfonyClientProvider implements ClientProviderInterface
         $this->caCertPath = $caCertPath ?? CaBundle::getSystemCaRootBundlePath();
     }
 
+    private static function describe(Throwable $exception): string
+    {
+        return sprintf('%s: %s', $exception::class, $exception->getMessage());
+    }
+
     public function sendRequest(Account $account, ServiceTypeEnum $serviceType, string $xmlBody): string
     {
         $requestOptions = [];
