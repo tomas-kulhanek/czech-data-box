@@ -32,6 +32,7 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 - **Nové atributy DTO**: `specMessFlag` + `isSuspicious()` (podezřelá zpráva), `dmVODZ` + `isVodz()` a `attsNum` (rozpoznání VoDZ v seznamech), `PublishOwnId` s `IdLevel`.
 - **Nová pole DTO**: `pnLastNameAtBirth`, `caState`, `adDistrict`, `adAMCode`.
 - **`Utils\AllowedAttachmentFormats`** — whitelist 51 povolených přípon vč. kontejnerových formátů.
+- **`Utils\StatusGuard`** — volitelný pomocník `assertOk()` / `assertStatusOk()`, který při ne-OK stavu odpovědi vyhodí typovanou výjimku `IsdsStatusError` (s `statusCode`, `statusMessage`, `refNumber`); obsahuje mapu známých kódů ISDS s českým vysvětlením (např. 1281, 1201, 2046). U `CreateMessage` kontroluje i dílčí stavy `dmMultipleStatus`.
 
 ### Opraveno
 
