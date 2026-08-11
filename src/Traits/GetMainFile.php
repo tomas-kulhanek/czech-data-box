@@ -9,16 +9,12 @@ use TomasKulhanek\CzechDataBox\DTO\File;
 trait GetMainFile
 {
     /**
-     * @return array<mixed, mixed>
+     * @return File[]
      */
-    public function getFiles(): array
-    {
-        return [];
-    }
+    abstract public function getFiles(): array;
 
     public function getMainFile(): ?File
     {
-        /** @var File $file */
         foreach ($this->getFiles() as $file) {
             if ($file->getMetaType() === 'main') {
                 return $file;
