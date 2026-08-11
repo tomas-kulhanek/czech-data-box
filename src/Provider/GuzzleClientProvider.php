@@ -8,6 +8,7 @@ use LogicException;
 use Throwable;
 use Composer\CaBundle\CaBundle;
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\RequestOptions;
 use TomasKulhanek\CzechDataBox\Account;
@@ -28,7 +29,7 @@ readonly class GuzzleClientProvider implements ClientProviderInterface
     }
 
     public function __construct(
-        private Client $client,
+        private ClientInterface $client,
         private EndpointProviderInterface $endpointProvider,
         ?string $caCertPath = null
     ) {

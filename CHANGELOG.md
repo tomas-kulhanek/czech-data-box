@@ -55,6 +55,7 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 - Smazán mrtvý `ruleset.xml` — odkazoval na balíček `ninjify/coding-standard`, který v projektu není. Kontrola stylu reálně běží přes `phpcs --standard=PSR12` (skript `check:cs`).
 - **`jms/serializer` je nově explicitní závislost** (`^3.32`). `Connector::__construct()` přijímá `JMS\Serializer\SerializerInterface`, takže jde o součást veřejného API — dosud se balíček instaloval jen tranzitivně přes `tomas-kulhanek/serializer`.
 - Constraint PHP zpřísněn z `>=8.4` na `^8.4`, aby se knihovna neinstalovala na dosud nevydané PHP 9.
+- `GuzzleClientProvider::__construct()` přijímá `GuzzleHttp\ClientInterface` místo konkrétní třídy `GuzzleHttp\Client` — stejně jako `SymfonyClientProvider` s `HttpClientInterface`. Umožňuje předat dekorovaného či mockovaného klienta.
 - Dist balíček z Packagistu vezl i vývojové soubory (`tests/`, `.github/`, `phpunit.xml`, `phpstan.neon`, `rector.php`, `Dockerfile`) — `.gitattributes` je nově označuje `export-ignore`. `archive.exclude` v `composer.json` platí jen pro `composer archive`, na distribuci přes Packagist vliv nemá.
 
 ### Zabezpečení
