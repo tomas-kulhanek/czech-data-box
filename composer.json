@@ -27,6 +27,7 @@
     "ext-mbstring": "*",
     "ext-openssl": "*",
     "ext-xml": "*",
+    "composer/ca-bundle": "^1.5",
     "symfony/validator": "^7.0",
     "tomas-kulhanek/serializer": "^2.0.3"
   },
