@@ -7,13 +7,15 @@ namespace TomasKulhanek\CzechDataBox\DTO;
 use DateTimeImmutable;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
-use TomasKulhanek\CzechDataBox\Traits\DataBoxId;
 
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'dbResult')]
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 class DataBoxResult
 {
-    use DataBoxId;
+    #[Serializer\Type('string')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbID')]
+    protected ?string $dataBoxId = null;
 
     #[Serializer\Type('string')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
@@ -55,6 +57,17 @@ class DataBoxResult
     #[Serializer\SerializedName('dbSendOptions')]
     #[Serializer\SkipWhenEmpty]
     protected ?string $dataBoxSendOptions = null;
+
+    public function getDataBoxId(): ?string
+    {
+        return $this->dataBoxId;
+    }
+
+    public function setDataBoxId(?string $dataBoxId): DataBoxResult
+    {
+        $this->dataBoxId = $dataBoxId;
+        return $this;
+    }
 
     public function getDataBoxType(): string
     {

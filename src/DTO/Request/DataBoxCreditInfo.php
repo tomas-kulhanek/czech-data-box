@@ -6,15 +6,12 @@ namespace TomasKulhanek\CzechDataBox\DTO\Request;
 
 use DateTimeImmutable;
 use JMS\Serializer\Annotation as Serializer;
-use TomasKulhanek\CzechDataBox\Traits\DataBoxId;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'DataBoxCreditInfo')]
 #[Serializer\AccessorOrder(order: 'custom', custom: ['dataBoxId', 'fromDate', 'toDate'])]
-class DataBoxCreditInfo implements Request
+class DataBoxCreditInfo extends DataBoxRequest
 {
-    use DataBoxId;
-
     #[Serializer\Type("DateTimeImmutable<'Y-m-d'>")]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('ciFromDate')]

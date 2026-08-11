@@ -6,15 +6,12 @@ namespace TomasKulhanek\CzechDataBox\DTO\Request;
 
 use DateTimeImmutable;
 use JMS\Serializer\Annotation as Serializer;
-use TomasKulhanek\CzechDataBox\Traits\DataBoxId;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetDataBoxActivityStatus')]
 #[Serializer\AccessorOrder(order: 'custom', custom: ['dataBoxId', 'from', 'to'])]
-class GetDataBoxActivityStatus implements Request
+class GetDataBoxActivityStatus extends DataBoxRequest
 {
-    use DataBoxId;
-
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('baFrom')]
