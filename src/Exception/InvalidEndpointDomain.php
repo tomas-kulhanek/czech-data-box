@@ -6,7 +6,7 @@ namespace TomasKulhanek\CzechDataBox\Exception;
 
 use Exception;
 
-class InvalidEndpointDomain extends Exception
+class InvalidEndpointDomain extends Exception implements CzechDataBoxException
 {
     public function __construct(string $domain)
     {

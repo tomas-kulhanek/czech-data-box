@@ -6,6 +6,6 @@ namespace TomasKulhanek\CzechDataBox\Exception;
 
 use Exception;
 
-class DisallowedAttachmentFormat extends Exception
+class DisallowedAttachmentFormat extends Exception implements CzechDataBoxException
 {
 }

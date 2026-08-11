@@ -12,8 +12,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * na dříve nahrané přílohy (dmExtFile) a malé inline přílohy (dmFile),
  * proto jsou obě kolekce serializované inline v jednom wrapperu.
  */
-#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'dmFiles')]
-#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'dmFiles')]
+#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\AccessorOrder(order: 'custom', custom: ['extFiles', 'files'])]
 class BigMessageFiles
 {
@@ -21,7 +21,7 @@ class BigMessageFiles
      * @var ExtFile[]
      */
     #[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\ExtFile>')]
-    #[Serializer\XmlList(entry: 'dmExtFile', inline: true, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlList(entry: 'dmExtFile', inline: true, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\All([
         new Assert\Type(ExtFile::class)
     ])]
@@ -32,7 +32,7 @@ class BigMessageFiles
      * @var File[]
      */
     #[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\File>')]
-    #[Serializer\XmlList(entry: 'dmFile', inline: true, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlList(entry: 'dmFile', inline: true, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\All([
         new Assert\Type(File::class)
     ])]

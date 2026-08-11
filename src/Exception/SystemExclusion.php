@@ -6,6 +6,6 @@ namespace TomasKulhanek\CzechDataBox\Exception;
 
 use Exception;
 
-class SystemExclusion extends Exception
+class SystemExclusion extends Exception implements CzechDataBoxException
 {
 }

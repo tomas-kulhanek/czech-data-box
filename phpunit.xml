@@ -1,8 +1,11 @@
 <?xml version="1.0"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/13.3/phpunit.xsd" backupGlobals="false" colors="true" beStrictAboutTestsThatDoNotTestAnything="false" beStrictAboutOutputDuringTests="true" failOnRisky="true" executionOrder="random" cacheDirectory=".phpunit.cache">
   <testsuites>
-    <testsuite name="all">
-      <directory>./tests</directory>
+    <testsuite name="unit">
+      <directory>./tests/Unit</directory>
+    </testsuite>
+    <testsuite name="integration">
+      <directory>./tests/Integration</directory>
     </testsuite>
   </testsuites>
   <groups>

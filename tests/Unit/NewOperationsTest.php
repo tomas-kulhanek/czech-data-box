@@ -94,7 +94,7 @@ class NewOperationsTest extends TestCase
     {
         $xml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<p:GetMessageAuthor2Response xmlns:p="https://isds.czechpoint.cz/v20">
+<p:GetMessageAuthor2Response xmlns:p="http://isds.czechpoint.cz/v20">
   <p:dmMessageAuthor>
     <p:maItem key="userType" value="PRIMARY_USER"/>
     <p:maItem key="pnGivenNames" value="Jan"/>
@@ -121,7 +121,7 @@ XML;
     {
         $xml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<p:GetListForNotificationsResponse xmlns:p="https://isds.czechpoint.cz/v20">
+<p:GetListForNotificationsResponse xmlns:p="http://isds.czechpoint.cz/v20">
   <p:ntfRecords>
     <p:ntfRecord>
       <p:ntfType>1</p:ntfType>
@@ -161,7 +161,7 @@ XML;
     {
         $xml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<p:GetConstantsResponse xmlns:p="https://isds.czechpoint.cz/v20">
+<p:GetConstantsResponse xmlns:p="http://isds.czechpoint.cz/v20">
   <p:constRecords>
     <p:constRecord>
       <p:cName>MAX_ATTACHMENT_SIZE</p:cName>
@@ -199,7 +199,7 @@ XML;
     {
         $xml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<p:GetDataBoxAddressResponse xmlns:p="https://isds.czechpoint.cz/v20">
+<p:GetDataBoxAddressResponse xmlns:p="http://isds.czechpoint.cz/v20">
   <p:adCode>12345678</p:adCode>
   <p:adCity>Praha</p:adCity>
   <p:adDistrict>Praha 1</p:adDistrict>
@@ -234,7 +234,7 @@ XML;
     {
         $xml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<p:GetUserInfoFromLogin2Response xmlns:p="https://isds.czechpoint.cz/v20">
+<p:GetUserInfoFromLogin2Response xmlns:p="http://isds.czechpoint.cz/v20">
   <p:dbUserInfo>
     <p:aifoIsds>false</p:aifoIsds>
     <p:pnGivenNames>Jan</p:pnGivenNames>

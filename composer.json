@@ -60,14 +60,16 @@
     "check": [
       "@check:phpstan",
       "@check:cs",
-      "@phpunit"
+      "@check:rector"
     ],
     "test:phpunit": "php -d xdebug.mode=off vendor/phpunit/phpunit/phpunit",
+    "test:unit": "php -d xdebug.mode=off vendor/phpunit/phpunit/phpunit --testsuite unit",
+    "test:integration": "php -d xdebug.mode=off vendor/phpunit/phpunit/phpunit --testsuite integration",
     "check:phpstan": "php -d memory_limit=512M vendor/bin/phpstan analyse -c phpstan.neon",
-    "check:rector": "php vendor/bin/rector process src tests public --dry-run",
+    "check:rector": "php vendor/bin/rector process src tests --dry-run",
     "check:cs": "phpcs --extensions=php --standard=PSR12 -n src tests",
     "fix:cs": "phpcbf --extensions=php --standard=PSR12 -n src tests",
-    "fix:rector": "php vendor/bin/rector process src tests public",
+    "fix:rector": "php vendor/bin/rector process src tests",
     "fix:all": [
       "@fix:rector",
       "@fix:cs"
