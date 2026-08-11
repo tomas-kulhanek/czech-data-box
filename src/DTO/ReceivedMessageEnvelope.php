@@ -6,14 +6,10 @@ namespace TomasKulhanek\CzechDataBox\DTO;
 
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
-use TomasKulhanek\CzechDataBox\Traits\DataMessageEnvelope;
-use TomasKulhanek\CzechDataBox\Traits\GetMainFile;
+use TomasKulhanek\CzechDataBox\Utils\MainFileResolver;
 
-class ReceivedMessageEnvelope
+class ReceivedMessageEnvelope extends AbstractMessageEnvelope
 {
-    use GetMainFile;
-    use DataMessageEnvelope;
-
     /**
      * @var File[]
      */
@@ -43,5 +39,10 @@ class ReceivedMessageEnvelope
     {
         $this->files = $files;
         return $this;
+    }
+
+    public function getMainFile(): ?File
+    {
+        return MainFileResolver::resolve($this->files);
     }
 }

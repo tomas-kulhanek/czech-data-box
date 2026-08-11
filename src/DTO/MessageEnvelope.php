@@ -6,16 +6,12 @@ namespace TomasKulhanek\CzechDataBox\DTO;
 
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
-use TomasKulhanek\CzechDataBox\Traits\DataMessageEnvelope;
-use TomasKulhanek\CzechDataBox\Traits\GetMainFile;
+use TomasKulhanek\CzechDataBox\Utils\MainFileResolver;
 
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'dmDm')]
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
-class MessageEnvelope
+class MessageEnvelope extends AbstractMessageEnvelope
 {
-    use GetMainFile;
-    use DataMessageEnvelope;
-
     /**
      * @var File[]
      */
@@ -45,5 +41,10 @@ class MessageEnvelope
     {
         $this->files = $files;
         return $this;
+    }
+
+    public function getMainFile(): ?File
+    {
+        return MainFileResolver::resolve($this->files);
     }
 }
