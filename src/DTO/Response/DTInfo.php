@@ -6,17 +6,14 @@ namespace TomasKulhanek\CzechDataBox\DTO\Response;
 
 use DateTimeImmutable;
 use JMS\Serializer\Annotation as Serializer;
-use TomasKulhanek\CzechDataBox\Traits\DataBoxStatus;
 
 /**
  * Class DTInfo
  */
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'DTInfoResponse')]
-class DTInfo extends Response
+class DTInfo extends DataBoxResponse
 {
-    use DataBoxStatus;
-
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]

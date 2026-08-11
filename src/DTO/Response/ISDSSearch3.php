@@ -7,14 +7,11 @@ namespace TomasKulhanek\CzechDataBox\DTO\Response;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\DTO\DataBoxResult;
-use TomasKulhanek\CzechDataBox\Traits\DataBoxStatus;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'ISDSSearch3Response')]
-class ISDSSearch3 extends Response
+class ISDSSearch3 extends DataBoxResponse
 {
-    use DataBoxStatus;
-
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
     #[Serializer\SerializedName('totalCount')]

@@ -6,15 +6,12 @@ namespace TomasKulhanek\CzechDataBox\DTO\Response;
 
 use DateTimeImmutable;
 use JMS\Serializer\Annotation as Serializer;
-use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 use TomasKulhanek\CzechDataBox\Serializer\SplFileInfo;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'Re-signISDSDocumentResponse')]
-class ResignISDSDocument extends Response
+class ResignISDSDocument extends DataMessageResponse
 {
-    use DataMessageStatus;
-
     #[Serializer\Type('base64File')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dmResultDoc')]
@@ -25,12 +22,6 @@ class ResignISDSDocument extends Response
     #[Serializer\SerializedName('dmValidTo')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?DateTimeImmutable $validTo = null;
-
-    public function setStatus(\TomasKulhanek\CzechDataBox\DTO\DataMessageStatus $status): ResignISDSDocument
-    {
-        $this->status = $status;
-        return $this;
-    }
 
     public function getDocument(): ?SplFileInfo
     {

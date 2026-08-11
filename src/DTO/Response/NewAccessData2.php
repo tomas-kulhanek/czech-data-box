@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace TomasKulhanek\CzechDataBox\DTO\Response;
 
 use JMS\Serializer\Annotation as Serializer;
-use TomasKulhanek\CzechDataBox\Traits\DataBoxStatus;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'NewAccessData2Response')]
-class NewAccessData2 extends Response
+class NewAccessData2 extends DataBoxResponse
 {
-    use DataBoxStatus;
-
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dbUserID')]

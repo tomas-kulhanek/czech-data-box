@@ -8,13 +8,11 @@ use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\DTO\Period;
 use TomasKulhanek\CzechDataBox\Traits\DataBoxId;
-use TomasKulhanek\CzechDataBox\Traits\DataBoxStatus;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetDataBoxActivityStatusResponse')]
-class GetDataBoxActivityStatus extends Response
+class GetDataBoxActivityStatus extends DataBoxResponse
 {
-    use DataBoxStatus;
     use DataBoxId;
 
     /**

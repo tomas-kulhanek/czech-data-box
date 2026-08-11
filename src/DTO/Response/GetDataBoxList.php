@@ -5,15 +5,12 @@ declare(strict_types=1);
 namespace TomasKulhanek\CzechDataBox\DTO\Response;
 
 use JMS\Serializer\Annotation as Serializer;
-use TomasKulhanek\CzechDataBox\Traits\DataBoxStatus;
 use TomasKulhanek\CzechDataBox\Serializer\SplFileInfo;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetDataBoxListResponse')]
-class GetDataBoxList extends Response
+class GetDataBoxList extends DataBoxResponse
 {
-    use DataBoxStatus;
-
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('base64File')]
     #[Serializer\SerializedName('dblData')]
