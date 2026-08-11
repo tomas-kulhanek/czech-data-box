@@ -51,6 +51,7 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 - Composer skript `check` odkazoval na neexistující `@phpunit` a `check:rector`/`fix:rector` zpracovávaly neexistující složku `public/`; README instaloval Guzzle `^7.0`, dev závislost je `^8.0`.
 - Mapování HTTP 503 → `SystemExclusion` nikdy nefungovalo — Guzzle provider testoval symfonní `TransportExceptionInterface`, kterou Guzzle nevyhazuje, a Symfony provider dostával `ServerExceptionInterface`. Oba providery nově vyhodnocují stavový kód odpovědi; HTTP 500 (a další chyby ≥ 400) s neprázdným tělem se navíc předává `Connectoru`, aby šel detekovat SOAP Fault.
 - Composer skript `check` neobsahoval testy, takže lokální brána prošla i s rozbitou unit test suite. `check` nově spouští stejnou sadu jako CI (`check:phpstan`, `check:cs`, `check:rector`, `test:unit`); duplicitní `check:all` byl zrušen.
+- `composer test:integration` bez přihlašovacích údajů končil chybami místo přeskočení. Integrační testy se nově přeskočí (`markTestSkipped`), pokud chybí proměnné prostředí `*_LOGIN_USER` nebo soubor `.data/cert.pem`.
 
 ### Zabezpečení
 
