@@ -41,6 +41,13 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 - `Response\CheckDataBox` měl XML root `FindDataBoxResponse` místo `CheckDataBoxResponse`.
 - Duplicitní prázdný atribut `#[Assert\All()]` v `Delivery` shazoval phpstan.
 - Integrační test importoval neexistující třídu `Utils\MessageStatus`.
+- Poškozená nebo neúplná SOAP odpověď vypisovala PHP warning z `DOMDocument::loadXML()` a končila prázdnou `ConnectionException`. Parsování nově běží s `libxml_use_internal_errors()` a chyba se hlásí jako `ConnectionException` s popisem.
+
+### Zabezpečení
+
+- **VoDZ operace nově validují vstup na straně knihovny.** `uploadAttachment()` odmítne prázdný `dmFileDescr`, příponu mimo whitelist vyhlášky č. 194/2009 Sb., chybějící obsah a přílohu nad 100 MB. `createBigMessage()` vyžaduje alespoň jeden `dmExtFile`, hlavní přílohu (`dmFileMetaType="main"`), `dbIDRecipient` a `dmAnnotation`, hlídá limit 100 příloh a souhrnnou velikost inline příloh. Nevalidní požadavek se tak neposílá na server.
+- **Limit velikosti odpovědi.** `Connector` odmítne SOAP odpověď větší než `Connector::DEFAULT_MAX_RESPONSE_SIZE` (256 MB) ještě před parsováním; limit lze změnit třetím parametrem konstruktoru.
+- **GitHub Actions pinovány na commit SHA** a hlavní workflow má minimální `permissions: contents: read`. Přibyl job `Dependency audit` s `composer validate --strict` a `composer audit`, který běží i v týdenním scheduled runu.
 
 ### Migrace z 5.x
 
@@ -53,6 +60,7 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 7. Počítejte s novými výjimkami `AttachmentCountOverflow` a `DisallowedAttachmentFormat` u `createMessage()`.
 8. `$account->setProduction(false)` → `GuzzleClientProvider::create(EndpointProvider::test())` (resp. `SymfonyClientProvider::create(...)`); volání `setProduction()` odstraňte.
 9. `getOwnerInfoFromLogin()` / `getUserInfoFromLogin()` jsou deprecated — přejděte na `getOwnerInfoFromLogin2()` / `getUserInfoFromLogin2()`.
+10. `uploadAttachment()` a `createBigMessage()` nově vyhazují `MissingRequiredField`, `MissingMainFile`, `DisallowedAttachmentFormat`, `AttachmentCountOverflow` a `FileSizeOverflow` — ošetřete je stejně jako u `createMessage()`.
 
 ## [5.0.0] – 2024-05-24
 

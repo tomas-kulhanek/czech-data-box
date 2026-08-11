@@ -15,6 +15,7 @@ use DOMNode;
 use DOMNodeList;
 use DOMXPath;
 use JMS\Serializer\SerializerInterface;
+use TomasKulhanek\CzechDataBox\DTO\ExtFile;
 use TomasKulhanek\CzechDataBox\DTO\File;
 use TomasKulhanek\CzechDataBox\DTO\Request\ArchiveISDSDocument;
 use TomasKulhanek\CzechDataBox\DTO\Request\AuthenticateBigMessage;
@@ -81,9 +82,22 @@ use TomasKulhanek\CzechDataBox\Utils\BinarySuffix;
 
 readonly class Connector
 {
+    public const int MAX_RECIPIENT_COUNT = 50;
+
+    public const int MAX_ATTACHMENT_COUNT = 100;
+
+    public const int MAX_CONTAINER_ATTACHMENT_COUNT = 10;
+
+    public const int MAX_MESSAGE_ATTACHMENTS_SIZE = 20 * 1024 ** 2;
+
+    public const int MAX_BIG_MESSAGE_ATTACHMENTS_SIZE = 100 * 1024 ** 2;
+
+    public const int DEFAULT_MAX_RESPONSE_SIZE = 256 * 1024 ** 2;
+
     public function __construct(
         private SerializerInterface $serializer,
-        private ClientProviderInterface $provider
+        private ClientProviderInterface $provider,
+        private int $maxResponseSize = self::DEFAULT_MAX_RESPONSE_SIZE
     ) {
     }
 
@@ -208,53 +222,22 @@ readonly class Connector
         if ($recipientsCount < 1) {
             throw new MissingRequiredField('recipient');
         }
-        if ($recipientsCount > 50) {
+        if ($recipientsCount > self::MAX_RECIPIENT_COUNT) {
             throw new RecipientCountOverflow(
-                sprintf('More than 50 recipients are assigned. Currently, %d are added.', $recipientsCount)
-            );
-        }
-        $filesCount = count($input->getFiles());
-        if ($filesCount > 100) {
-            throw new AttachmentCountOverflow(
-                sprintf('A message can contain at most 100 attachments. Currently, %d are added.', $filesCount)
-            );
-        }
-        $sumFileSize = 0;
-        $containerCount = 0;
-        /** @var DTO\File $file */
-        foreach ($input->getFiles() as $file) {
-            if (!AllowedAttachmentFormats::isAllowed($file->getDescription())) {
-                throw new DisallowedAttachmentFormat(
-                    sprintf('The attachment "%s" has a format disallowed by the ISDS decree.', $file->getDescription())
-                );
-            }
-            if (AllowedAttachmentFormats::isContainer($file->getDescription())) {
-                $containerCount++;
-            }
-            if ($file->getEncodedContent() instanceof SplFileInfo) {
-                $sumFileSize += $file->getEncodedContent()->getSize();
-            } elseif ($file->getXmlContent() !== null) {
-                $sumFileSize += strlen($file->getXmlContent());
-            }
-        }
-        if ($containerCount > 10) {
-            throw new AttachmentCountOverflow(
                 sprintf(
-                    'A message can contain at most 10 container (ZIP/ASiC) attachments. Currently, %d are added.',
-                    $containerCount
+                    'More than %d recipients are assigned. Currently, %d are added.',
+                    self::MAX_RECIPIENT_COUNT,
+                    $recipientsCount
                 )
             );
         }
-        $maxSize = 20 * 1024 ** 2;
-        if ($sumFileSize > $maxSize) {
-            throw new FileSizeOverflow(
-                sprintf(
-                    'Maximum size of all files can be %s. Current size is %s.',
-                    BinarySuffix::convert($maxSize),
-                    BinarySuffix::convert($sumFileSize)
-                )
-            );
-        }
+        $this->assertAttachmentCount(count($input->getFiles()));
+        $this->assertAllowedFormats($input->getFiles());
+        $this->assertContainerCount($input->getFiles());
+        $this->assertAttachmentSize(
+            $this->sumAttachmentSize($input->getFiles()),
+            self::MAX_MESSAGE_ATTACHMENTS_SIZE
+        );
         if (!$input->getMainFile() instanceof File) {
             throw new MissingMainFile('The message can\'t be send without main attachment');
         }
@@ -432,6 +415,21 @@ readonly class Connector
 
     public function uploadAttachment(Account $account, UploadAttachment $input): DTO\Response\UploadAttachment
     {
+        $file = $input->getFile();
+        if (trim($file->getDescription()) === '') {
+            throw new MissingRequiredField('dmFileDescr');
+        }
+        if (!AllowedAttachmentFormats::isAllowed($file->getDescription())) {
+            throw new DisallowedAttachmentFormat(
+                sprintf('The attachment "%s" has a format disallowed by the ISDS decree.', $file->getDescription())
+            );
+        }
+        $content = $file->getEncodedContent();
+        if (!$content instanceof SplFileInfo) {
+            throw new MissingRequiredField('dmEncodedContent');
+        }
+        $this->assertAttachmentSize((int) $content->getSize(), self::MAX_BIG_MESSAGE_ATTACHMENTS_SIZE);
+
         return $this->send($account, ServiceTypeEnum::VODZ, $input, DTO\Response\UploadAttachment::class);
     }
 
@@ -442,6 +440,29 @@ readonly class Connector
 
     public function createBigMessage(Account $account, CreateBigMessage $input): DTO\Response\CreateBigMessage
     {
+        $extFiles = $input->getFiles()->getExtFiles();
+        $inlineFiles = $input->getFiles()->getFiles();
+        if ($extFiles === []) {
+            throw new MissingRequiredField('dmExtFile');
+        }
+        $this->assertAttachmentCount(count($extFiles) + count($inlineFiles));
+        $this->assertAllowedFormats($inlineFiles);
+        $this->assertContainerCount($inlineFiles);
+        $this->assertAttachmentSize(
+            $this->sumAttachmentSize($inlineFiles),
+            self::MAX_BIG_MESSAGE_ATTACHMENTS_SIZE
+        );
+        if (!$this->hasMainAttachment($extFiles, $inlineFiles)) {
+            throw new MissingMainFile('The message can\'t be send without main attachment');
+        }
+        $envelope = $input->getEnvelope();
+        if (empty($envelope->getRecipientId())) {
+            throw new MissingRequiredField('dbIDRecipient');
+        }
+        if (empty($envelope->getAnnotation())) {
+            throw new MissingRequiredField('annotation');
+        }
+
         return $this->send($account, ServiceTypeEnum::VODZ, $input, DTO\Response\CreateBigMessage::class);
     }
 
@@ -478,19 +499,128 @@ readonly class Connector
         return $this->send($account, ServiceTypeEnum::ARCHIVE, $input, DTO\Response\ArchiveISDSDocument::class);
     }
 
+    private function assertAttachmentCount(int $count): void
+    {
+        if ($count > self::MAX_ATTACHMENT_COUNT) {
+            throw new AttachmentCountOverflow(
+                sprintf(
+                    'A message can contain at most %d attachments. Currently, %d are added.',
+                    self::MAX_ATTACHMENT_COUNT,
+                    $count
+                )
+            );
+        }
+    }
+
+    /**
+     * @param File[] $files
+     */
+    private function assertAllowedFormats(array $files): void
+    {
+        foreach ($files as $file) {
+            if (!AllowedAttachmentFormats::isAllowed($file->getDescription())) {
+                throw new DisallowedAttachmentFormat(
+                    sprintf('The attachment "%s" has a format disallowed by the ISDS decree.', $file->getDescription())
+                );
+            }
+        }
+    }
+
+    /**
+     * @param File[] $files
+     */
+    private function assertContainerCount(array $files): void
+    {
+        $containerCount = count(
+            array_filter($files, static fn (File $file): bool => AllowedAttachmentFormats::isContainer(
+                $file->getDescription()
+            ))
+        );
+        if ($containerCount > self::MAX_CONTAINER_ATTACHMENT_COUNT) {
+            throw new AttachmentCountOverflow(
+                sprintf(
+                    'A message can contain at most %d container (ZIP/ASiC) attachments. Currently, %d are added.',
+                    self::MAX_CONTAINER_ATTACHMENT_COUNT,
+                    $containerCount
+                )
+            );
+        }
+    }
+
+    /**
+     * @param File[] $files
+     */
+    private function sumAttachmentSize(array $files): int
+    {
+        $sumFileSize = 0;
+        foreach ($files as $file) {
+            if ($file->getEncodedContent() instanceof SplFileInfo) {
+                $sumFileSize += $file->getEncodedContent()->getSize();
+            } elseif ($file->getXmlContent() !== null) {
+                $sumFileSize += strlen($file->getXmlContent());
+            }
+        }
+
+        return $sumFileSize;
+    }
+
+    private function assertAttachmentSize(int $size, int $maxSize): void
+    {
+        if ($size > $maxSize) {
+            throw new FileSizeOverflow(
+                sprintf(
+                    'Maximum size of all files can be %s. Current size is %s.',
+                    BinarySuffix::convert($maxSize),
+                    BinarySuffix::convert($size)
+                )
+            );
+        }
+    }
+
+    /**
+     * @param ExtFile[] $extFiles
+     * @param File[] $inlineFiles
+     */
+    private function hasMainAttachment(array $extFiles, array $inlineFiles): bool
+    {
+        $isMain = static fn (ExtFile|File $file): bool => $file->getMetaType() === 'main';
+
+        return array_any($extFiles, $isMain) || array_any($inlineFiles, $isMain);
+    }
+
     private function getXmlDocument(?string $xmlContent = null, bool $soap12 = false): DOMDocument
     {
-        $document = new DOMDocument('1.0', 'UTF-8');
         if ($xmlContent !== null) {
-            $document->loadXML($xmlContent);
-            return $document;
+            return $this->loadXmlDocumentOrFail($xmlContent);
         }
         $soapNamespace = $soap12
             ? 'http://www.w3.org/2003/05/soap-envelope'
             : 'http://schemas.xmlsoap.org/soap/envelope/';
-        $document->loadXML(
+
+        return $this->loadXmlDocumentOrFail(
             '<SOAP-ENV:Envelope xmlns:SOAP-ENV="' . $soapNamespace . '"><SOAP-ENV:Header/><SOAP-ENV:Body></SOAP-ENV:Body></SOAP-ENV:Envelope>'
         );
+    }
+
+    private function loadXmlDocumentOrFail(string $xmlContent): DOMDocument
+    {
+        $document = new DOMDocument('1.0', 'UTF-8');
+        $previousState = libxml_use_internal_errors(true);
+        libxml_clear_errors();
+        try {
+            if (!$document->loadXML($xmlContent)) {
+                $error = libxml_get_last_error();
+                throw new ConnectionException(
+                    $error === false
+                        ? 'The XML document could not be parsed.'
+                        : sprintf('The XML document could not be parsed: %s', trim($error->message))
+                );
+            }
+        } finally {
+            libxml_clear_errors();
+            libxml_use_internal_errors($previousState);
+        }
+
         return $document;
     }
 
@@ -562,6 +692,14 @@ readonly class Connector
         }
 
         $response = $this->provider->sendRequest($account, $serviceType, $xmlBody);
+        if (strlen($response) > $this->maxResponseSize) {
+            throw new ConnectionException(
+                sprintf(
+                    'The response is larger than the allowed %s.',
+                    BinarySuffix::convert($this->maxResponseSize)
+                )
+            );
+        }
         $soapResponse = $this->getXmlDocument($response);
         if (empty($soapResponse->documentElement)) {
             throw new ConnectionException('The response is empty');
