@@ -12,7 +12,6 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\RequestOptions;
 use TomasKulhanek\CzechDataBox\Account;
-use TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum;
 use TomasKulhanek\CzechDataBox\Enum\ServiceTypeEnum;
 use TomasKulhanek\CzechDataBox\Exception\ConnectionException;
 use TomasKulhanek\CzechDataBox\Exception\FileSystemException;
@@ -31,61 +30,16 @@ readonly class GuzzleClientProvider implements ClientProviderInterface
     public function __construct(
         private ClientInterface $client,
         private EndpointProviderInterface $endpointProvider,
-        ?string $caCertPath = null
+        ?string $caCertPath = null,
+        private RequestOptionsFactory $requestOptionsFactory = new RequestOptionsFactory()
     ) {
         $this->caCertPath = $caCertPath ?? CaBundle::getSystemCaRootBundlePath();
-    }
-
-    /**
-     * @return array<string, non-empty-string>
-     */
-    private function getHeaders(ServiceTypeEnum $serviceType): array
-    {
-        $headers = [
-            'Connection' => 'Keep-Alive',
-            'Accept-Encoding' => 'gzip,deflate',
-        ];
-        if ($serviceType->usesSoap12()) {
-            $headers['Content-Type'] = 'application/soap+xml; charset=utf-8';
-        } else {
-            $headers['Content-Type'] = 'text/xml; charset=utf-8';
-            $headers['SOAPAction'] = '""';
-        }
-
-        return $headers;
-    }
-
-    /**
-     * @return array{0: string, 1: string}|null
-     */
-    private function getAuthentication(Account $account): ?array
-    {
-        switch ($account->getLoginType()) {
-            case LoginTypeEnum::HOSTED_SPIS:
-                $dataBoxId = $account->getDataBoxId();
-                if ($dataBoxId === null) {
-                    throw new MissingRequiredField('Missing data box ID');
-                }
-
-                return [$dataBoxId, ''];
-            case LoginTypeEnum::NAME_PASSWORD:
-            case LoginTypeEnum::CERT_LOGIN_NAME_PASSWORD:
-                $loginName = $account->getLoginName();
-                $password = $account->getPassword();
-                if ($loginName === null || $password === null) {
-                    throw new MissingRequiredField('Missing login name or password');
-                }
-
-                return [$loginName, $password];
-            default:
-                return null;
-        }
     }
 
     public function sendRequest(Account $account, ServiceTypeEnum $serviceType, string $xmlBody): string
     {
         $requestOptions = [];
-        $authentication = $this->getAuthentication($account);
+        $authentication = $this->requestOptionsFactory->createBasicAuthentication($account);
         if ($authentication !== null) {
             $requestOptions[RequestOptions::AUTH] = $authentication;
         }
@@ -120,7 +74,7 @@ readonly class GuzzleClientProvider implements ClientProviderInterface
             $requestOptions[RequestOptions::SSL_KEY] = [$privateStream['uri'], $account->getPrivateKeyPassPhrase()];
         }
 
-        $requestOptions[RequestOptions::HEADERS] = $this->getHeaders($serviceType);
+        $requestOptions[RequestOptions::HEADERS] = $this->requestOptionsFactory->createHeaders($serviceType);
         $requestOptions[RequestOptions::BODY] = $xmlBody;
         if (file_exists($this->caCertPath)) {
             $requestOptions[RequestOptions::VERIFY] = $this->caCertPath;
