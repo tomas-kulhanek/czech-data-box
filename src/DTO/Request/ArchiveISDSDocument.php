@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace TomasKulhanek\CzechDataBox\DTO\Request;
 
 use JMS\Serializer\Annotation as Serializer;
-use TomasKulhanek\Serializer\Utils\SplFileInfo;
+use TomasKulhanek\CzechDataBox\Serializer\SplFileInfo;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'ArchiveISDSDocument')]

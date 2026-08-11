@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace TomasKulhanek\CzechDataBox\Traits;
 
 use JMS\Serializer\Annotation as Serializer;
-use TomasKulhanek\Serializer\Utils\SplFileInfo;
+use TomasKulhanek\CzechDataBox\Serializer\SplFileInfo;
 
 trait Signature
 {

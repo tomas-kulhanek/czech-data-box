@@ -6,7 +6,7 @@ namespace TomasKulhanek\CzechDataBox\DTO;
 
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
-use TomasKulhanek\Serializer\Utils\SplFileInfo;
+use TomasKulhanek\CzechDataBox\Serializer\SplFileInfo;
 
 /**
  * Příloha velkoobjemové datové zprávy (VoDZ) nahrávaná operací UploadAttachment.

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace TomasKulhanek\CzechDataBox\DTO;
 
 use JMS\Serializer\Annotation as Serializer;
-use TomasKulhanek\Serializer\Utils\SplFileInfo;
+use TomasKulhanek\CzechDataBox\Serializer\SplFileInfo;
 
 /**
  * Příloha velkoobjemové datové zprávy (VoDZ) vracená operací DownloadAttachment.
