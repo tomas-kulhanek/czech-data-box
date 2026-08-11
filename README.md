@@ -232,9 +232,12 @@ Knihovna řeší komunikaci s ISDS, ale některé povinnosti [Provozního řádu
 V případě že potřebujete poradit, nebo při implementaci Vám třída zobrazuje chybu vytvořte prosím nové Issues.
 Základní pomoc je poskytována zcela zdarma pomocí Issues.
 
+⚠ **Bezpečnostní chybu prosím nehlaste veřejným Issue** — postup najdete v [SECURITY.md](SECURITY.md).
+
 ## Odkazy
 - Changelog knihovny - [CHANGELOG.md](CHANGELOG.md)
 - Jak přispívat - [CONTRIBUTING.md](CONTRIBUTING.md)
+- Bezpečnostní politika - [SECURITY.md](SECURITY.md)
 - Produkční ISDS - https://www.datovka.gov.cz
 - Testovací ISDS - https://datovka-test.gov.cz
 - Provozní řád ISDS - https://datovka.gov.cz/info/cs/80.html

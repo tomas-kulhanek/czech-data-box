@@ -41,16 +41,19 @@ final readonly class RequestOptionsFactory
             case LoginTypeEnum::HOSTED_SPIS:
                 $dataBoxId = $account->getDataBoxId();
                 if ($dataBoxId === null) {
-                    throw new MissingRequiredField('Missing data box ID');
+                    throw new MissingRequiredField('dbID');
                 }
 
                 return [$dataBoxId, ''];
             case LoginTypeEnum::NAME_PASSWORD:
             case LoginTypeEnum::CERT_LOGIN_NAME_PASSWORD:
                 $loginName = $account->getLoginName();
+                if ($loginName === null) {
+                    throw new MissingRequiredField('loginName');
+                }
                 $password = $account->getPassword();
-                if ($loginName === null || $password === null) {
-                    throw new MissingRequiredField('Missing login name or password');
+                if ($password === null) {
+                    throw new MissingRequiredField('password');
                 }
 
                 return [$loginName, $password];

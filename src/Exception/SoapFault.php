@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TomasKulhanek\CzechDataBox\Exception;
 
-final class SoapFault extends ConnectionException
+final class SoapFault extends ConnectionException implements CzechDataBoxException
 {
     public function __construct(
         public readonly string $faultCode,
