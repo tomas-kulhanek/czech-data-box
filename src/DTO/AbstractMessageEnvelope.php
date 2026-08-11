@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace TomasKulhanek\CzechDataBox\DTO;
 
 use JMS\Serializer\Annotation as Serializer;
-use TomasKulhanek\CzechDataBox\Traits\DataMessageId;
 
 #[Serializer\AccessorOrder(order: 'custom', custom: [
     'dataMessageId',
@@ -37,7 +36,11 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageId;
 ])]
 abstract class AbstractMessageEnvelope
 {
-    use DataMessageId;
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type('string')]
+    #[Serializer\SerializedName('dmID')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    protected ?string $dataMessageId = null;
 
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dbIDSender')]
@@ -184,6 +187,17 @@ abstract class AbstractMessageEnvelope
     #[Serializer\SerializedName('dmAllowSubstDelivery')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?bool $allowSubstDelivery = null;
+
+    public function getDataMessageId(): ?string
+    {
+        return $this->dataMessageId;
+    }
+
+    public function setDataMessageId(?string $dataMessageId): static
+    {
+        $this->dataMessageId = $dataMessageId;
+        return $this;
+    }
 
     public function getSenderId(): ?string
     {
