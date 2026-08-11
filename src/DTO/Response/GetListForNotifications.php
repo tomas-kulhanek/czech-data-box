@@ -7,14 +7,11 @@ namespace TomasKulhanek\CzechDataBox\DTO\Response;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\DTO\NotificationRecord;
-use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetListForNotificationsResponse')]
-class GetListForNotifications extends Response
+class GetListForNotifications extends DataMessageResponse
 {
-    use DataMessageStatus;
-
     /**
      * @var NotificationRecord[]
      */

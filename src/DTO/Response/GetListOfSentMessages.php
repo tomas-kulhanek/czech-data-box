@@ -7,14 +7,11 @@ namespace TomasKulhanek\CzechDataBox\DTO\Response;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\DTO\MessageRecord;
-use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetListOfSentMessagesResponse')]
-class GetListOfSentMessages extends Response
+class GetListOfSentMessages extends DataMessageResponse
 {
-    use DataMessageStatus;
-
     /**
      * @var MessageRecord[]
      */

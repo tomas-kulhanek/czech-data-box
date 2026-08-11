@@ -7,14 +7,11 @@ namespace TomasKulhanek\CzechDataBox\DTO\Response;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\DTO\ConstantRecord;
-use TomasKulhanek\CzechDataBox\Traits\DataBoxStatus;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetConstantsResponse')]
-class GetConstants extends Response
+class GetConstants extends DataBoxResponse
 {
-    use DataBoxStatus;
-
     /**
      * @var ConstantRecord[]
      */

@@ -7,15 +7,12 @@ namespace TomasKulhanek\CzechDataBox\DTO\Response;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\DTO\MessageStatus;
-use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'CreateMultipleMessageResponse')]
 #[Serializer\AccessorOrder(order: 'custom', custom: ['messageStatus', 'status'])]
-class CreateMessage extends Response
+class CreateMessage extends DataMessageResponse
 {
-    use DataMessageStatus;
-
     /**
      * @var MessageStatus[]
      */
@@ -35,12 +32,6 @@ class CreateMessage extends Response
     public function getMultipleStatus(): array
     {
         return $this->multipleStatus;
-    }
-
-    public function setStatus(\TomasKulhanek\CzechDataBox\DTO\DataMessageStatus $status): CreateMessage
-    {
-        $this->status = $status;
-        return $this;
     }
 
     public function isOk(): bool

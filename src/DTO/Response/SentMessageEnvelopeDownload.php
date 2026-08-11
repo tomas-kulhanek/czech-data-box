@@ -7,14 +7,11 @@ namespace TomasKulhanek\CzechDataBox\DTO\Response;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\DTO\ReturnedMessageEnvelope;
-use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'SentMessageEnvelopeDownloadResponse')]
-class SentMessageEnvelopeDownload extends Response
+class SentMessageEnvelopeDownload extends DataMessageResponse
 {
-    use DataMessageStatus;
-
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type(ReturnedMessageEnvelope::class)]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]

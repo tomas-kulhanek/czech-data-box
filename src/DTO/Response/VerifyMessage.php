@@ -7,25 +7,16 @@ namespace TomasKulhanek\CzechDataBox\DTO\Response;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\DTO\Hash;
-use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'VerifyMessageResponse')]
-class VerifyMessage extends Response
+class VerifyMessage extends DataMessageResponse
 {
-    use DataMessageStatus;
-
     #[Serializer\Type(Hash::class)]
     #[Serializer\SerializedName('dmHash')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
     protected ?Hash $hash = null;
-
-    public function setStatus(\TomasKulhanek\CzechDataBox\DTO\DataMessageStatus $status): VerifyMessage
-    {
-        $this->status = $status;
-        return $this;
-    }
 
     public function getHash(): ?Hash
     {
