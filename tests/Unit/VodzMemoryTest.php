@@ -46,7 +46,7 @@ class VodzMemoryTest extends TestCase
 <?xml version="1.0" encoding="UTF-8"?>
 <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
   <soap:Body>
-    <p:UploadAttachmentResponse xmlns:p="https://isds.czechpoint.cz/v20">
+    <p:UploadAttachmentResponse xmlns:p="http://isds.czechpoint.cz/v20">
       <p:dmAttID>ATT123456</p:dmAttID>
       <p:dmStatus>
         <p:dmStatusCode>0000</p:dmStatusCode>
