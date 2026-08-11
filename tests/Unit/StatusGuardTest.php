@@ -86,7 +86,7 @@ class StatusGuardTest extends TestCase
     {
         $xml = <<<XML_WRAP
 <?xml version="1.0" encoding="UTF-8"?>
-<p:CreateMultipleMessageResponse xmlns:p="https://isds.czechpoint.cz/v20">
+<p:CreateMultipleMessageResponse xmlns:p="http://isds.czechpoint.cz/v20">
   <p:dmMultipleStatus>
     <p:dmSingleStatus>
       <p:dmStatus>
