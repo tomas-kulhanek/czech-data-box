@@ -31,26 +31,17 @@ class NewAccessData2 implements Request
     #[Assert\NotBlank(allowNull: false)]
     protected string $isdsId;
 
-    /**
-     * True, pokud je zaplacen správní poplatek.
-     */
     #[Serializer\Type('bool')]
     #[Serializer\SerializedName('dbFeePaid')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected bool $feePaid = false;
 
-    /**
-     * True, pokud se přístupové údaje nemají posílat, ale má se použít virtuální obálka.
-     */
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('bool')]
     #[Serializer\SerializedName('dbVirtual')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?bool $virtual = null;
 
-    /**
-     * V případě použití virtuální obálky email, na nějž má přijít odkaz na Aktivační portál.
-     */
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('email')]

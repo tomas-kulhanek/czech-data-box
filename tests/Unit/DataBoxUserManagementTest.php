@@ -120,7 +120,6 @@ class DataBoxUserManagementTest extends TestCase
         $document->loadXML($serializer->serialize($request, 'xml'));
 
         self::assertSame('SetOpenAddressing', $document->documentElement?->localName);
-        // XSD tIdDBInputAttrs je xs:sequence: dbID, dbApproved, dbExternRefNumber.
         self::assertSame(
             ['dbID', 'dbApproved', 'dbExternRefNumber'],
             $this->childElementNames($document)
@@ -155,7 +154,6 @@ class DataBoxUserManagementTest extends TestCase
         $document = new DOMDocument();
         $document->loadXML($serializer->serialize($request, 'xml'));
 
-        // XSD tNewAccDataInput2 je xs:sequence: dbID, isdsID, dbFeePaid, dbVirtual, email a gExtApproval.
         self::assertSame(
             ['dbID', 'isdsID', 'dbFeePaid', 'dbVirtual', 'email', 'dbExternRefNumber'],
             $this->childElementNames($document)
@@ -174,7 +172,6 @@ class DataBoxUserManagementTest extends TestCase
         $document = new DOMDocument();
         $document->loadXML($serializer->serialize($request, 'xml'));
 
-        // dbFeePaid je v XSD povinný, nesmí vypadnout ani při hodnotě false.
         self::assertSame(['dbID', 'isdsID', 'dbFeePaid'], $this->childElementNames($document));
         self::assertSame('false', $this->childElementValue($document, 'dbFeePaid'));
     }

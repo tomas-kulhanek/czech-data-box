@@ -13,18 +13,12 @@ class NewAccessData2 extends Response
 {
     use DataBoxStatus;
 
-    /**
-     * ID uživatele nově vydaných přístupových údajů.
-     */
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dbUserID')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?string $userId = null;
 
-    /**
-     * Identifikátor zásilky s přístupovými údaji, samotné údaje ISDS webovou službou nevrací.
-     */
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dbAccessDataId')]

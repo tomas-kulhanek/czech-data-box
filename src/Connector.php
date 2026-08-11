@@ -197,17 +197,11 @@ readonly class Connector
         return $this->send($account, ServiceTypeEnum::ACCESS, $input, DTO\Response\DeleteDataBoxUser2::class);
     }
 
-    /**
-     * Zapne otevřené adresování — schránka může přijímat poštovní datové zprávy od kohokoli (§ 18a).
-     */
     public function setOpenAddressing(Account $account, SetOpenAddressing $input): DTO\Response\SetOpenAddressing
     {
         return $this->send($account, ServiceTypeEnum::ACCESS, $input, DTO\Response\SetOpenAddressing::class);
     }
 
-    /**
-     * Vypne otevřené adresování schránky.
-     */
     public function clearOpenAddressing(
         Account $account,
         ClearOpenAddressing $input
@@ -215,9 +209,6 @@ readonly class Connector
         return $this->send($account, ServiceTypeEnum::ACCESS, $input, DTO\Response\ClearOpenAddressing::class);
     }
 
-    /**
-     * Vygeneruje nové přístupové údaje uživatele schránky.
-     */
     public function newAccessData2(Account $account, NewAccessData2 $input): DTO\Response\NewAccessData2
     {
         return $this->send($account, ServiceTypeEnum::ACCESS, $input, DTO\Response\NewAccessData2::class);
