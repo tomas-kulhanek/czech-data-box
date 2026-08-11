@@ -28,6 +28,7 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 
   Odpovídající settery nově přijímají `null` (rozšíření, ne zúžení — volající kód se měnit nemusí). **`getStatus()` zůstává non-nullable** vědomě: `Response::getStatus(): ResponseStatus` je základní kontrakt knihovny a odpověď bez stavu je stejně nepoužitelná. Request DTO v `src/DTO/Request/` zůstávají non-nullable záměrně — chybějící povinná hodnota je chyba volajícího a má ji odhalit typový systém.
 - **`Account::setProduction()` / `isProduction()` odstraněno** — prostředí nově určuje `EndpointProvider` (`EndpointProvider::production()`, `EndpointProvider::test()`, nebo vlastní doména `new EndpointProvider('datovka.cms2.cz')` pro KIVS). HTTP providery přijímají `EndpointProviderInterface`, factory `create()` má volitelný parametr. Vlastní doména se validuje jako holé jméno hostu (bez schématu, přihlašovacích údajů, portu a cesty); neplatná hodnota vyhodí `InvalidEndpointDomain`. Doména musí vždy pocházet z důvěryhodné konfigurace — na výslednou URL se posílají přihlašovací údaje i klientský certifikát.
+- **`symfony/validator` už není povinná závislost** — přesunut z `require` do `require-dev` a `suggest`. Knihovna validátor nikdy nespouštěla (atributy `#[Assert\*]` na request DTO jsou metadata pro konzumenta), constraint `^7.0` přitom blokoval instalaci v aplikacích na Symfony 8. Pokud validátor v aplikaci používáte, doinstalujte si ho explicitně (`composer require symfony/validator`); atributy zůstávají beze změny. Vlastní kontroly knihovny (limity a formáty příloh, povinná pověření) fungují dál nezávisle na něm.
 
 ### Přidáno
 
@@ -90,6 +91,7 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 8. `$account->setProduction(false)` → `GuzzleClientProvider::create(EndpointProvider::test())` (resp. `SymfonyClientProvider::create(...)`); volání `setProduction()` odstraňte.
 9. `getOwnerInfoFromLogin()` / `getUserInfoFromLogin()` jsou deprecated — přejděte na `getOwnerInfoFromLogin2()` / `getUserInfoFromLogin2()`.
 10. `uploadAttachment()` a `createBigMessage()` nově vyhazují `MissingRequiredField`, `MissingMainFile`, `DisallowedAttachmentFormat`, `AttachmentCountOverflow` a `FileSizeOverflow` — ošetřete je stejně jako u `createMessage()`.
+11. Pokud ve své aplikaci validujete request DTO přes `symfony/validator`, přidejte si ho do vlastního `composer.json` (`composer require symfony/validator`) — knihovna ho už netáhne tranzitivně.
 
 ## [5.0.0] – 2024-05-24
 

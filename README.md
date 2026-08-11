@@ -28,6 +28,26 @@ composer require tomas-kulhanek/czech-data-box symfony/http-client
 
 V případě využívání vlastního http klienta, stačí implementovat rozhraní `TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface` a předat ho do konstruktoru třídy `TomasKulhanek\CzechDataBox\Connector`. Samozřejmostí je třeba zajistit správné nastavení hlaviček nebo SSL klientských certifikátů.
 
+### Volitelná validace požadavků
+
+Request DTO nesou atributy `#[Assert\*]` ze [symfony/validator](https://symfony.com/doc/current/validation.html), ale **knihovna sama validátor nespouští** — jsou to metadata pro vaši aplikaci. Pokud chcete požadavky validovat před odesláním, doinstalujte si validátor a zavolejte ho sami:
+
+```bash
+composer require symfony/validator
+```
+
+```php
+use Symfony\Component\Validator\Validation;
+
+$validator = Validation::createValidatorBuilder()->enableAttributeMapping()->getValidator();
+$violations = $validator->validate($request);
+if (count($violations) > 0) {
+    // ošetřete chyby dříve, než požadavek předáte konektoru
+}
+```
+
+Knihovna si sama hlídá jen kontroly, které vyplývají z Provozního řádu (limity velikosti a počtu příloh, povolené formáty, povinná pověření). Regresní shodu serializovaných požadavků se schématy Provozního řádu hlídá XSD validace v testech.
+
 ## Popis
 Tato knihovna slouží k základní komunikaci s Informačním systémem datových schránek [ISDS](https://www.datovka.gov.cz) nebo [ISDS test](https://datovka-test.gov.cz)
 
