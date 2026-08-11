@@ -2,12 +2,17 @@
 
 declare(strict_types=1);
 
-namespace TomasKulhanek\CzechDataBox\Traits;
+namespace TomasKulhanek\CzechDataBox\DTO\Request;
 
 use JMS\Serializer\Annotation as Serializer;
 
-trait ExtApproval
+abstract class DataBoxManagementRequest implements Request
 {
+    #[Serializer\Type('string')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbID')]
+    protected ?string $dataBoxId = null;
+
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('bool')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
@@ -20,12 +25,23 @@ trait ExtApproval
     #[Serializer\SerializedName('dbExternRefNumber')]
     protected ?string $externRefNumber = null;
 
+    public function getDataBoxId(): ?string
+    {
+        return $this->dataBoxId;
+    }
+
+    public function setDataBoxId(?string $dataBoxId): static
+    {
+        $this->dataBoxId = $dataBoxId;
+        return $this;
+    }
+
     public function getApproved(): ?bool
     {
         return $this->approved;
     }
 
-    public function setApproved(?bool $approved): self
+    public function setApproved(?bool $approved): static
     {
         $this->approved = $approved;
         return $this;
@@ -36,7 +52,7 @@ trait ExtApproval
         return $this->externRefNumber;
     }
 
-    public function setExternRefNumber(?string $externRefNumber): self
+    public function setExternRefNumber(?string $externRefNumber): static
     {
         $this->externRefNumber = $externRefNumber;
         return $this;
