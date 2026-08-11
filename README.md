@@ -60,6 +60,37 @@ $provider = GuzzleClientProvider::create(new EndpointProvider('datovka.cms2.cz')
 > údajů, portu a cesty (`datovka.cms2.cz` ano, `https://datovka.cms2.cz/` ne). Neplatná hodnota skončí
 > výjimkou `TomasKulhanek\CzechDataBox\Exception\InvalidEndpointDomain`.
 
+### Načtení seznamu přijatých zpráv
+
+Minimální příklad reálné operace — seznam přijatých zpráv s filtrem stavů a časovým rozsahem:
+
+```php
+<?php
+
+use TomasKulhanek\CzechDataBox\Connector;
+use TomasKulhanek\CzechDataBox\DTO\Request\GetListOfReceivedMessages;
+use TomasKulhanek\CzechDataBox\Enum\FilterEnum;
+use TomasKulhanek\CzechDataBox\Provider\GuzzleClientProvider;
+use TomasKulhanek\Serializer\SerializerFactory;
+
+$connector = new Connector(SerializerFactory::create(), GuzzleClientProvider::create());
+
+$request = new GetListOfReceivedMessages();
+$request->setListFrom(new DateTimeImmutable('-7 days'))
+    ->setListTo(new DateTimeImmutable())
+    ->setStatusFilter(FilterEnum::DELIVERED, FilterEnum::READ)
+    ->setLimit(50);
+
+$response = $connector->getListOfReceivedMessages($account, $request);
+if (!$response->getStatus()->isOk()) {
+    throw new RuntimeException($response->getStatus()->getMessage());
+}
+
+foreach ($response->getRecord() as $record) {
+    echo $record->getDataMessageId() . ': ' . $record->getAnnotation() . PHP_EOL;
+}
+```
+
 ## Využití s Symfony HTTP client
 ### Instalace
 ```bash
@@ -83,6 +114,84 @@ $serializer = \TomasKulhanek\Serializer\SerializerFactory::create();
 $guzzleProvider = \TomasKulhanek\CzechDataBox\Provider\GuzzleClientProvider::create();
 $connector = new \TomasKulhanek\CzechDataBox\Connector($serializer, $guzzleProvider);
 ```
+## Velkoobjemové datové zprávy (VoDZ)
+
+Zprávy s přílohami nad 20 MB se odesílají jako velkoobjemové datové zprávy (VoDZ) s limitem **100 MB**.
+Komunikace probíhá přes SOAP 1.2 na endpointech `ws2[c].…/DS/vodz` — knihovna to řeší automaticky.
+Postup: každou přílohu nejprve nahrajte přes `uploadAttachment()`, poté odešlete zprávu přes
+`createBigMessage()`, kde na nahrané přílohy odkážete pomocí `ExtFile` a vráceného identifikátoru.
+
+```php
+<?php
+
+use TomasKulhanek\CzechDataBox\Account;
+use TomasKulhanek\CzechDataBox\Connector;
+use TomasKulhanek\CzechDataBox\DTO\BigAttachment;
+use TomasKulhanek\CzechDataBox\DTO\BigMessageEnvelope;
+use TomasKulhanek\CzechDataBox\DTO\BigMessageFiles;
+use TomasKulhanek\CzechDataBox\DTO\ExtFile;
+use TomasKulhanek\CzechDataBox\DTO\Request\CreateBigMessage;
+use TomasKulhanek\CzechDataBox\DTO\Request\UploadAttachment;
+use TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum;
+use TomasKulhanek\CzechDataBox\Provider\GuzzleClientProvider;
+use TomasKulhanek\Serializer\SerializerFactory;
+use TomasKulhanek\Serializer\Utils\SplFileInfo;
+
+$account = new Account();
+$account->setPassword('mojeTajneHeslo')
+    ->setLoginName('mujLogin')
+    ->setLoginType(LoginTypeEnum::NAME_PASSWORD);
+
+$connector = new Connector(SerializerFactory::create(), GuzzleClientProvider::create());
+
+// 1) Nahrání přílohy (volá se zvlášť pro každou přílohu, součet max. 100 MB)
+$attachment = new BigAttachment();
+$attachment->setMimeType('application/pdf')
+    ->setDescription('smlouva.pdf')
+    ->setEncodedContent(new SplFileInfo('/cesta/ke/smlouva.pdf'));
+
+$uploadRequest = new UploadAttachment();
+$uploadRequest->setFile($attachment);
+
+$uploadResponse = $connector->uploadAttachment($account, $uploadRequest);
+if (!$uploadResponse->getStatus()->isOk()) {
+    throw new RuntimeException($uploadResponse->getStatus()->getMessage());
+}
+$attachmentId = $uploadResponse->getAttachmentId(); // např. "ATT123456"
+
+// 2) Odeslání zprávy odkazující na nahranou přílohu
+$envelope = new BigMessageEnvelope();
+$envelope->setType('V')
+    ->setRecipientId('abcdefg')          // dbIDRecipient
+    ->setAnnotation('Smlouva o dílo');   // dmAnnotation
+
+$extFile = new ExtFile();
+$extFile->setMetaType('main')            // hlavní příloha zprávy
+    ->setAttachmentId($attachmentId)
+    ->setAttachmentHash1($uploadResponse->getAttachmentHash1()->getValue())
+    ->setAttachmentHash1Algorithm($uploadResponse->getAttachmentHash1()->getAlgorithm())
+    ->setAttachmentHash2($uploadResponse->getAttachmentHash2()->getValue())
+    ->setAttachmentHash2Algorithm($uploadResponse->getAttachmentHash2()->getAlgorithm());
+
+$files = new BigMessageFiles();
+$files->addExtFile($extFile);
+
+$request = new CreateBigMessage();
+$request->setEnvelope($envelope);
+$request->setFiles($files);
+
+$response = $connector->createBigMessage($account, $request);
+if ($response->getStatus()->isOk()) {
+    // zpráva byla úspěšně podána
+}
+```
+
+Knihovna ještě před odesláním validuje vstupy a může vyhodit výjimky `MissingRequiredField`
+(chybějící popis, obsah, příjemce či anotace), `MissingMainFile` (žádná příloha s `metaType` `main`),
+`DisallowedAttachmentFormat` (přípona mimo whitelist vyhlášky č. 194/2009 Sb.),
+`AttachmentCountOverflow` (příliš mnoho příloh) a `FileSizeOverflow` (překročení 100 MB) —
+všechny z namespace `TomasKulhanek\CzechDataBox\Exception`.
+
 ## Povinnosti aplikace dle Provozního řádu ISDS
 
 Knihovna řeší komunikaci s ISDS, ale některé povinnosti [Provozního řádu](https://datovka.gov.cz/info/cs/80.html) musí zajistit až vaše aplikace:
@@ -96,7 +205,7 @@ Knihovna řeší komunikaci s ISDS, ale některé povinnosti [Provozního řádu
 - **Zprávy nad 20 MB** odesílejte jako velkoobjemové (VoDZ, do 100 MB) přes `uploadAttachment()` + `createBigMessage()`; hromadné odeslání u VoDZ není podporováno.
 - Změny webových služeb oznamuje DIA zpravidla 2 měsíce předem na [stránce pro dodavatele](https://datovka.gov.cz/info/cs/74.html); dodavatelům aplikací se doporučuje [registrace do pracovního prostoru](https://registrace.poradnaisds.cz).
 
-## Pomoc a řešní chyb
+## Pomoc a řešení chyb
 
 V případě že potřebujete poradit, nebo při implementaci Vám třída zobrazuje chybu vytvořte prosím nové Issues.
 Základní pomoc je poskytována zcela zdarma pomocí Issues.
