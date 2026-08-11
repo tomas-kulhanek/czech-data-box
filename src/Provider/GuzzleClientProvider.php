@@ -47,8 +47,13 @@ readonly class GuzzleClientProvider implements ClientProviderInterface
         $publicCert = null;
         $privateKey = null;
         if ($account->usingCertificate()) {
-            if (empty($account->getPublicKey()) || empty($account->getPrivateKey())) {
-                throw new MissingRequiredField('Missing PEM data');
+            $publicKeyPem = $account->getPublicKey();
+            if ($publicKeyPem === null || $publicKeyPem === '') {
+                throw new MissingRequiredField('publicKey');
+            }
+            $privateKeyPem = $account->getPrivateKey();
+            if ($privateKeyPem === null || $privateKeyPem === '') {
+                throw new MissingRequiredField('privateKey');
             }
             $publicCert = tmpfile();
             if (!$publicCert) {
@@ -59,8 +64,8 @@ readonly class GuzzleClientProvider implements ClientProviderInterface
                 fclose($publicCert);
                 throw new FileSystemException('Failed to create temp file for private key.');
             }
-            fwrite($publicCert, $account->getPublicKey());
-            fwrite($privateKey, $account->getPrivateKey());
+            fwrite($publicCert, $publicKeyPem);
+            fwrite($privateKey, $privateKeyPem);
 
             $publicStream = stream_get_meta_data($publicCert);
             if (!array_key_exists('uri', $publicStream)) {
@@ -90,16 +95,16 @@ readonly class GuzzleClientProvider implements ClientProviderInterface
             $response = $exception->getResponse();
             $statusCode = $response->getStatusCode();
             if ($statusCode === 503) {
-                throw new SystemExclusion($exception->getMessage(), $statusCode, $exception);
+                throw new SystemExclusion(self::describe($exception), $statusCode);
             }
             $body = (string) $response->getBody();
             if ($body !== '') {
                 return $body;
             }
 
-            throw new ConnectionException($exception->getMessage(), $statusCode, $exception);
+            throw new ConnectionException(self::describe($exception), $statusCode);
         } catch (Throwable $exception) {
-            throw new ConnectionException($exception->getMessage(), $exception->getCode(), $exception);
+            throw new ConnectionException(self::describe($exception), $exception->getCode());
         } finally {
             if (is_resource($publicCert)) {
                 fclose($publicCert);

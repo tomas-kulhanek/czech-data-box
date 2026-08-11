@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace TomasKulhanek\CzechDataBox;
 
+use SensitiveParameter;
 use TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum;
 use TomasKulhanek\CzechDataBox\Exception\PkcsCertificateException;
 
 class Account
 {
+    private const string REDACTED = '***';
+
     private ?string $loginName = null;
     private ?string $dataBoxId = null;
     private ?string $password = null;
@@ -33,7 +36,7 @@ class Account
         return $this->password;
     }
 
-    public function setPassword(string $password): Account
+    public function setPassword(#[SensitiveParameter] string $password): Account
     {
         $this->password = $password;
         return $this;
@@ -66,7 +69,7 @@ class Account
         return $this;
     }
 
-    public function setPrivateKey(string $privateKey): Account
+    public function setPrivateKey(#[SensitiveParameter] string $privateKey): Account
     {
         $this->privateKey = $privateKey;
         return $this;
@@ -77,7 +80,7 @@ class Account
         return $this->privateKeyPassPhrase;
     }
 
-    public function setPrivateKeyPassPhrase(string $privateKeyPassPhrase): Account
+    public function setPrivateKeyPassPhrase(#[SensitiveParameter] string $privateKeyPassPhrase): Account
     {
         $this->privateKeyPassPhrase = $privateKeyPassPhrase;
         return $this;
@@ -94,8 +97,10 @@ class Account
         return $this;
     }
 
-    public function setPkcs12Certificate(string $pkcsContent, string $passPhrase): Account
-    {
+    public function setPkcs12Certificate(
+        #[SensitiveParameter] string $pkcsContent,
+        #[SensitiveParameter] string $passPhrase
+    ): Account {
         $cert_array = [];
         if (!openssl_pkcs12_read($pkcsContent, $cert_array, $passPhrase)) {
             throw new PkcsCertificateException('Invalid PKCS12');
@@ -114,6 +119,22 @@ class Account
             ->setPrivateKeyPassPhrase($passPhrase);
 
         return $this;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function __debugInfo(): array
+    {
+        return [
+            'loginName' => $this->loginName,
+            'dataBoxId' => $this->dataBoxId,
+            'password' => $this->password === null ? null : self::REDACTED,
+            'loginType' => $this->loginType,
+            'publicKey' => $this->publicKey,
+            'privateKey' => $this->privateKey === null ? null : self::REDACTED,
+            'privateKeyPassPhrase' => $this->privateKeyPassPhrase === null ? null : self::REDACTED,
+        ];
     }
 
     public function usingCertificate(): bool

@@ -154,7 +154,31 @@ XML;
 
         self::assertInstanceOf(ConnectionException::class, $soapFault);
         self::assertInstanceOf(CzechDataBoxException::class, $soapFault);
+        self::assertContains(
+            CzechDataBoxException::class,
+            class_implements(SoapFault::class),
+            'SoapFault must declare the marker interface, not only inherit it.'
+        );
         self::assertSame('SOAP-ENV:Server', $soapFault->faultCode);
         self::assertSame('Internal error', $soapFault->faultString);
+    }
+
+    public function testEveryExceptionOfTheLibraryImplementsTheMarkerInterface(): void
+    {
+        $directory = __DIR__ . '/../../src/Exception';
+        $files = glob($directory . '/*.php');
+        self::assertIsArray($files);
+        self::assertNotEmpty($files);
+
+        foreach ($files as $file) {
+            $class = 'TomasKulhanek\\CzechDataBox\\Exception\\' . basename($file, '.php');
+            if ($class === CzechDataBoxException::class) {
+                continue;
+            }
+            self::assertTrue(
+                is_a($class, CzechDataBoxException::class, true),
+                sprintf('%s does not implement %s.', $class, CzechDataBoxException::class)
+            );
+        }
     }
 }

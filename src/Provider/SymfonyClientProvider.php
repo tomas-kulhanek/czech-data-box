@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TomasKulhanek\CzechDataBox\Provider;
 
 use LogicException;
+use Throwable;
 use Composer\CaBundle\CaBundle;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
@@ -45,8 +46,13 @@ readonly class SymfonyClientProvider implements ClientProviderInterface
         $publicCert = null;
         $privateKey = null;
         if ($account->usingCertificate()) {
-            if (empty($account->getPublicKey()) || empty($account->getPrivateKey())) {
-                throw new MissingRequiredField('Missing PEM data');
+            $publicKeyPem = $account->getPublicKey();
+            if ($publicKeyPem === null || $publicKeyPem === '') {
+                throw new MissingRequiredField('publicKey');
+            }
+            $privateKeyPem = $account->getPrivateKey();
+            if ($privateKeyPem === null || $privateKeyPem === '') {
+                throw new MissingRequiredField('privateKey');
             }
             $publicCert = tmpfile();
             if (!$publicCert) {
@@ -57,8 +63,8 @@ readonly class SymfonyClientProvider implements ClientProviderInterface
                 fclose($publicCert);
                 throw new FileSystemException('Failed to create temp file for private key.');
             }
-            fwrite($publicCert, $account->getPublicKey());
-            fwrite($privateKey, $account->getPrivateKey());
+            fwrite($publicCert, $publicKeyPem);
+            fwrite($privateKey, $privateKeyPem);
 
             $publicStream = stream_get_meta_data($publicCert);
             if (!array_key_exists('uri', $publicStream)) {
@@ -98,7 +104,7 @@ readonly class SymfonyClientProvider implements ClientProviderInterface
 
             return $content;
         } catch (TransportExceptionInterface $exception) {
-            throw new ConnectionException($exception->getMessage(), $exception->getCode(), $exception);
+            throw new ConnectionException(self::describe($exception), $exception->getCode());
         } finally {
             if (is_resource($publicCert)) {
                 fclose($publicCert);
