@@ -48,12 +48,6 @@ class CreateMessage extends IResponse
         if (!$this->getStatus()->isOk()) {
             return false;
         }
-        /** @var MessageStatus $messageStatus */
-        foreach ($this->getMultipleStatus() as $messageStatus) {
-            if (!$messageStatus->getStatus()->isOk()) {
-                return false;
-            }
-        }
-        return true;
+        return array_all($this->getMultipleStatus(), fn($messageStatus) => $messageStatus->getStatus()->isOk());
     }
 }

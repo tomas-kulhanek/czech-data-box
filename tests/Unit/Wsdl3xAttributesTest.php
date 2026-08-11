@@ -55,7 +55,7 @@ XML_WRAP;
         $serializer = SerializerFactory::create();
         $envelope = new Envelope();
         $envelope->setAnnotation('Test');
-        $envelope->setPublishOwnId((new PublishOwnId())->setValue(true)->setIdLevel(3));
+        $envelope->setPublishOwnId(new PublishOwnId()->setValue(true)->setIdLevel(3));
 
         $xml = $serializer->serialize($envelope, 'xml');
         self::assertStringContainsString('IdLevel="3"', $xml);

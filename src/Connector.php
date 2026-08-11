@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace TomasKulhanek\CzechDataBox;
 
+use Deprecated;
+use SplFileInfo;
 use TomasKulhanek\CzechDataBox\DTO\Response\DummyOperation;
 use TomasKulhanek\CzechDataBox\DTO\Response\GetOwnerInfoFromLogin2;
 use TomasKulhanek\CzechDataBox\DTO\Response\GetUserInfoFromLogin2;
@@ -131,9 +133,7 @@ readonly class Connector
         return $this->send($account, ServiceTypeEnum::SEARCH, $input, DTO\Response\CheckDataBox::class);
     }
 
-    /**
-     * @deprecated Use getOwnerInfoFromLogin2() which returns extended data (aifoIsds, dbIdOVM, RUIAN address).
-     */
+    #[Deprecated(message: 'Use getOwnerInfoFromLogin2() which returns extended data (aifoIsds, dbIdOVM, RUIAN address).')]
     public function getOwnerInfoFromLogin(Account $account): GetOwnerInfoFromLogin
     {
         return $this->send(
@@ -184,9 +184,7 @@ readonly class Connector
         return $this->send($account, ServiceTypeEnum::OPERATIONS, $input, DTO\Response\AuthenticateMessage::class);
     }
 
-    /**
-     * @deprecated Use getUserInfoFromLogin2() which returns extended data (aifoIsds, isdsID, RUIAN address).
-     */
+    #[Deprecated(message: 'Use getUserInfoFromLogin2() which returns extended data (aifoIsds, isdsID, RUIAN address).')]
     public function getUserInfoFromLogin(Account $account): GetUserInfoFromLogin
     {
         return $this->send(
@@ -197,9 +195,7 @@ readonly class Connector
         );
     }
 
-    /**
-     * @deprecated
-     */
+    #[Deprecated]
     public function verifyMessage(Account $account, VerifyMessage $input): DTO\Response\VerifyMessage
     {
         return $this->send($account, ServiceTypeEnum::INFO, $input, DTO\Response\VerifyMessage::class);
@@ -234,7 +230,7 @@ readonly class Connector
             if (AllowedAttachmentFormats::isContainer($file->getDescription())) {
                 $containerCount++;
             }
-            if ($file->getEncodedContent() instanceof \SplFileInfo) {
+            if ($file->getEncodedContent() instanceof SplFileInfo) {
                 $sumFileSize += $file->getEncodedContent()->getSize();
             } elseif ($file->getXmlContent() !== null) {
                 $sumFileSize += strlen($file->getXmlContent());

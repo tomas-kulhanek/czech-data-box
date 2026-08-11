@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TomasKulhanek\Tests\CzechDataBox\Unit;
 
+use LogicException;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use TomasKulhanek\CzechDataBox\DTO\Request\EraseMessage;
@@ -227,7 +228,7 @@ XML;
         self::assertSame('Testovací 1/100', $response->getAdFullAddress1());
         self::assertSame('110 00 Praha 1', $response->getAdFullAddress2());
         self::assertFalse($response->hasStatus());
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $response->getStatus();
     }
 

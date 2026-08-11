@@ -233,7 +233,7 @@ class Envelope
     public function setPublishOwnId(PublishOwnId|bool|null $publishOwnId): Envelope
     {
         if (is_bool($publishOwnId)) {
-            $publishOwnId = (new PublishOwnId())->setValue($publishOwnId);
+            $publishOwnId = new PublishOwnId()->setValue($publishOwnId);
         }
         $this->publishOwnId = $publishOwnId;
         return $this;
