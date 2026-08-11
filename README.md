@@ -308,6 +308,163 @@ echo $newAccessData->getAccessDataId();
 Ostatní operace služby (`CreateDataBox2`, `DeleteDataBox2`, `EnableOwnDataBox2`, `DisableOwnDataBox2`,
 `UpdateDataBoxDescr2`, `DisableDataBoxExternally2`) jsou určeny pro OVM/správce a knihovna je zatím
 nepokrývá.
+## Pokrytí webových služeb ISDS
+
+<!-- wsdl-coverage:start -->
+Matici generuje `php tools/wsdl-coverage.php` z WSDL v [`tests/_data/wsdl/`](tests/_data/wsdl)
+(příloha 2 Provozního řádu, verze 3.11) a z reflexe třídy
+`TomasKulhanek\CzechDataBox\Connector`. Soulad matice se skutečností hlídá CI
+(`composer check:wsdl-coverage`), matici proto needitujte ručně.
+
+Legenda: ✅ implementováno · ⛔ záměrně vynecháno (operaci nahradila novější varianta) ·
+❌ neimplementováno (skutečná mezera).
+
+### Souhrn
+
+| WSDL | Operací | ✅ | ⛔ | ❌ |
+| --- | ---: | ---: | ---: | ---: |
+| [`db_access.wsdl`](#db_accesswsdl) | 6 | 6 | 0 | 0 |
+| [`db_search.wsdl`](#db_searchwsdl) | 14 | 11 | 3 | 0 |
+| [`db_manipulations.wsdl`](#db_manipulationswsdl) | 23 | 4 | 10 | 9 |
+| [`dm_operations.wsdl`](#dm_operationswsdl) | 8 | 8 | 0 | 0 |
+| [`dm_info.wsdl`](#dm_infowsdl) | 17 | 16 | 1 | 0 |
+| [`dm_VoDZ.wsdl`](#dm_vodzwsdl) | 7 | 7 | 0 | 0 |
+| [`dm_arch.wsdl`](#dm_archwsdl) | 1 | 1 | 0 | 0 |
+| **Celkem** | **76** | **53** | **14** | **9** |
+
+### `db_access.wsdl`
+
+*služby související s přístupem do ISDS*
+
+| Operace | Metoda `Connector` | Stav | Poznámka |
+| --- | --- | --- | --- |
+| `GetOwnerInfoFromLogin` | `getOwnerInfoFromLogin()` | ✅ | v knihovně označeno `#[Deprecated]` |
+| `GetOwnerInfoFromLogin2` | `getOwnerInfoFromLogin2()` | ✅ | — |
+| `GetUserInfoFromLogin` | `getUserInfoFromLogin()` | ✅ | v knihovně označeno `#[Deprecated]` |
+| `GetUserInfoFromLogin2` | `getUserInfoFromLogin2()` | ✅ | — |
+| `ChangeISDSPassword` | `changeIsdsPassword()` | ✅ | — |
+| `GetPasswordInfo` | `getPasswordExpirationInfo()` | ✅ | — |
+
+### `db_search.wsdl`
+
+*vyhledávání datových schránek*
+
+| Operace | Metoda `Connector` | Stav | Poznámka |
+| --- | --- | --- | --- |
+| `FindDataBox` | — | ⛔ | starší varianta, ISDS ji nahradilo operací `FindDataBox2`; z API odstraněno v 6.0.0, viz [CHANGELOG.md](CHANGELOG.md) |
+| `FindDataBox2` | `findDataBox2()` | ✅ | — |
+| `CheckDataBox` | `checkDataBox()` | ✅ | — |
+| `GetDataBoxList` | `getDataBoxList()` | ✅ | — |
+| `PDZInfo` | `pdzInfo()` | ✅ | — |
+| `DataBoxCreditInfo` | `dataBoxCreditInfo()` | ✅ | — |
+| `ISDSSearch2` | — | ⛔ | starší varianta, ISDS ji nahradilo operací `ISDSSearch3` |
+| `ISDSSearch3` | `isdsSearch3()` | ✅ | — |
+| `GetDataBoxActivityStatus` | `getDataBoxActivityStatus()` | ✅ | — |
+| `FindPersonalDataBox` | — | ⛔ | zrušeno v ISDS 2018, nahrazeno `FindDataBox2`; z API odstraněno v 6.0.0, viz [CHANGELOG.md](CHANGELOG.md) |
+| `DTInfo` | `dtInfo()` | ✅ | — |
+| `PDZSendInfo` | `pdzSendInfo()` | ✅ | — |
+| `GetConstants` | `getConstants()` | ✅ | — |
+| `GetDataBoxAddress` | `getDataBoxAddress()` | ✅ | — |
+
+### `db_manipulations.wsdl`
+
+*manipulace s datovou schránkou a její uživatelé*
+
+| Operace | Metoda `Connector` | Stav | Poznámka |
+| --- | --- | --- | --- |
+| `CreateDataBox` | — | ⛔ | starší varianta, ISDS ji nahradilo operací `CreateDataBox2` |
+| `CreateDataBox2` | — | ❌ | zřízení datové schránky (jen pro OVM s příslušnou rolí) |
+| `DeleteDataBox` | — | ⛔ | starší varianta, ISDS ji nahradilo operací `DeleteDataBox2` |
+| `DeleteDataBox2` | — | ❌ | znepřístupnění datové schránky |
+| `UpdateDataBoxDescr` | — | ⛔ | starší varianta, ISDS ji nahradilo operací `UpdateDataBoxDescr2` |
+| `UpdateDataBoxDescr2` | — | ❌ | změna popisných údajů schránky |
+| `AddDataBoxUser` | — | ⛔ | starší varianta, ISDS ji nahradilo operací `AddDataBoxUser2` |
+| `AddDataBoxUser2` | `addDataBoxUser2()` | ✅ | — |
+| `DeleteDataBoxUser` | — | ⛔ | starší varianta, ISDS ji nahradilo operací `DeleteDataBoxUser2` |
+| `DeleteDataBoxUser2` | `deleteDataBoxUser2()` | ✅ | — |
+| `UpdateDataBoxUser` | — | ⛔ | starší varianta, ISDS ji nahradilo operací `UpdateDataBoxUser2` |
+| `UpdateDataBoxUser2` | `updateDataBoxUser2()` | ✅ | — |
+| `NewAccessData` | — | ⛔ | starší varianta, ISDS ji nahradilo operací `NewAccessData2` |
+| `NewAccessData2` | — | ❌ | vygenerování nových přístupových údajů uživatele |
+| `DisableDataBoxExternally` | — | ⛔ | starší varianta, ISDS ji nahradilo operací `DisableDataBoxExternally2` |
+| `DisableDataBoxExternally2` | — | ❌ | znepřístupnění cizí schránky (agenda OVM) |
+| `DisableOwnDataBox` | — | ⛔ | starší varianta, ISDS ji nahradilo operací `DisableOwnDataBox2` |
+| `DisableOwnDataBox2` | — | ❌ | znepřístupnění vlastní schránky |
+| `EnableOwnDataBox` | — | ⛔ | starší varianta, ISDS ji nahradilo operací `EnableOwnDataBox2` |
+| `EnableOwnDataBox2` | — | ❌ | zpřístupnění vlastní schránky |
+| `SetOpenAddressing` | — | ❌ | zapnutí příjmu poštovních datových zpráv |
+| `ClearOpenAddressing` | — | ❌ | vypnutí příjmu poštovních datových zpráv |
+| `GetDataBoxUsers2` | `getDataBoxUsers2()` | ✅ | — |
+
+### `dm_operations.wsdl`
+
+*odesílání a stahování datových zpráv*
+
+| Operace | Metoda `Connector` | Stav | Poznámka |
+| --- | --- | --- | --- |
+| `CreateMessage` | `createMessage()` | ✅ | knihovna posílá obálku `CreateMultipleMessage`, která pokrývá i jednoho příjemce |
+| `MessageDownload` | `messageDownload()` | ✅ | — |
+| `SignedMessageDownload` | `signedMessageDownload()` | ✅ | — |
+| `SignedSentMessageDownload` | `signedSentMessageDownload()` | ✅ | — |
+| `DummyOperation` | `dummyOperation()` | ✅ | — |
+| `CreateMultipleMessage` | `createMessage()` | ✅ | hromadné odeslání (více příjemců v jednom volání) |
+| `AuthenticateMessage` | `authenticateMessage()` | ✅ | — |
+| `Re-signISDSDocument` | `resignIsdsDocument()` | ✅ | — |
+
+### `dm_info.wsdl`
+
+*informace o datových zprávách*
+
+| Operace | Metoda `Connector` | Stav | Poznámka |
+| --- | --- | --- | --- |
+| `VerifyMessage` | `verifyMessage()` | ✅ | v knihovně označeno `#[Deprecated]` |
+| `MessageEnvelopeDownload` | `messageEnvelopeDownload()` | ✅ | — |
+| `MarkMessageAsDownloaded` | `markMessageAsDownloaded()` | ✅ | — |
+| `GetDeliveryInfo` | `getDeliveryInfo()` | ✅ | — |
+| `GetSignedDeliveryInfo` | `getSignedDeliveryInfo()` | ✅ | — |
+| `GetListOfSentMessages` | `getListOfSentMessages()` | ✅ | — |
+| `GetListOfReceivedMessages` | `getListOfReceivedMessages()` | ✅ | — |
+| `GetMessageStateChanges` | `getMessageStateChanges()` | ✅ | — |
+| `GetMessageAuthor` | — | ⛔ | starší varianta, ISDS ji nahradilo operací `GetMessageAuthor2` |
+| `GetMessageAuthor2` | `getMessageAuthor2()` | ✅ | — |
+| `EraseMessage` | `eraseMessage()` | ✅ | — |
+| `GetListOfErasedMessages` | `getListOfErasedMessages()` | ✅ | — |
+| `PickUpAsyncResponse` | `pickUpAsyncResponse()` | ✅ | — |
+| `GetListForNotifications` | `getListForNotifications()` | ✅ | — |
+| `RegisterForNotifications` | `registerForNotifications()` | ✅ | — |
+| `SentMessageEnvelopeDownload` | `sentMessageEnvelopeDownload()` | ✅ | — |
+| `SuspMessageReport` | `suspMessageReport()` | ✅ | — |
+
+### `dm_VoDZ.wsdl`
+
+*velkoobjemové datové zprávy (VoDZ, do 100 MB)*
+
+| Operace | Metoda `Connector` | Stav | Poznámka |
+| --- | --- | --- | --- |
+| `UploadAttachment` | `uploadAttachment()` | ✅ | — |
+| `DownloadAttachment` | `downloadAttachment()` | ✅ | — |
+| `CreateBigMessage` | `createBigMessage()` | ✅ | — |
+| `AuthenticateBigMessage` | `authenticateBigMessage()` | ✅ | — |
+| `SignedBigMessageDownload` | `signedBigMessageDownload()` | ✅ | — |
+| `SignedSentBigMessageDownload` | `signedSentBigMessageDownload()` | ✅ | — |
+| `BigMessageDownload` | `bigMessageDownload()` | ✅ | — |
+
+### `dm_arch.wsdl`
+
+*archivace (přerazítkování) ZFO*
+
+| Operace | Metoda `Connector` | Stav | Poznámka |
+| --- | --- | --- | --- |
+| `ArchiveISDSDocument` | `archiveIsdsDocument()` | ✅ | — |
+
+### Mimo záběr knihovny
+
+Následující WSDL přílohy 2 knihovna vědomě neimplementuje, nejde tedy o mezery v pokrytí:
+
+- **`ChangePassword.wsdl` (služba `asws`)** — změna hesla přes SMS kód / OTP (`SendSMSCode`, `ChangePasswordOTP`) běží na samostatné službě `asws` s vlastní autentizací. Knihovna podporuje běžnou změnu hesla operací `ChangeISDSPassword` z `db_access.wsdl`.
+- **`SetConcept.wsdl`** — zakládání konceptů zpráv (`SetConcept`, `SetMultipleConcept`) je určené pro předání rozepsané zprávy do webového Portálu datových schránek, ne pro strojové odesílání. Knihovna zprávy odesílá přímo přes `dm_operations.wsdl`.
+- **`ExtWs.wsdl` — odesílací brána (OB)** — odesílací brána (`extWsLogout`, `GetCredential`) je samostatný produkt ISDS s vlastním modelem autentizace a smluvním režimem. Knihovna cílí na přímé napojení aplikace na ISDS.
+<!-- wsdl-coverage:end -->
 
 ## Povinnosti aplikace dle Provozního řádu ISDS
 
