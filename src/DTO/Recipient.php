@@ -32,6 +32,7 @@ class Recipient
     #[Serializer\Type('string')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dmToHands')]
+    #[Serializer\SkipWhenEmpty]
     protected string $toHand = '';
 
     public function getDataBoxId(): string

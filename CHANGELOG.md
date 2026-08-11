@@ -58,6 +58,7 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 - Constraint PHP zpřísněn z `>=8.4` na `^8.4`, aby se knihovna neinstalovala na dosud nevydané PHP 9.
 - `GuzzleClientProvider::__construct()` přijímá `GuzzleHttp\ClientInterface` místo konkrétní třídy `GuzzleHttp\Client` — stejně jako `SymfonyClientProvider` s `HttpClientInterface`. Umožňuje předat dekorovaného či mockovaného klienta.
 - `setRecipientId()` a `setToHands()` v obálce stažené zprávy vracely `void`, takže se fluent řetězec setterů uprostřed rozbil. Nově vracejí `self` jako ostatní settery.
+- `DTO\Recipient` posílal do každého požadavku prázdný element `<p:dmToHands></p:dmToHands>`; pole `dmToHands` je nově označeno `#[Serializer\SkipWhenEmpty]`.
 - Dist balíček z Packagistu vezl i vývojové soubory (`tests/`, `.github/`, `phpunit.xml`, `phpstan.neon`, `rector.php`, `Dockerfile`) — `.gitattributes` je nově označuje `export-ignore`. `archive.exclude` v `composer.json` platí jen pro `composer archive`, na distribuci přes Packagist vliv nemá.
 
 ### Zabezpečení
