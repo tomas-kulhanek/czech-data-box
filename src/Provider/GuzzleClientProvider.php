@@ -8,8 +8,8 @@ use LogicException;
 use Throwable;
 use Composer\CaBundle\CaBundle;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\RequestOptions;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use TomasKulhanek\CzechDataBox\Account;
 use TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum;
 use TomasKulhanek\CzechDataBox\Enum\ServiceTypeEnum;
@@ -131,11 +131,19 @@ readonly class GuzzleClientProvider implements ClientProviderInterface
                 $this->endpointProvider->getServiceLocation($account, $serviceType),
                 $requestOptions
             )->getBody()->getContents();
-        } catch (Throwable $exception) {
-            if ($exception instanceof TransportExceptionInterface && $exception->getCode() === 503) {
-                throw new SystemExclusion($exception->getMessage(), $exception->getCode(), $exception);
+        } catch (BadResponseException $exception) {
+            $response = $exception->getResponse();
+            $statusCode = $response->getStatusCode();
+            if ($statusCode === 503) {
+                throw new SystemExclusion($exception->getMessage(), $statusCode, $exception);
+            }
+            $body = (string) $response->getBody();
+            if ($body !== '') {
+                return $body;
             }
 
+            throw new ConnectionException($exception->getMessage(), $statusCode, $exception);
+        } catch (Throwable $exception) {
             throw new ConnectionException($exception->getMessage(), $exception->getCode(), $exception);
         } finally {
             if (is_resource($publicCert)) {

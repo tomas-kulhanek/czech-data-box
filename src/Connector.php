@@ -76,6 +76,7 @@ use TomasKulhanek\CzechDataBox\Exception\FileSizeOverflow;
 use TomasKulhanek\CzechDataBox\Exception\MissingMainFile;
 use TomasKulhanek\CzechDataBox\Exception\MissingRequiredField;
 use TomasKulhanek\CzechDataBox\Exception\RecipientCountOverflow;
+use TomasKulhanek\CzechDataBox\Exception\SoapFault;
 use TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface;
 use TomasKulhanek\CzechDataBox\Utils\AllowedAttachmentFormats;
 use TomasKulhanek\CzechDataBox\Utils\BinarySuffix;
@@ -647,6 +648,38 @@ readonly class Connector
         return $result;
     }
 
+    private function throwOnSoapFault(DOMDocument $document): void
+    {
+        $xpath = new DOMXPath($document);
+        $xpath->registerNamespace('soap11', 'http://schemas.xmlsoap.org/soap/envelope/');
+        $xpath->registerNamespace('soap12', 'http://www.w3.org/2003/05/soap-envelope');
+
+        $faults = $xpath->query('//soap11:Fault');
+        $fault = $faults instanceof DOMNodeList ? $faults->item(0) : null;
+        if ($fault instanceof DOMNode) {
+            throw new SoapFault(
+                $this->evaluateXpathString($xpath, 'string(faultcode)', $fault) ?? 'SOAP-ENV:Server',
+                $this->evaluateXpathString($xpath, 'string(faultstring)', $fault) ?? 'Unknown SOAP fault'
+            );
+        }
+
+        $faults = $xpath->query('//soap12:Fault');
+        $fault = $faults instanceof DOMNodeList ? $faults->item(0) : null;
+        if ($fault instanceof DOMNode) {
+            throw new SoapFault(
+                $this->evaluateXpathString($xpath, 'string(soap12:Code/soap12:Value)', $fault) ?? 'env:Receiver',
+                $this->evaluateXpathString($xpath, 'string(soap12:Reason/soap12:Text)', $fault) ?? 'Unknown SOAP fault'
+            );
+        }
+    }
+
+    private function evaluateXpathString(DOMXPath $xpath, string $expression, DOMNode $context): ?string
+    {
+        $value = $xpath->evaluate($expression, $context);
+
+        return is_string($value) && trim($value) !== '' ? trim($value) : null;
+    }
+
     /**
      * @template T of DTO\Response\Response
      * @return Response
@@ -664,32 +697,23 @@ readonly class Connector
             throw new ConnectionException();
         }
 
-        $request = $this->serializer->serialize($request, 'xml');
-        $request = $this->getXmlDocument($request);
-
-        $requestDocument = $this->getXmlDocument(null, $serviceType->usesSoap12());
-        $requestDocumentXpath = new DOMXPath($requestDocument);
-        if (empty($requestDocument->documentElement)) {
-            throw new ConnectionException();
+        $body = $this->serializer->serialize($request, 'xml');
+        if (str_starts_with($body, '<?')) {
+            $declarationEnd = strpos($body, '?>');
+            if ($declarationEnd !== false) {
+                $offset = $declarationEnd + 2;
+                $offset += strspn($body, " \t\r\n", $offset);
+                $body = substr($body, $offset);
+            }
         }
-        $bodyNode = $requestDocumentXpath->evaluate('//' . $requestDocument->documentElement->prefix . ':Body');
-        if (!$bodyNode instanceof DOMNodeList) {
-            throw new ConnectionException();
-        }
-        $body = $bodyNode->item(0);
-        if (!$body instanceof DOMNode || $body->ownerDocument === null || $request->documentElement === null) {
-            throw new ConnectionException();
-        }
-        $new = $body->ownerDocument->importNode($request->documentElement, true);
-        if ($body->nextSibling !== null) {
-            $body->insertBefore($new, $body->nextSibling);
-        } else {
-            $body->appendChild($new);
-        }
-        $xmlBody = $requestDocument->saveXml();
-        if (!$xmlBody) {
-            throw new ConnectionException();
-        }
+        $soapNamespace = $serviceType->usesSoap12()
+            ? 'http://www.w3.org/2003/05/soap-envelope'
+            : 'http://schemas.xmlsoap.org/soap/envelope/';
+        $xmlBody = '<?xml version="1.0" encoding="UTF-8"?>'
+            . '<SOAP-ENV:Envelope xmlns:SOAP-ENV="' . $soapNamespace . '"><SOAP-ENV:Header/><SOAP-ENV:Body>'
+            . $body
+            . '</SOAP-ENV:Body></SOAP-ENV:Envelope>';
+        unset($body);
 
         $response = $this->provider->sendRequest($account, $serviceType, $xmlBody);
         if (strlen($response) > $this->maxResponseSize) {
@@ -701,32 +725,19 @@ readonly class Connector
             );
         }
         $soapResponse = $this->getXmlDocument($response);
+        $this->throwOnSoapFault($soapResponse);
         if (empty($soapResponse->documentElement)) {
             throw new ConnectionException('The response is empty');
         }
         $response = $this->getValueByXpath($soapResponse, '//' . $soapResponse->documentElement->prefix . ':Body');
         $soapResponse = null;
+        if (empty($response)) {
+            throw new ConnectionException('The response is empty');
+        }
         $dom = $this->getXmlDocument($response);
         if (empty($dom->documentElement)) {
             throw new ConnectionException('The response is empty');
         }
-        $prefix = $dom->documentElement->prefix;
-        if ($prefix !== 'p') {
-            $dom->documentElement->setAttributeNS(
-                'http://www.w3.org/2000/xmlns/',
-                'xmlns:p',
-                'https://isds.czechpoint.cz/v20'
-            );
-            /** @var string $response */
-            $response = $dom->saveXML();
-            $regex = ['/(<|<\/)' . $prefix . ':(\w*)(\s|>|\/>)/'];
-            $replace = ['\1p:\2\3'];
-            $response = preg_replace($regex, $replace, $response);
-        }
-        if (empty($response)) {
-            throw new ConnectionException('The response is empty');
-        }
-        $response = str_replace('http://isds.czechpoint.cz/v20', 'https://isds.czechpoint.cz/v20', $response);
 
         $deserialized = $this->serializer->deserialize($response, $responseClass, 'xml');
         if (!$deserialized instanceof $responseClass) {

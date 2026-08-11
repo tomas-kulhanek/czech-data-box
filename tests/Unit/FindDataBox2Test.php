@@ -34,7 +34,7 @@ class FindDataBox2Test extends TestCase
     {
         $xml = <<<XML_WRAP
 <?xml version="1.0" encoding="UTF-8"?>
-<p:FindDataBox2Response xmlns:p="https://isds.czechpoint.cz/v20">
+<p:FindDataBox2Response xmlns:p="http://isds.czechpoint.cz/v20">
   <p:dbResults>
     <p:dbOwnerInfo>
       <p:dbID>abcdefg</p:dbID>

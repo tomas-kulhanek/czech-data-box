@@ -9,8 +9,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\DTO\ReturnedMessage;
 use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 
-#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'BigMessageDownloadResponse')]
+#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'BigMessageDownloadResponse')]
 class BigMessageDownload extends Response
 {
     use DataMessageStatus;
@@ -18,7 +18,7 @@ class BigMessageDownload extends Response
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type(ReturnedMessage::class)]
     #[Serializer\SerializedName('dmReturnedMessage')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
     protected ?ReturnedMessage $returnedMessage = null;
 

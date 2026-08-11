@@ -6,8 +6,8 @@ namespace TomasKulhanek\CzechDataBox\DTO;
 
 use JMS\Serializer\Annotation as Serializer;
 
-#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'maItem')]
-#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'maItem')]
+#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 class MessageAuthorItem
 {
     #[Serializer\Type('string')]

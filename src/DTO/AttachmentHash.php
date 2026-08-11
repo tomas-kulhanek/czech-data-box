@@ -10,7 +10,7 @@ use JMS\Serializer\Annotation as Serializer;
  * Otisk (hash) nahrané přílohy VoDZ vracený operací UploadAttachment
  * (elementy dmAttHash1 a dmAttHash2 s atributem AttHashAlg).
  */
-#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 class AttachmentHash
 {
     #[Serializer\Type('string')]
