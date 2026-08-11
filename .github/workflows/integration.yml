@@ -1,14 +1,15 @@
-name: Run base actions
-run-name: ${{ github.actor }} running base actions
+name: Integration tests
+run-name: ${{ github.actor }} running integration tests
 
 concurrency:
-  group: "${{ github.ref }}-${{ github.workflow }}"
-  cancel-in-progress: true
+  group: isds-integration
+  cancel-in-progress: false
 
 on:
+  # Pondělí 07:00 UTC — záměrně mimo servisní okno ISDS (pátek 0:00–1:00).
+  schedule:
+    - cron: "0 7 * * MON"
   workflow_dispatch:
-  pull_request:
-  push:
 
 permissions:
   contents: read
@@ -37,89 +38,20 @@ jobs:
           args: "${{ env.composer-install-args }}"
       - run: composer audit
 
-  rector:
-    name: "Rector"
+  integration-tests:
+    name: "Integration tests"
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php-version: [ '8.4', '8.5' ]
-      fail-fast: false
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
         with:
-          php-version: ${{ matrix.php-version }}
+          php-version: '8.5'
           coverage: none
 
       - uses: php-actions/composer@8a65f0d3c6a1d17ca4800491a40b5756a4c164f3 # v6
         with:
-          php_version: ${{ matrix.php-version }}
-          args:  "${{ env.composer-install-args }}"
-      - run: composer check:rector
-
-  qa:
-    name: "Quality assurance"
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php-version: ['8.5']
-      fail-fast: false
-
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
-        with:
-          php-version: ${{ matrix.php-version }}
-          coverage: none
-
-      - uses: php-actions/composer@8a65f0d3c6a1d17ca4800491a40b5756a4c164f3 # v6
-        with:
-          php_version: ${{ matrix.php-version }}
-          args:  "${{ env.composer-install-args }}"
-      - run: composer check:cs
-
-  static-analysis:
-    name: "Static analysis"
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php-version: [ '8.5' ]
-      fail-fast: false
-
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
-        with:
-          php-version: ${{ matrix.php-version }}
-          coverage: none
-
-      - uses: php-actions/composer@8a65f0d3c6a1d17ca4800491a40b5756a4c164f3 # v6
-        with:
-          php_version: ${{ matrix.php-version }}
-          args: "${{ env.composer-install-args }}"
-
-      - name: PHPStan Static Analysis
-        run: composer check:phpstan
-
-  tests:
-    name: "Tests"
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php-version: [ '8.4', '8.5' ]
-      fail-fast: false
-
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
-        with:
-          php-version: ${{ matrix.php-version }}
-          coverage: none
-
-      - uses: php-actions/composer@8a65f0d3c6a1d17ca4800491a40b5756a4c164f3 # v6
-        with:
-          php_version: ${{ matrix.php-version }}
+          php_version: '8.5'
           args: "${{ env.composer-install-args }}"
 
       - run: |
@@ -151,9 +83,8 @@ jobs:
           PFO_LOGIN_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/6g5plyqgiqxexvefr4nvtos4xu/username
           PFO_PASSWORD_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/6g5plyqgiqxexvefr4nvtos4xu/password
       - name: PHPUnit
-        run: composer test:unit
+        run: composer test:integration
         env:
-          XDEBUG_MODE: coverage
           CERT_PRIV: '${{ secrets.CERT_PRIV }}'
           CERT_PUB: '${{ secrets.CERT_PUB }}'
           CERT_PASSPHRASE: '${{ secrets.CERT_PASSPHRASE }}'
