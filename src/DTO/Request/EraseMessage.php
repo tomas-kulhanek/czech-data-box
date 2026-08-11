@@ -7,8 +7,8 @@ namespace TomasKulhanek\CzechDataBox\DTO\Request;
 use JMS\Serializer\Annotation as Serializer;
 use TomasKulhanek\CzechDataBox\Traits\DataMessageId;
 
-#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'EraseMessage')]
+#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'EraseMessage')]
 #[Serializer\AccessorOrder(order: 'custom', custom: ['dataMessageId', 'incoming'])]
 class EraseMessage implements Request
 {
@@ -16,7 +16,7 @@ class EraseMessage implements Request
 
     #[Serializer\Type('bool')]
     #[Serializer\SerializedName('dmIncoming')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected bool $incoming;
 
     public function isIncoming(): bool

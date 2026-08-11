@@ -10,8 +10,8 @@ use TomasKulhanek\CzechDataBox\DTO\UserInfoExt2;
 use TomasKulhanek\CzechDataBox\Traits\DataBoxId;
 use TomasKulhanek\CzechDataBox\Traits\ExtApproval;
 
-#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'AddDataBoxUser2')]
+#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'AddDataBoxUser2')]
 #[Serializer\AccessorOrder(order: 'custom', custom: ['dataBoxId', 'userInfo', 'virtual', 'email', 'approved', 'externRefNumber'])]
 class AddDataBoxUser2 implements Request
 {
@@ -20,7 +20,7 @@ class AddDataBoxUser2 implements Request
 
     #[Serializer\Type(UserInfoExt2::class)]
     #[Serializer\SerializedName('dbUserInfo')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
     protected UserInfoExt2 $userInfo;
 
@@ -30,7 +30,7 @@ class AddDataBoxUser2 implements Request
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('bool')]
     #[Serializer\SerializedName('dbVirtual')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?bool $virtual = null;
 
     /**
@@ -39,7 +39,7 @@ class AddDataBoxUser2 implements Request
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('email')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?string $email = null;
 
     public function getUserInfo(): UserInfoExt2

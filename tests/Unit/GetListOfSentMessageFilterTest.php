@@ -56,7 +56,7 @@ class GetListOfSentMessageFilterTest extends TestCase
         $a->setStatusFilter(FilterEnum::ALL, FilterEnum::DELETED);
         $expectingXml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<GetListOfSentMessages xmlns="https://isds.czechpoint.cz/v20" xmlns:p="https://isds.czechpoint.cz/v20">
+<GetListOfSentMessages xmlns="http://isds.czechpoint.cz/v20" xmlns:p="http://isds.czechpoint.cz/v20">
   <dmStatusFilter>-1</dmStatusFilter>
 </GetListOfSentMessages>
 
@@ -71,7 +71,7 @@ XML;
         $a->setStatusFilter(FilterEnum::DELETED);
         $expectingXml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<GetListOfSentMessages xmlns="https://isds.czechpoint.cz/v20" xmlns:p="https://isds.czechpoint.cz/v20">
+<GetListOfSentMessages xmlns="http://isds.czechpoint.cz/v20" xmlns:p="http://isds.czechpoint.cz/v20">
   <dmStatusFilter>512</dmStatusFilter>
 </GetListOfSentMessages>
 
@@ -85,7 +85,7 @@ XML;
         $a = new GetListOfSentMessages();
         $expectingXml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<GetListOfSentMessages xmlns="https://isds.czechpoint.cz/v20" xmlns:p="https://isds.czechpoint.cz/v20">
+<GetListOfSentMessages xmlns="http://isds.czechpoint.cz/v20" xmlns:p="http://isds.czechpoint.cz/v20">
   <dmStatusFilter>-1</dmStatusFilter>
 </GetListOfSentMessages>
 

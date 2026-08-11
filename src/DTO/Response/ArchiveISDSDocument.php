@@ -9,8 +9,8 @@ use JMS\Serializer\Annotation as Serializer;
 use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 use TomasKulhanek\Serializer\Utils\SplFileInfo;
 
-#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'ArchiveISDSDocumentResponse')]
+#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'ArchiveISDSDocumentResponse')]
 class ArchiveISDSDocument extends Response
 {
     use DataMessageStatus;
@@ -18,13 +18,13 @@ class ArchiveISDSDocument extends Response
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('base64File')]
     #[Serializer\SerializedName('dmResultDoc')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?SplFileInfo $resultDocument = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type("DateTimeImmutable<'Y-m-d'>")]
     #[Serializer\SerializedName('nextStampTo')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?DateTimeImmutable $nextStampTo = null;
 
     public function getResultDocument(): ?SplFileInfo
