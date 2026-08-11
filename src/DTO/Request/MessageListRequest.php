@@ -1,10 +1,12 @@
 <?php
 
-namespace TomasKulhanek\CzechDataBox\Traits;
+declare(strict_types=1);
+
+namespace TomasKulhanek\CzechDataBox\DTO\Request;
 
 use TomasKulhanek\CzechDataBox\Enum\FilterEnum;
 
-trait StatusFilter
+abstract class MessageListRequest implements Request
 {
     /**
      * @return non-empty-list<FilterEnum>

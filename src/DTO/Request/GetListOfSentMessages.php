@@ -7,14 +7,11 @@ namespace TomasKulhanek\CzechDataBox\DTO\Request;
 use DateTimeImmutable;
 use JMS\Serializer\Annotation as Serializer;
 use TomasKulhanek\CzechDataBox\Enum\FilterEnum;
-use TomasKulhanek\CzechDataBox\Traits\StatusFilter;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetListOfSentMessages')]
-class GetListOfSentMessages implements Request
+class GetListOfSentMessages extends MessageListRequest
 {
-    use StatusFilter;
-
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
     #[Serializer\SerializedName('dmFromTime')]

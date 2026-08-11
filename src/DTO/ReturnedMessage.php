@@ -7,14 +7,11 @@ namespace TomasKulhanek\CzechDataBox\DTO;
 use DateTimeImmutable;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
-use TomasKulhanek\CzechDataBox\Traits\QTimestamp;
 
 #[Serializer\XmlRoot(name: 'dmReturnedMessage', namespace: 'http://isds.czechpoint.cz/v20')]
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 class ReturnedMessage
 {
-    use QTimestamp;
-
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dmType')]
     #[Serializer\XmlAttribute]
@@ -62,6 +59,16 @@ class ReturnedMessage
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\Positive]
     protected ?int $attachmentSize = null;
+
+    #[Serializer\Type('string')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dmQTimestamp')]
+    protected ?string $qTimestamp = null;
+
+    public function getQTimestamp(): ?string
+    {
+        return $this->qTimestamp;
+    }
 
     public function getType(): ?string
     {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace TomasKulhanek\CzechDataBox\Traits;
+namespace TomasKulhanek\CzechDataBox\DTO\Request;
 
 use JMS\Serializer\Annotation as Serializer;
 
-trait Dummy
+abstract class DummyRequest implements Request
 {
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
@@ -19,7 +19,7 @@ trait Dummy
         return $this->dummy;
     }
 
-    public function setDummy(?string $dummy): self
+    public function setDummy(?string $dummy): static
     {
         $this->dummy = $dummy;
         return $this;
