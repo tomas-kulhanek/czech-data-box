@@ -9,15 +9,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\DTO\UserInfoExt2;
 use TomasKulhanek\CzechDataBox\Traits\DataBoxStatus;
 
-#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'GetUserInfoFromLogin2Response')]
+#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetUserInfoFromLogin2Response')]
 class GetUserInfoFromLogin2 extends Response
 {
     use DataBoxStatus;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type(UserInfoExt2::class)]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dbUserInfo')]
     #[Assert\Valid()]
     protected ?UserInfoExt2 $userInfo = null;

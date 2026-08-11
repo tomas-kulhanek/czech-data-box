@@ -8,8 +8,8 @@ use JMS\Serializer\Annotation as Serializer;
 use TomasKulhanek\CzechDataBox\Traits\DataBoxStatus;
 use TomasKulhanek\Serializer\Utils\SplFileInfo;
 
-#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'GetDataBoxListResponse')]
+#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetDataBoxListResponse')]
 class GetDataBoxList extends Response
 {
     use DataBoxStatus;
@@ -17,7 +17,7 @@ class GetDataBoxList extends Response
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('base64File')]
     #[Serializer\SerializedName('dblData')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?SplFileInfo $data = null;
 
     public function getData(): ?SplFileInfo

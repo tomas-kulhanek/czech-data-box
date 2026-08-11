@@ -18,7 +18,7 @@ class DataBoxUserManagementTest extends TestCase
 {
     use SerializerTrait;
 
-    private const string NAMESPACE = 'https://isds.czechpoint.cz/v20';
+    private const string NAMESPACE = 'http://isds.czechpoint.cz/v20';
 
     public function testGetDataBoxUsers2RequestSerialization(): void
     {
@@ -134,7 +134,7 @@ class DataBoxUserManagementTest extends TestCase
     {
         $xml = <<<XML_WRAP
 <?xml version="1.0" encoding="UTF-8"?>
-<p:GetDataBoxUsers2Response xmlns:p="https://isds.czechpoint.cz/v20">
+<p:GetDataBoxUsers2Response xmlns:p="http://isds.czechpoint.cz/v20">
   <p:dbUsers>
     <p:dbUserInfo AIFOTicket="ticket-1">
       <p:aifoIsds>true</p:aifoIsds>
