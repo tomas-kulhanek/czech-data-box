@@ -109,4 +109,78 @@ XML;
 
         self::assertTrue($response->getStatus()->isOk());
     }
+
+    public function testExternalEntityIsNotResolved(): void
+    {
+        $soapResponse = <<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Envelope [
+  <!ENTITY xxe SYSTEM "file:///etc/passwd">
+]>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+  <SOAP-ENV:Body>
+    <p:MessageEnvelopeDownloadResponse xmlns:p="http://isds.czechpoint.cz/v20">
+      <p:dmStatus>
+        <p:dmStatusCode>0000</p:dmStatusCode>
+        <p:dmStatusMessage>&xxe;</p:dmStatusMessage>
+      </p:dmStatus>
+    </p:MessageEnvelopeDownloadResponse>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+XML;
+        $connector = new Connector(
+            self::createSerializer(),
+            new RecordingClientProvider($soapResponse)
+        );
+
+        try {
+            $response = $connector->messageEnvelopeDownload($this->createAccount(), $this->createRequest());
+        } catch (ConnectionException $exception) {
+            self::assertStringNotContainsString(
+                'root:',
+                $exception->getMessage(),
+                'An external entity must never be resolved.'
+            );
+
+            return;
+        }
+
+        self::fail(sprintf(
+            'A response with an external entity must be rejected, the status message was "%s".',
+            $response->getStatus()->getMessage()
+        ));
+    }
+
+    public function testRecursiveEntityExpansionIsRejected(): void
+    {
+        $soapResponse = <<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Envelope [
+  <!ENTITY lol "lol">
+  <!ENTITY lol1 "&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;">
+  <!ENTITY lol2 "&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;">
+  <!ENTITY lol3 "&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;">
+  <!ENTITY lol4 "&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;">
+  <!ENTITY lol5 "&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;">
+]>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+  <SOAP-ENV:Body>
+    <p:MessageEnvelopeDownloadResponse xmlns:p="http://isds.czechpoint.cz/v20">
+      <p:dmStatus>
+        <p:dmStatusCode>0000</p:dmStatusCode>
+        <p:dmStatusMessage>&lol5;</p:dmStatusMessage>
+      </p:dmStatus>
+    </p:MessageEnvelopeDownloadResponse>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+XML;
+        $connector = new Connector(
+            self::createSerializer(),
+            new RecordingClientProvider($soapResponse)
+        );
+
+        $this->expectException(ConnectionException::class);
+
+        $connector->messageEnvelopeDownload($this->createAccount(), $this->createRequest());
+    }
 }

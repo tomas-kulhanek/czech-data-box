@@ -104,6 +104,14 @@ readonly class Connector
 
     public const int DEFAULT_MAX_RESPONSE_SIZE = 256 * 1024 ** 2;
 
+    /**
+     * @var array<string, string>
+     */
+    private const array SOAP_NAMESPACES = [
+        'soap11' => 'http://schemas.xmlsoap.org/soap/envelope/',
+        'soap12' => 'http://www.w3.org/2003/05/soap-envelope',
+    ];
+
     public function __construct(
         private SerializerInterface $serializer,
         private ClientProviderInterface $provider,
@@ -651,7 +659,7 @@ readonly class Connector
         $previousState = libxml_use_internal_errors(true);
         libxml_clear_errors();
         try {
-            if (!$document->loadXML($xmlContent)) {
+            if (!$document->loadXML($xmlContent, LIBXML_NONET)) {
                 $error = libxml_get_last_error();
                 throw new ConnectionException(
                     $error === false
@@ -667,34 +675,41 @@ readonly class Connector
         return $document;
     }
 
-    private function getValueByXpath(DOMDocument $document, string $xpath): ?string
+    private function createSoapXpath(DOMDocument $document): DOMXPath
     {
-        $domXpath = new DOMXPath($document);
-        $res = $domXpath->evaluate($xpath);
-        if (!$res instanceof DOMNodeList) {
+        $xpath = new DOMXPath($document);
+        foreach (self::SOAP_NAMESPACES as $prefix => $namespace) {
+            $xpath->registerNamespace($prefix, $namespace);
+        }
+
+        return $xpath;
+    }
+
+    /**
+     * Reads the SOAP body regardless of the prefix the sender bound the envelope namespace to.
+     */
+    private function getSoapBodyContent(DOMDocument $document): ?string
+    {
+        $bodies = $this->createSoapXpath($document)->query('//soap11:Body | //soap12:Body');
+        if (!$bodies instanceof DOMNodeList) {
             return null;
         }
         $result = null;
-        foreach ($res as $node) {
-            if ($node instanceof DOMElement || $node instanceof DOMDocument) {
-                $nodeValue = null;
-                $children = $node->childNodes;
-                foreach ($children as $child) {
-                    $nodeValue .= $document->saveXML($child);
-                }
-            } else {
-                $nodeValue = $node->nodeValue;
+        foreach ($bodies as $body) {
+            if (!$body instanceof DOMElement) {
+                continue;
             }
-            $result .= $nodeValue;
+            foreach ($body->childNodes as $child) {
+                $result .= $document->saveXML($child);
+            }
         }
+
         return $result;
     }
 
     private function throwOnSoapFault(DOMDocument $document): void
     {
-        $xpath = new DOMXPath($document);
-        $xpath->registerNamespace('soap11', 'http://schemas.xmlsoap.org/soap/envelope/');
-        $xpath->registerNamespace('soap12', 'http://www.w3.org/2003/05/soap-envelope');
+        $xpath = $this->createSoapXpath($document);
 
         $faults = $xpath->query('//soap11:Fault');
         $fault = $faults instanceof DOMNodeList ? $faults->item(0) : null;
@@ -771,7 +786,7 @@ readonly class Connector
         if (empty($soapResponse->documentElement)) {
             throw new ConnectionException('The response is empty');
         }
-        $response = $this->getValueByXpath($soapResponse, '//' . $soapResponse->documentElement->prefix . ':Body');
+        $response = $this->getSoapBodyContent($soapResponse);
         $soapResponse = null;
         if (empty($response)) {
             throw new ConnectionException('The response is empty');
