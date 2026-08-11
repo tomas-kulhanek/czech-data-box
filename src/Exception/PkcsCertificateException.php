@@ -6,6 +6,6 @@ namespace TomasKulhanek\CzechDataBox\Exception;
 
 use Exception;
 
-class PkcsCertificateException extends Exception
+class PkcsCertificateException extends Exception implements CzechDataBoxException
 {
 }

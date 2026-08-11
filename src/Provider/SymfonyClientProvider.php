@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace TomasKulhanek\CzechDataBox\Provider;
 
 use LogicException;
-use Throwable;
 use Composer\CaBundle\CaBundle;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
@@ -106,16 +105,22 @@ readonly class SymfonyClientProvider implements ClientProviderInterface
         }
 
         try {
-            return $this->client->request(
+            $response = $this->client->request(
                 'POST',
                 $this->endpointProvider->getServiceLocation($account, $serviceType),
                 $requestOptions
-            )->getContent();
-        } catch (Throwable $exception) {
-            if ($exception instanceof TransportExceptionInterface && $exception->getCode() === 503) {
-                throw new SystemExclusion($exception->getMessage(), $exception->getCode(), $exception);
+            );
+            $statusCode = $response->getStatusCode();
+            $content = $response->getContent(false);
+            if ($statusCode === 503) {
+                throw new SystemExclusion(sprintf('The server responded with HTTP %d.', $statusCode), $statusCode);
+            }
+            if ($statusCode >= 400 && $content === '') {
+                throw new ConnectionException(sprintf('The server responded with HTTP %d and an empty body.', $statusCode), $statusCode);
             }
 
+            return $content;
+        } catch (TransportExceptionInterface $exception) {
             throw new ConnectionException($exception->getMessage(), $exception->getCode(), $exception);
         } finally {
             if (is_resource($publicCert)) {

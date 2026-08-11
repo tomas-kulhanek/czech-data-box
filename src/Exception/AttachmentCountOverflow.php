@@ -6,6 +6,6 @@ namespace TomasKulhanek\CzechDataBox\Exception;
 
 use Exception;
 
-class AttachmentCountOverflow extends Exception
+class AttachmentCountOverflow extends Exception implements CzechDataBoxException
 {
 }
