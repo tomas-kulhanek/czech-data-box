@@ -26,6 +26,7 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 - **Nové operace dm_operations**: `dummyOperation()` (keep-alive).
 - **Nové operace db_search**: `getConstants()`, `getDataBoxAddress()`.
 - **Nové operace db_access**: `getOwnerInfoFromLogin2()`, `getUserInfoFromLogin2()` (rozšířené údaje: `aifoIsds`, `isdsID`, `dbIdOVM`, RUIAN adresa).
+- **Správa uživatelů schránky (db_manipulations)**: `getDataBoxUsers2()`, `addDataBoxUser2()`, `updateDataBoxUser2()`, `deleteDataBoxUser2()` — výpis a správa pověřených osob vlastní schránky (vyžaduje oprávnění `PRIVIL_OWNER_ADM`). `addDataBoxUser2()` podporuje i virtuální obálku (`dbVirtual`) s e-mailem pro odkaz na Aktivační portál.
 - **Velkoobjemové datové zprávy (VoDZ, do 100 MB)** přes SOAP 1.2 na endpointech `ws2[c].…/DS/vodz`: `uploadAttachment()`, `downloadAttachment()`, `createBigMessage()`, `authenticateBigMessage()`, `bigMessageDownload()`, `signedBigMessageDownload()`, `signedSentBigMessageDownload()`.
 - **Archivace**: `archiveIsdsDocument()` (přerazítkování ZFO) na `ws2[c].…/DS/arch`.
 - **Nové atributy DTO**: `specMessFlag` + `isSuspicious()` (podezřelá zpráva), `dmVODZ` + `isVodz()` a `attsNum` (rozpoznání VoDZ v seznamech), `PublishOwnId` s `IdLevel`.

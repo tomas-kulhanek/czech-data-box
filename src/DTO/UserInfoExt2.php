@@ -12,6 +12,12 @@ use JMS\Serializer\Annotation as Serializer;
 class UserInfoExt2
 {
     #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type('string')]
+    #[Serializer\SerializedName('AIFOTicket')]
+    #[Serializer\XmlAttribute]
+    protected ?string $aifoTicket = null;
+
+    #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('bool')]
     #[Serializer\SerializedName('aifoIsds')]
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
@@ -136,6 +142,17 @@ class UserInfoExt2
     #[Serializer\SerializedName('caState')]
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     protected ?string $caState = null;
+
+    public function getAifoTicket(): ?string
+    {
+        return $this->aifoTicket;
+    }
+
+    public function setAifoTicket(?string $aifoTicket): UserInfoExt2
+    {
+        $this->aifoTicket = $aifoTicket;
+        return $this;
+    }
 
     public function getAifoIsds(): ?bool
     {
