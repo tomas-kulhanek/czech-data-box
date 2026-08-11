@@ -100,9 +100,17 @@ class Account
         if (!openssl_pkcs12_read($pkcsContent, $cert_array, $passPhrase)) {
             throw new PkcsCertificateException('Invalid PKCS12');
         }
+        if (!is_array($cert_array)) {
+            throw new PkcsCertificateException('Invalid PKCS12');
+        }
+        $cert = $cert_array['cert'] ?? null;
+        $pkey = $cert_array['pkey'] ?? null;
+        if (!is_string($cert) || !is_string($pkey)) {
+            throw new PkcsCertificateException('PKCS12 does not contain a certificate and a private key');
+        }
 
-        $this->setPublicKey($cert_array['cert'])
-            ->setPrivateKey($cert_array['pkey'])
+        $this->setPublicKey($cert)
+            ->setPrivateKey($pkey)
             ->setPrivateKeyPassPhrase($passPhrase);
 
         return $this;

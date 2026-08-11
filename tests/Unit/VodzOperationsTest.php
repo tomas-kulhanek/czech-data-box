@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TomasKulhanek\Tests\CzechDataBox\Unit;
 
+use TomasKulhanek\Tests\CzechDataBox\SerializerTrait;
 use PHPUnit\Framework\TestCase;
 use TomasKulhanek\CzechDataBox\Account;
 use TomasKulhanek\CzechDataBox\Connector;
@@ -17,11 +18,11 @@ use TomasKulhanek\CzechDataBox\DTO\Request\MessageEnvelopeDownload;
 use TomasKulhanek\CzechDataBox\DTO\Response\UploadAttachment;
 use TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum;
 use TomasKulhanek\CzechDataBox\Enum\ServiceTypeEnum;
-use TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface;
-use TomasKulhanek\Serializer\SerializerFactory;
 
 class VodzOperationsTest extends TestCase
 {
+    use SerializerTrait;
+
     private function createAccount(): Account
     {
         $account = new Account();
@@ -30,25 +31,9 @@ class VodzOperationsTest extends TestCase
         return $account;
     }
 
-    private function createFakeProvider(string $soapResponse): ClientProviderInterface
+    private function createFakeProvider(string $soapResponse): RecordingClientProvider
     {
-        return new class ($soapResponse) implements ClientProviderInterface {
-            public ?string $capturedBody = null;
-
-            public ?ServiceTypeEnum $capturedServiceType = null;
-
-            public function __construct(private readonly string $response)
-            {
-            }
-
-            public function sendRequest(Account $account, ServiceTypeEnum $serviceType, string $xmlBody): string
-            {
-                $this->capturedBody = $xmlBody;
-                $this->capturedServiceType = $serviceType;
-
-                return $this->response;
-            }
-        };
+        return new RecordingClientProvider($soapResponse);
     }
 
     public function testVodzOperationUsesSoap12Envelope(): void
@@ -67,7 +52,7 @@ class VodzOperationsTest extends TestCase
 </soap:Envelope>
 XML;
         $provider = $this->createFakeProvider($soapResponse);
-        $connector = new Connector(SerializerFactory::create(), $provider);
+        $connector = new Connector(self::createSerializer(), $provider);
 
         $request = new BigMessageDownload();
         $request->setDataMessageId('123456789');
@@ -99,7 +84,7 @@ XML;
 </SOAP-ENV:Envelope>
 XML;
         $provider = $this->createFakeProvider($soapResponse);
-        $connector = new Connector(SerializerFactory::create(), $provider);
+        $connector = new Connector(self::createSerializer(), $provider);
 
         $request = new MessageEnvelopeDownload();
         $request->setDataMessageId('123456789');
@@ -114,7 +99,7 @@ XML;
 
     public function testCreateBigMessageRequestIsSerialized(): void
     {
-        $serializer = SerializerFactory::create();
+        $serializer = self::createSerializer();
 
         $envelope = new BigMessageEnvelope();
         $envelope->setType('V');
@@ -171,7 +156,6 @@ XML;
 
     public function testUploadAttachmentResponseIsDeserialized(): void
     {
-        $serializer = SerializerFactory::create();
         $xml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <p:UploadAttachmentResponse xmlns:p="https://isds.czechpoint.cz/v20">
@@ -184,7 +168,7 @@ XML;
   </p:dmStatus>
 </p:UploadAttachmentResponse>
 XML;
-        $response = $serializer->deserialize($xml, UploadAttachment::class, 'xml');
+        $response = self::deserializeXml($xml, UploadAttachment::class);
         self::assertSame('ATT123456', $response->getAttachmentId());
         self::assertNotNull($response->getAttachmentHash1());
         self::assertSame('1a2b3c4d', $response->getAttachmentHash1()->getValue());

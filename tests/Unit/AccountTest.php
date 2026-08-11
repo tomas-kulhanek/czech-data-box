@@ -31,7 +31,8 @@ class AccountTest extends TestCase
         $pkcsContent = $this->generateP12Certificate($passPhrase);
 
         $cert_array = [];
-        openssl_pkcs12_read($pkcsContent, $cert_array, $passPhrase);
+        self::assertTrue(openssl_pkcs12_read($pkcsContent, $cert_array, $passPhrase));
+        self::assertIsArray($cert_array);
 
         $account = new Account();
         $account->setPkcs12Certificate($pkcsContent, $passPhrase);

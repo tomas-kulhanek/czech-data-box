@@ -1,0 +1,37 @@
+<?php
+
+declare(strict_types=1);
+
+namespace TomasKulhanek\Tests\CzechDataBox;
+
+use JMS\Serializer\SerializerInterface;
+use LogicException;
+use TomasKulhanek\Serializer\SerializerFactory;
+
+trait SerializerTrait
+{
+    private static function createSerializer(): SerializerInterface
+    {
+        $serializer = SerializerFactory::create();
+        if (!$serializer instanceof SerializerInterface) {
+            throw new LogicException('SerializerFactory::create() did not return a SerializerInterface.');
+        }
+
+        return $serializer;
+    }
+
+    /**
+     * @template T of object
+     * @param class-string<T> $type
+     * @return T
+     */
+    private static function deserializeXml(string $xml, string $type): object
+    {
+        $result = self::createSerializer()->deserialize($xml, $type, 'xml');
+        if (!$result instanceof $type) {
+            throw new LogicException(sprintf('Expected %s, got %s.', $type, get_debug_type($result)));
+        }
+
+        return $result;
+    }
+}

@@ -11,6 +11,7 @@ use TomasKulhanek\CzechDataBox\DTO\Response\GetOwnerInfoFromLogin2;
 use TomasKulhanek\CzechDataBox\DTO\Response\GetUserInfoFromLogin2;
 use DOMDocument;
 use DOMElement;
+use DOMNode;
 use DOMNodeList;
 use DOMXPath;
 use JMS\Serializer\SerializerInterface;
@@ -542,11 +543,18 @@ readonly class Connector
             throw new ConnectionException();
         }
         $bodyNode = $requestDocumentXpath->evaluate('//' . $requestDocument->documentElement->prefix . ':Body');
-        $new = $bodyNode[0]->ownerDocument->importNode($request->documentElement, true);
-        if ($bodyNode[0]->nextSibling) {
-            $bodyNode[0]->insertBefore($new, $bodyNode[0]->nextSibling);
+        if (!$bodyNode instanceof DOMNodeList) {
+            throw new ConnectionException();
+        }
+        $body = $bodyNode->item(0);
+        if (!$body instanceof DOMNode || $body->ownerDocument === null || $request->documentElement === null) {
+            throw new ConnectionException();
+        }
+        $new = $body->ownerDocument->importNode($request->documentElement, true);
+        if ($body->nextSibling !== null) {
+            $body->insertBefore($new, $body->nextSibling);
         } else {
-            $bodyNode[0]->appendChild($new);
+            $body->appendChild($new);
         }
         $xmlBody = $requestDocument->saveXml();
         if (!$xmlBody) {
@@ -582,6 +590,11 @@ readonly class Connector
         }
         $response = str_replace('http://isds.czechpoint.cz/v20', 'https://isds.czechpoint.cz/v20', $response);
 
-        return $this->serializer->deserialize($response, $responseClass, 'xml');
+        $deserialized = $this->serializer->deserialize($response, $responseClass, 'xml');
+        if (!$deserialized instanceof $responseClass) {
+            throw new ConnectionException('The response could not be deserialized into ' . $responseClass);
+        }
+
+        return $deserialized;
     }
 }

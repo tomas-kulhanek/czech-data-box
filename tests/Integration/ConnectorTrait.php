@@ -5,20 +5,16 @@ declare(strict_types=1);
 namespace TomasKulhanek\Tests\CzechDataBox\Integration;
 
 use GuzzleHttp\Client;
-use JMS\Serializer\SerializerInterface;
 use Symfony\Component\HttpClient\HttpClient;
 use TomasKulhanek\CzechDataBox\Connector;
 use TomasKulhanek\CzechDataBox\Provider\EndpointProvider;
 use TomasKulhanek\CzechDataBox\Provider\GuzzleClientProvider;
 use TomasKulhanek\CzechDataBox\Provider\SymfonyClientProvider;
-use TomasKulhanek\Serializer\SerializerFactory;
+use TomasKulhanek\Tests\CzechDataBox\SerializerTrait;
 
 trait ConnectorTrait
 {
-    protected function createSerializer(): SerializerInterface
-    {
-        return SerializerFactory::create();
-    }
+    use SerializerTrait;
 
     protected function createGuzzleProvider(): GuzzleClientProvider
     {
@@ -35,7 +31,7 @@ trait ConnectorTrait
     private function createGuzzleConnector(): Connector
     {
         return new Connector(
-            $this->createSerializer(),
+            self::createSerializer(),
             $this->createGuzzleProvider()
         );
     }
@@ -43,7 +39,7 @@ trait ConnectorTrait
     private function createSymfonyConnector(): Connector
     {
         return new Connector(
-            $this->createSerializer(),
+            self::createSerializer(),
             $this->createSymfonyProvider()
         );
     }

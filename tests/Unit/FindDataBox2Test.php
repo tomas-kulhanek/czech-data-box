@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace TomasKulhanek\Tests\CzechDataBox\Unit;
 
+use TomasKulhanek\Tests\CzechDataBox\SerializerTrait;
 use PHPUnit\Framework\TestCase;
 use TomasKulhanek\CzechDataBox\DTO\OwnerInfoExt2;
 use TomasKulhanek\CzechDataBox\DTO\Request\FindDataBox2;
 use TomasKulhanek\CzechDataBox\DTO\Response\FindDataBox2 as FindDataBox2Response;
-use TomasKulhanek\Serializer\SerializerFactory;
 
 class FindDataBox2Test extends TestCase
 {
+    use SerializerTrait;
+
     public function testRequestSerialization(): void
     {
-        $serializer = SerializerFactory::create();
+        $serializer = self::createSerializer();
         $ownerInfo = new OwnerInfoExt2();
         $ownerInfo->setDataBoxType('OVM')
             ->setIc('12345678');
@@ -30,7 +32,6 @@ class FindDataBox2Test extends TestCase
 
     public function testResponseDeserialization(): void
     {
-        $serializer = SerializerFactory::create();
         $xml = <<<XML_WRAP
 <?xml version="1.0" encoding="UTF-8"?>
 <p:FindDataBox2Response xmlns:p="https://isds.czechpoint.cz/v20">
@@ -55,7 +56,7 @@ class FindDataBox2Test extends TestCase
   </p:dbStatus>
 </p:FindDataBox2Response>
 XML_WRAP;
-        $response = $serializer->deserialize($xml, FindDataBox2Response::class, 'xml');
+        $response = self::deserializeXml($xml, FindDataBox2Response::class);
         self::assertCount(1, $response->getResult());
         $owner = $response->getResult()[0];
         self::assertSame('abcdefg', $owner->getDataBoxId());

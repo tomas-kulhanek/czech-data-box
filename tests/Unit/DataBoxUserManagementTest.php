@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TomasKulhanek\Tests\CzechDataBox\Unit;
 
+use TomasKulhanek\Tests\CzechDataBox\SerializerTrait;
 use DOMDocument;
 use DOMElement;
 use PHPUnit\Framework\TestCase;
@@ -12,15 +13,16 @@ use TomasKulhanek\CzechDataBox\DTO\Request\DeleteDataBoxUser2;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetDataBoxUsers2;
 use TomasKulhanek\CzechDataBox\DTO\Response\GetDataBoxUsers2 as GetDataBoxUsers2Response;
 use TomasKulhanek\CzechDataBox\DTO\UserInfoExt2;
-use TomasKulhanek\Serializer\SerializerFactory;
 
 class DataBoxUserManagementTest extends TestCase
 {
+    use SerializerTrait;
+
     private const string NAMESPACE = 'https://isds.czechpoint.cz/v20';
 
     public function testGetDataBoxUsers2RequestSerialization(): void
     {
-        $serializer = SerializerFactory::create();
+        $serializer = self::createSerializer();
         $request = new GetDataBoxUsers2();
         $request->setDataBoxId('abcdefg');
 
@@ -32,7 +34,7 @@ class DataBoxUserManagementTest extends TestCase
 
     public function testDeleteDataBoxUser2RequestElementOrder(): void
     {
-        $serializer = SerializerFactory::create();
+        $serializer = self::createSerializer();
         $request = new DeleteDataBoxUser2();
         $request->setDataBoxId('abcdefg');
         $request->setIsdsId('USR123');
@@ -47,7 +49,7 @@ class DataBoxUserManagementTest extends TestCase
 
     public function testAddDataBoxUser2RequestElementOrder(): void
     {
-        $serializer = SerializerFactory::create();
+        $serializer = self::createSerializer();
         $userInfo = new UserInfoExt2();
         $userInfo->setAifoTicket('ticket-1');
         $userInfo->setGivenNames('Jan');
@@ -85,7 +87,7 @@ class DataBoxUserManagementTest extends TestCase
 
     public function testAddDataBoxUser2RequestSkipsEmptyOptionalElements(): void
     {
-        $serializer = SerializerFactory::create();
+        $serializer = self::createSerializer();
         $userInfo = new UserInfoExt2();
         $userInfo->setGivenNames('Jan');
         $userInfo->setLastName('Novák');
@@ -113,6 +115,7 @@ class DataBoxUserManagementTest extends TestCase
                 continue;
             }
             self::assertSame(self::NAMESPACE, $node->namespaceURI);
+            self::assertNotNull($node->localName);
             $names[] = $node->localName;
         }
 
@@ -129,7 +132,6 @@ class DataBoxUserManagementTest extends TestCase
 
     public function testGetDataBoxUsers2ResponseDeserialization(): void
     {
-        $serializer = SerializerFactory::create();
         $xml = <<<XML_WRAP
 <?xml version="1.0" encoding="UTF-8"?>
 <p:GetDataBoxUsers2Response xmlns:p="https://isds.czechpoint.cz/v20">
@@ -149,7 +151,7 @@ class DataBoxUserManagementTest extends TestCase
   </p:dbStatus>
 </p:GetDataBoxUsers2Response>
 XML_WRAP;
-        $response = $serializer->deserialize($xml, GetDataBoxUsers2Response::class, 'xml');
+        $response = self::deserializeXml($xml, GetDataBoxUsers2Response::class);
         self::assertCount(1, $response->getUsers());
         $user = $response->getUsers()[0];
         self::assertSame('ticket-1', $user->getAifoTicket());

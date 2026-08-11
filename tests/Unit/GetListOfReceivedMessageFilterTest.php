@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace TomasKulhanek\Tests\CzechDataBox\Unit;
 
+use TomasKulhanek\Tests\CzechDataBox\SerializerTrait;
 use PHPUnit\Framework\TestCase;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetListOfReceivedMessages;
 use TomasKulhanek\CzechDataBox\Enum\FilterEnum;
-use TomasKulhanek\Serializer\SerializerFactory;
 
 class GetListOfReceivedMessageFilterTest extends TestCase
 {
+    use SerializerTrait;
+
     public function testAllFilterCombinations(): void
     {
         $filterEnumValues = FilterEnum::cases();
@@ -49,7 +51,7 @@ class GetListOfReceivedMessageFilterTest extends TestCase
 
     public function testXmlFilterAll(): void
     {
-        $serializer = SerializerFactory::create();
+        $serializer = self::createSerializer();
         $a = new GetListOfReceivedMessages();
         $a->setStatusFilter(FilterEnum::ALL, FilterEnum::DELETED);
         $expectingXml = <<<XML
@@ -64,7 +66,7 @@ XML;
 
     public function testXmlFilterSpecific(): void
     {
-        $serializer = SerializerFactory::create();
+        $serializer = self::createSerializer();
         $a = new GetListOfReceivedMessages();
         $a->setStatusFilter(FilterEnum::DELETED);
         $expectingXml = <<<XML
@@ -79,7 +81,7 @@ XML;
 
     public function testXmlFilterNotSpecified(): void
     {
-        $serializer = SerializerFactory::create();
+        $serializer = self::createSerializer();
         $a = new GetListOfReceivedMessages();
         $expectingXml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>

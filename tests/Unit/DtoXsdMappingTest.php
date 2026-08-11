@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace TomasKulhanek\Tests\CzechDataBox\Unit;
 
+use TomasKulhanek\Tests\CzechDataBox\SerializerTrait;
 use PHPUnit\Framework\TestCase;
 use TomasKulhanek\CzechDataBox\DTO\DataBoxResult;
 use TomasKulhanek\CzechDataBox\DTO\Delivery;
 use TomasKulhanek\CzechDataBox\DTO\Request\DTInfo;
-use TomasKulhanek\Serializer\SerializerFactory;
 
 class DtoXsdMappingTest extends TestCase
 {
+    use SerializerTrait;
+
     public function testDeliveryEventTimeIsDeserialized(): void
     {
-        $serializer = SerializerFactory::create();
         $xml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <p:dmDelivery xmlns:p="https://isds.czechpoint.cz/v20">
@@ -31,7 +32,7 @@ class DtoXsdMappingTest extends TestCase
   </p:dmEvents>
 </p:dmDelivery>
 XML;
-        $delivery = $serializer->deserialize($xml, Delivery::class, 'xml');
+        $delivery = self::deserializeXml($xml, Delivery::class);
         $events = $delivery->getEvents();
         self::assertCount(1, $events);
         self::assertNotNull($events[0]->getTime());
@@ -41,7 +42,7 @@ XML;
 
     public function testDtInfoRequestUsesLowercaseDbId(): void
     {
-        $serializer = SerializerFactory::create();
+        $serializer = self::createSerializer();
         $request = new DTInfo();
         $request->setDataBoxId('abcdefg');
         $xml = $serializer->serialize($request, 'xml');
@@ -51,7 +52,6 @@ XML;
 
     public function testDataBoxResultMapsDbIdOvm(): void
     {
-        $serializer = SerializerFactory::create();
         $xml = <<<XML_WRAP
 <?xml version="1.0" encoding="UTF-8"?>
 <p:dbResult xmlns:p="https://isds.czechpoint.cz/v20">
@@ -65,7 +65,7 @@ XML;
   <p:dbSendOptions>ALL</p:dbSendOptions>
 </p:dbResult>
 XML_WRAP;
-        $result = $serializer->deserialize($xml, DataBoxResult::class, 'xml');
+        $result = self::deserializeXml($xml, DataBoxResult::class);
         self::assertSame('12345678', $result->getDataBoxIdOvm());
         self::assertSame('OVM', $result->getDataBoxType());
         self::assertSame('ALL', $result->getDataBoxSendOptions());

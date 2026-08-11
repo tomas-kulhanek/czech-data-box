@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TomasKulhanek\Tests\CzechDataBox\Unit;
 
+use TomasKulhanek\Tests\CzechDataBox\SerializerTrait;
 use PHPUnit\Framework\TestCase;
 use TomasKulhanek\CzechDataBox\Account;
 use TomasKulhanek\CzechDataBox\Connector;
@@ -16,15 +17,16 @@ use TomasKulhanek\CzechDataBox\Exception\DisallowedAttachmentFormat;
 use TomasKulhanek\CzechDataBox\Exception\FileSizeOverflow;
 use TomasKulhanek\CzechDataBox\Exception\RecipientCountOverflow;
 use TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface;
-use TomasKulhanek\Serializer\SerializerFactory;
 
 class CreateMessageValidationTest extends TestCase
 {
+    use SerializerTrait;
+
     private function createConnector(): Connector
     {
         $provider = $this->createMock(ClientProviderInterface::class);
         $provider->expects(self::never())->method('sendRequest');
-        return new Connector(SerializerFactory::create(), $provider);
+        return new Connector(self::createSerializer(), $provider);
     }
 
     private function createAccount(): Account
