@@ -12,11 +12,34 @@ on:
   schedule:
     - cron: "0 7 * * MON"
 
+permissions:
+  contents: read
+
 env:
   extensions: "xml mbstring curl openssl dom xdebug"
   composer-install-args: "--no-progress --no-interaction --prefer-dist --no-scripts"
 
 jobs:
+  dependencies:
+    name: "Dependency audit"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: '8.5'
+          coverage: none
+
+      # composer.lock není součástí knihovny, audit proto běží nad sadou
+      # nainstalovanou z aktuálních constraintů v composer.json.
+      - run: composer validate --strict
+      - uses: php-actions/composer@8a65f0d3c6a1d17ca4800491a40b5756a4c164f3 # v6
+        with:
+          php_version: '8.5'
+          args: "${{ env.composer-install-args }}"
+      - run: composer audit
+
   rector:
     name: "Rector"
     runs-on: ubuntu-latest
@@ -26,13 +49,13 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v7
-      - uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
         with:
           php-version: ${{ matrix.php-version }}
           coverage: none
 
-      - uses: php-actions/composer@v6
+      - uses: php-actions/composer@8a65f0d3c6a1d17ca4800491a40b5756a4c164f3 # v6
         with:
           php_version: ${{ matrix.php-version }}
           args:  "${{ env.composer-install-args }}"
@@ -47,13 +70,13 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v7
-      - uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
         with:
           php-version: ${{ matrix.php-version }}
           coverage: none
 
-      - uses: php-actions/composer@v6
+      - uses: php-actions/composer@8a65f0d3c6a1d17ca4800491a40b5756a4c164f3 # v6
         with:
           php_version: ${{ matrix.php-version }}
           args:  "${{ env.composer-install-args }}"
@@ -68,13 +91,13 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v7
-      - uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
         with:
           php-version: ${{ matrix.php-version }}
           coverage: none
 
-      - uses: php-actions/composer@v6
+      - uses: php-actions/composer@8a65f0d3c6a1d17ca4800491a40b5756a4c164f3 # v6
         with:
           php_version: ${{ matrix.php-version }}
           args: "${{ env.composer-install-args }}"
@@ -91,13 +114,13 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v7
-      - uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
         with:
           php-version: ${{ matrix.php-version }}
           coverage: none
 
-      - uses: php-actions/composer@v6
+      - uses: php-actions/composer@8a65f0d3c6a1d17ca4800491a40b5756a4c164f3 # v6
         with:
           php_version: ${{ matrix.php-version }}
           args: "${{ env.composer-install-args }}"
@@ -108,7 +131,7 @@ jobs:
           echo ${{ secrets.CERT_PUB }} | base64 -d > .data/cert.crt
 
 
-      - uses: 1password/load-secrets-action@v4
+      - uses: 1password/load-secrets-action@eb2efd0703da22a93c467f2d1ffbb6826c11e19c # v4
         with:
           # Export loaded secrets as environment variables
           export-env: true
