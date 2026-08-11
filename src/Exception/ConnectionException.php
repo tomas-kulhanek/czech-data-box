@@ -6,6 +6,6 @@ namespace TomasKulhanek\CzechDataBox\Exception;
 
 use Exception;
 
-class ConnectionException extends Exception
+class ConnectionException extends Exception implements CzechDataBoxException
 {
 }

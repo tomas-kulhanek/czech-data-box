@@ -32,6 +32,11 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 - **Nové atributy DTO**: `specMessFlag` + `isSuspicious()` (podezřelá zpráva), `dmVODZ` + `isVodz()` a `attsNum` (rozpoznání VoDZ v seznamech), `PublishOwnId` s `IdLevel`.
 - **Nová pole DTO**: `pnLastNameAtBirth`, `caState`, `adDistrict`, `adAMCode`.
 - **`Utils\AllowedAttachmentFormats`** — whitelist 51 povolených přípon vč. kontejnerových formátů.
+- **Týdenní integrační běh proti `datovka-test.gov.cz`** — testy rozděleny na suite `unit` a `integration` (composer skripty `test:unit` / `test:integration`); nové workflow `integration.yml` spouští integrační testy každé pondělí v 07:00 UTC (mimo servisní okno ISDS) a lze jej spustit i ručně.
+- **XSD validace serializovaných requestů** proti schématům přílohy 1 a 2 Provozního řádu (`tests/_data/xsd/`) — každý request DTO se serializuje a validuje proti `dmBaseTypes.xsd` resp. `dbTypes.xsd`, úplnost pokrytí hlídá reflexní test.
+- **Výjimka `SoapFault`** — `Connector` nově detekuje SOAP Fault (1.1 i 1.2) v odpovědi a vyhazuje `SoapFault` (potomek `ConnectionException`) s `faultCode` a `faultString` místo obecné chyby. Všechny výjimky knihovny navíc implementují nový marker interface `CzechDataBoxException`, takže je lze zachytit jedním `catch`.
+- **SOAP obálka požadavku se skládá řetězcově bez DOM** — odpadl druhý plný DOM průchod (parse + `importNode` + `saveXml`) nad serializovaným požadavkem; u VoDZ `uploadAttachment()` to šetří ~35 % CPU času a špičkovou paměť nově určuje jen samotná serializace. Horní mez paměti hlídá nový test ve skupině `memory` (z výchozího běhu vyloučena, spouští se `--group memory`).
+- **`Utils\StatusGuard`** — volitelný pomocník `assertOk()` / `assertStatusOk()`, který při ne-OK stavu odpovědi vyhodí typovanou výjimku `IsdsStatusError` (s `statusCode`, `statusMessage`, `refNumber`); obsahuje mapu známých kódů ISDS s českým vysvětlením (např. 1281, 1201, 2046). U `CreateMessage` kontroluje i dílčí stavy `dmMultipleStatus`.
 - **README**: příklady použití — odeslání VoDZ (`uploadAttachment()` + `createBigMessage()`) a načtení seznamu přijatých zpráv s filtrem.
 
 ### Opraveno
@@ -43,6 +48,8 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 - Duplicitní prázdný atribut `#[Assert\All()]` v `Delivery` shazoval phpstan.
 - Integrační test importoval neexistující třídu `Utils\MessageStatus`.
 - Poškozená nebo neúplná SOAP odpověď vypisovala PHP warning z `DOMDocument::loadXML()` a končila prázdnou `ConnectionException`. Parsování nově běží s `libxml_use_internal_errors()` a chyba se hlásí jako `ConnectionException` s popisem.
+- Composer skript `check` odkazoval na neexistující `@phpunit` a `check:rector`/`fix:rector` zpracovávaly neexistující složku `public/`; README instaloval Guzzle `^7.0`, dev závislost je `^8.0`.
+- Mapování HTTP 503 → `SystemExclusion` nikdy nefungovalo — Guzzle provider testoval symfonní `TransportExceptionInterface`, kterou Guzzle nevyhazuje, a Symfony provider dostával `ServerExceptionInterface`. Oba providery nově vyhodnocují stavový kód odpovědi; HTTP 500 (a další chyby ≥ 400) s neprázdným tělem se navíc předává `Connectoru`, aby šel detekovat SOAP Fault.
 
 ### Zabezpečení
 

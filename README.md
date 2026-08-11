@@ -20,7 +20,7 @@ composer require tomas-kulhanek/czech-data-box
 
 Dále je potřeba využít nějakého klienta. Buď je možné využít [Guzzle](https://github.com/guzzle/guzzle/) nebo [Symfony Http client](https://github.com/symfony/http-client)
 ```bash
-composer require tomas-kulhanek/czech-data-box guzzlehttp/guzzle:^7.0
+composer require tomas-kulhanek/czech-data-box guzzlehttp/guzzle:^8.0
 ```
 ```bash
 composer require tomas-kulhanek/czech-data-box symfony/http-client
@@ -103,10 +103,10 @@ $guzzleProvider = \TomasKulhanek\CzechDataBox\Provider\SymfonyClientProvider::cr
 $connector = new \TomasKulhanek\CzechDataBox\Connector($serializer, $guzzleProvider);
 ```
 
-## Využití s Guzzle 7
+## Využití s Guzzle 8
 ### Instalace
 ```bash
-composer require tomas-kulhanek/czech-data-box guzzlehttp/guzzle:^7.0
+composer require tomas-kulhanek/czech-data-box guzzlehttp/guzzle:^8.0
 ```
 #### Instancování 
 ```php

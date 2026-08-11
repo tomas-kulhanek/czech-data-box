@@ -42,7 +42,7 @@ class VodzOperationsTest extends TestCase
 <?xml version="1.0" encoding="UTF-8"?>
 <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
   <soap:Body>
-    <p:BigMessageDownloadResponse xmlns:p="https://isds.czechpoint.cz/v20">
+    <p:BigMessageDownloadResponse xmlns:p="http://isds.czechpoint.cz/v20">
       <p:dmStatus>
         <p:dmStatusCode>0000</p:dmStatusCode>
         <p:dmStatusMessage>Operation successfully</p:dmStatusMessage>
@@ -74,7 +74,7 @@ XML;
 <?xml version="1.0" encoding="UTF-8"?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
   <SOAP-ENV:Body>
-    <p:MessageEnvelopeDownloadResponse xmlns:p="https://isds.czechpoint.cz/v20">
+    <p:MessageEnvelopeDownloadResponse xmlns:p="http://isds.czechpoint.cz/v20">
       <p:dmStatus>
         <p:dmStatusCode>0000</p:dmStatusCode>
         <p:dmStatusMessage>Operation successfully</p:dmStatusMessage>
@@ -158,7 +158,7 @@ XML;
     {
         $xml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<p:UploadAttachmentResponse xmlns:p="https://isds.czechpoint.cz/v20">
+<p:UploadAttachmentResponse xmlns:p="http://isds.czechpoint.cz/v20">
   <p:dmAttID>ATT123456</p:dmAttID>
   <p:dmAttHash1 AttHashAlg="SHA-256">1a2b3c4d</p:dmAttHash1>
   <p:dmAttHash2 AttHashAlg="SHA-512">5e6f7a8b</p:dmAttHash2>

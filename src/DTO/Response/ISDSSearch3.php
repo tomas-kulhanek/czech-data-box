@@ -9,8 +9,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\DTO\DataBoxResult;
 use TomasKulhanek\CzechDataBox\Traits\DataBoxStatus;
 
-#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'ISDSSearch3Response')]
+#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'ISDSSearch3Response')]
 class ISDSSearch3 extends Response
 {
     use DataBoxStatus;
@@ -18,34 +18,34 @@ class ISDSSearch3 extends Response
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
     #[Serializer\SerializedName('totalCount')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?int $totalCount = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
     #[Serializer\SerializedName('currentCount')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?int $currentCount = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
     #[Serializer\SerializedName('position')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?int $position = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('bool')]
     #[Serializer\SerializedName('lastPage')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?bool $lastPage = null;
 
     /**
      * @var DataBoxResult[]
      */
     #[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\DataBoxResult>')]
-    #[Serializer\XmlList(entry: 'dbResult', inline: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlList(entry: 'dbResult', inline: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dbResults')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\All([
         new Assert\Type(type: DataBoxResult::class)
     ])]

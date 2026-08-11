@@ -6,8 +6,8 @@ namespace TomasKulhanek\CzechDataBox\DTO\Request;
 
 use JMS\Serializer\Annotation as Serializer;
 
-#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'DummyOperation')]
+#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'DummyOperation')]
 class DummyOperation implements Request
 {
     #[Serializer\SkipWhenEmpty]

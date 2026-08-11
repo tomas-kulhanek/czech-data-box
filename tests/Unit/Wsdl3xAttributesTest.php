@@ -18,7 +18,7 @@ class Wsdl3xAttributesTest extends TestCase
     {
         $xml = <<<XML_WRAP
 <?xml version="1.0" encoding="UTF-8"?>
-<p:dmRecord xmlns:p="https://isds.czechpoint.cz/v20" dmType="V" dmVODZ="true" specMessFlag="1">
+<p:dmRecord xmlns:p="http://isds.czechpoint.cz/v20" dmType="V" dmVODZ="true" specMessFlag="1">
   <p:dmID>1234567</p:dmID>
   <p:dmSenderID>abcdefg</p:dmSenderID>
   <p:dmSender>Testovací subjekt</p:dmSender>
@@ -39,7 +39,7 @@ XML_WRAP;
     {
         $xml = <<<XML_WRAP
 <?xml version="1.0" encoding="UTF-8"?>
-<p:dmRecord xmlns:p="https://isds.czechpoint.cz/v20" dmType="V">
+<p:dmRecord xmlns:p="http://isds.czechpoint.cz/v20" dmType="V">
   <p:dmID>1234567</p:dmID>
   <p:dmMessageStatus>4</p:dmMessageStatus>
 </p:dmRecord>

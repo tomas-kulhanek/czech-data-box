@@ -12,8 +12,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * z dmBaseTypes.xsd. Na rozdíl od běžné zprávy má VoDZ jediného příjemce
  * (dbIDRecipient je součástí obálky).
  */
-#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'dmEnvelope')]
-#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'dmEnvelope')]
+#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 class BigMessageEnvelope
 {
     #[Serializer\SkipWhenEmpty]
@@ -25,122 +25,122 @@ class BigMessageEnvelope
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dmSenderOrgUnit')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?string $senderOrgUnit = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
     #[Serializer\SerializedName('dmSenderOrgUnitNum')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?int $senderOrgUnitNum = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dbIDRecipient')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?string $recipientId = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dmRecipientOrgUnit')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?string $recipientOrgUnit = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
     #[Serializer\SerializedName('dmRecipientOrgUnitNum')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?int $recipientOrgUnitNum = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dmToHands')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?string $toHands = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dmAnnotation')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\Length(max: 255)]
     protected ?string $annotation = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dmRecipientRefNumber')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?string $recipientRefNumber = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dmSenderRefNumber')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?string $senderRefNumber = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dmRecipientIdent')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?string $recipientIdent = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dmSenderIdent')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?string $senderIdent = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
     #[Serializer\SerializedName('dmLegalTitleLaw')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?int $legalTitleLaw = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('int')]
     #[Serializer\SerializedName('dmLegalTitleYear')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?int $legalTitleYear = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dmLegalTitleSect')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?string $legalTitleSect = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dmLegalTitlePar')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?string $legalTitlePar = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dmLegalTitlePoint')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?string $legalTitlePoint = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('bool')]
     #[Serializer\SerializedName('dmPersonalDelivery')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?bool $personalDelivery = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('bool')]
     #[Serializer\SerializedName('dmAllowSubstDelivery')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?bool $allowSubstDelivery = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('bool')]
     #[Serializer\SerializedName('dmOVM')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?bool $ovm = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type(PublishOwnId::class)]
     #[Serializer\SerializedName('dmPublishOwnID')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?PublishOwnId $publishOwnId = null;
 
     public function getType(): ?string

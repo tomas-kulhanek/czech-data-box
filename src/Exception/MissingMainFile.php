@@ -6,6 +6,6 @@ namespace TomasKulhanek\CzechDataBox\Exception;
 
 use Exception;
 
-class MissingMainFile extends Exception
+class MissingMainFile extends Exception implements CzechDataBoxException
 {
 }

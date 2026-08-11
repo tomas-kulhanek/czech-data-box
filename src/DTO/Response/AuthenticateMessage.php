@@ -7,8 +7,8 @@ namespace TomasKulhanek\CzechDataBox\DTO\Response;
 use JMS\Serializer\Annotation as Serializer;
 use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 
-#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(name: 'AuthenticateMessageResponse', namespace: 'https://isds.czechpoint.cz/v20')]
+#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(name: 'AuthenticateMessageResponse', namespace: 'http://isds.czechpoint.cz/v20')]
 class AuthenticateMessage extends Response
 {
     use DataMessageStatus;

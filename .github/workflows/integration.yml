@@ -1,0 +1,90 @@
+name: Integration tests
+run-name: ${{ github.actor }} running integration tests
+
+concurrency:
+  group: isds-integration
+  cancel-in-progress: false
+
+on:
+  # Pondělí 07:00 UTC — záměrně mimo servisní okno ISDS (pátek 0:00–1:00).
+  schedule:
+    - cron: "0 7 * * MON"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  extensions: "xml mbstring curl openssl dom xdebug"
+  composer-install-args: "--no-progress --no-interaction --prefer-dist --no-scripts"
+
+jobs:
+  dependencies:
+    name: "Dependency audit"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: '8.5'
+          coverage: none
+
+      # composer.lock není součástí knihovny, audit proto potřebuje nejdřív instalaci.
+      - run: composer validate --strict
+      - uses: php-actions/composer@8a65f0d3c6a1d17ca4800491a40b5756a4c164f3 # v6
+        with:
+          php_version: '8.5'
+          args: "${{ env.composer-install-args }}"
+      - run: composer audit
+
+  integration-tests:
+    name: "Integration tests"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: '8.5'
+          coverage: none
+
+      - uses: php-actions/composer@8a65f0d3c6a1d17ca4800491a40b5756a4c164f3 # v6
+        with:
+          php_version: '8.5'
+          args: "${{ env.composer-install-args }}"
+
+      - run: |
+          mkdir .data
+          echo ${{ secrets.CERT_PRIV }} | base64 -d > .data/cert.pem
+          echo ${{ secrets.CERT_PUB }} | base64 -d > .data/cert.crt
+
+
+      - uses: 1password/load-secrets-action@eb2efd0703da22a93c467f2d1ffbb6826c11e19c # v4
+        with:
+          # Export loaded secrets as environment variables
+          export-env: true
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+
+          OVM_CERT_ID_DS: op://mafzpsiebs3jzo6sijs5rtfeg4/nwdbxdp4vx3qcczbfee7q2jg4i/text
+          OVM_CERT_LOGIN_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/nwdbxdp4vx3qcczbfee7q2jg4i/username
+          OVM_CERT_PASSWORD_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/nwdbxdp4vx3qcczbfee7q2jg4i/password
+
+          FO_ID_DS: op://mafzpsiebs3jzo6sijs5rtfeg4/db3jkjbdwomausvvp52q3qeefi/text
+          FO_LOGIN_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/db3jkjbdwomausvvp52q3qeefi/username
+          FO_PASSWORD_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/db3jkjbdwomausvvp52q3qeefi/password
+
+          OVM_ID_DS: op://mafzpsiebs3jzo6sijs5rtfeg4/2ksmcswa4ot4nh55lcsfmnpuau/text
+          OVM_LOGIN_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/2ksmcswa4ot4nh55lcsfmnpuau/username
+          OVM_PASSWORD_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/2ksmcswa4ot4nh55lcsfmnpuau/password
+
+          PFO_ID_DS: op://mafzpsiebs3jzo6sijs5rtfeg4/6g5plyqgiqxexvefr4nvtos4xu/text
+          PFO_LOGIN_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/6g5plyqgiqxexvefr4nvtos4xu/username
+          PFO_PASSWORD_USER: op://mafzpsiebs3jzo6sijs5rtfeg4/6g5plyqgiqxexvefr4nvtos4xu/password
+      - name: PHPUnit
+        run: composer test:integration
+        env:
+          CERT_PRIV: '${{ secrets.CERT_PRIV }}'
+          CERT_PUB: '${{ secrets.CERT_PUB }}'
+          CERT_PASSPHRASE: '${{ secrets.CERT_PASSPHRASE }}'

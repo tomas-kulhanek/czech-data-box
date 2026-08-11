@@ -7,21 +7,21 @@ namespace TomasKulhanek\CzechDataBox\DTO\Request;
 use JMS\Serializer\Annotation as Serializer;
 use TomasKulhanek\CzechDataBox\Traits\DataBoxId;
 
-#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'CheckDataBox')]
+#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'CheckDataBox')]
 class CheckDataBox implements Request
 {
     use DataBoxId;
 
     #[Serializer\Type('booL')]
     #[Serializer\SerializedName('dbApproved')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SkipWhenEmpty]
     protected ?bool $approved = null;
 
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dbExternRefNumber')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SkipWhenEmpty]
     protected ?string $externalRefNumber = null;
 
