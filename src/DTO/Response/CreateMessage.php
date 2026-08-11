@@ -12,7 +12,7 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'CreateMultipleMessageResponse')]
 #[Serializer\AccessorOrder(order: 'custom', custom: ['messageStatus', 'status'])]
-class CreateMessage extends IResponse
+class CreateMessage extends Response
 {
     use DataMessageStatus;
 

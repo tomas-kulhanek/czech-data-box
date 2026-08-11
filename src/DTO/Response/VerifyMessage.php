@@ -11,7 +11,7 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'VerifyMessageResponse')]
-class VerifyMessage extends IResponse
+class VerifyMessage extends Response
 {
     use DataMessageStatus;
 

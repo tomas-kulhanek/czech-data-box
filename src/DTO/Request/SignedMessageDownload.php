@@ -9,7 +9,7 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageId;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'SignedMessageDownload')]
-class SignedMessageDownload implements IRequest
+class SignedMessageDownload implements Request
 {
     use DataMessageId;
 }

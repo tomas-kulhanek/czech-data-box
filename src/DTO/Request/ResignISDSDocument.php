@@ -9,7 +9,7 @@ use TomasKulhanek\Serializer\Utils\SplFileInfo;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'Re-signISDSDocument')]
-class ResignISDSDocument implements IRequest
+class ResignISDSDocument implements Request
 {
     #[Serializer\Type('base64File')]
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]

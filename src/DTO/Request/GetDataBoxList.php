@@ -8,7 +8,7 @@ use JMS\Serializer\Annotation as Serializer;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'GetDataBoxList')]
-class GetDataBoxList implements IRequest
+class GetDataBoxList implements Request
 {
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dblType')]

@@ -11,7 +11,7 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'GetListOfReceivedMessagesResponse')]
-class GetListOfReceivedMessages extends IResponse
+class GetListOfReceivedMessages extends Response
 {
     use DataMessageStatus;
 

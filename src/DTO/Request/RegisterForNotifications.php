@@ -8,7 +8,7 @@ use JMS\Serializer\Annotation as Serializer;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'RegisterForNotifications')]
-class RegisterForNotifications implements IRequest
+class RegisterForNotifications implements Request
 {
     #[Serializer\Type('int')]
     #[Serializer\SerializedName('action')]

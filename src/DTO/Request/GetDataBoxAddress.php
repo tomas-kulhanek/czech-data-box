@@ -9,7 +9,7 @@ use TomasKulhanek\CzechDataBox\Traits\DataBoxId;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'GetDataBoxAddress')]
-class GetDataBoxAddress implements IRequest
+class GetDataBoxAddress implements Request
 {
     use DataBoxId;
 }

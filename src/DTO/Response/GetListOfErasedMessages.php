@@ -9,7 +9,7 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'GetListOfErasedMessagesResponse')]
-class GetListOfErasedMessages extends IResponse
+class GetListOfErasedMessages extends Response
 {
     use DataMessageStatus;
 

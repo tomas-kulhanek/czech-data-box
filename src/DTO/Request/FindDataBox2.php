@@ -10,7 +10,7 @@ use TomasKulhanek\CzechDataBox\DTO\OwnerInfoExt2;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'FindDataBox2')]
-class FindDataBox2 implements IRequest
+class FindDataBox2 implements Request
 {
     #[Serializer\Type(OwnerInfoExt2::class)]
     #[Serializer\SerializedName('dbOwnerInfo')]

@@ -11,7 +11,7 @@ use TomasKulhanek\CzechDataBox\Traits\ExtApproval;
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'GetDataBoxUsers2')]
 #[Serializer\AccessorOrder(order: 'custom', custom: ['dataBoxId', 'approved', 'externRefNumber'])]
-class GetDataBoxUsers2 implements IRequest
+class GetDataBoxUsers2 implements Request
 {
     use DataBoxId;
     use ExtApproval;

@@ -8,7 +8,7 @@ use JMS\Serializer\Annotation as Serializer;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'PickUpAsyncResponse')]
-class PickUpAsyncResponse implements IRequest
+class PickUpAsyncResponse implements Request
 {
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('asyncID')]

@@ -11,7 +11,7 @@ use TomasKulhanek\CzechDataBox\Traits\DataBoxId;
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'DataBoxCreditInfo')]
 #[Serializer\AccessorOrder(order: 'custom', custom: ['dataBoxId', 'fromDate', 'toDate'])]
-class DataBoxCreditInfo implements IRequest
+class DataBoxCreditInfo implements Request
 {
     use DataBoxId;
 

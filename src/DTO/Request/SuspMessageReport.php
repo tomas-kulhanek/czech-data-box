@@ -13,7 +13,7 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageId;
     order: 'custom',
     custom: ['dataMessageId', 'reporterName', 'reporterMail', 'reporterPhone', 'allowComplete', 'note']
 )]
-class SuspMessageReport implements IRequest
+class SuspMessageReport implements Request
 {
     use DataMessageId;
 

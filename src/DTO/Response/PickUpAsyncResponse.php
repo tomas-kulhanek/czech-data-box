@@ -9,7 +9,7 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'PickUpAsyncResponseResponse')]
-class PickUpAsyncResponse extends IResponse
+class PickUpAsyncResponse extends Response
 {
     use DataMessageStatus;
 

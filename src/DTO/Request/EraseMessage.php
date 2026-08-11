@@ -10,7 +10,7 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageId;
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'EraseMessage')]
 #[Serializer\AccessorOrder(order: 'custom', custom: ['dataMessageId', 'incoming'])]
-class EraseMessage implements IRequest
+class EraseMessage implements Request
 {
     use DataMessageId;
 

@@ -10,7 +10,7 @@ use LogicException;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'GetDataBoxAddressResponse')]
-class GetDataBoxAddress extends IResponse
+class GetDataBoxAddress extends Response
 {
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
@@ -86,7 +86,7 @@ class GetDataBoxAddress extends IResponse
     #[Serializer\Type(DataBoxStatus::class)]
     #[Serializer\SerializedName('dbStatus')]
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
-    protected ?IResponseStatus $status = null;
+    protected ?ResponseStatus $status = null;
 
     /**
      * GetDataBoxAddressResponse has no status element defined in the XSD,
@@ -94,9 +94,9 @@ class GetDataBoxAddress extends IResponse
      *
      * @throws LogicException When no dbStatus element was present in the response.
      */
-    public function getStatus(): IResponseStatus
+    public function getStatus(): ResponseStatus
     {
-        if (!$this->status instanceof IResponseStatus) {
+        if (!$this->status instanceof ResponseStatus) {
             throw new LogicException('GetDataBoxAddressResponse does not contain any dbStatus element.');
         }
         return $this->status;
@@ -104,7 +104,7 @@ class GetDataBoxAddress extends IResponse
 
     public function hasStatus(): bool
     {
-        return $this->status instanceof IResponseStatus;
+        return $this->status instanceof ResponseStatus;
     }
 
     public function getAdCode(): ?string

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TomasKulhanek\CzechDataBox\DTO\Response;
 
-interface IResponseStatus
+interface ResponseStatus
 {
     public function getCode(): string;
 

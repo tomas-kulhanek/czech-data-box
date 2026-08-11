@@ -11,7 +11,7 @@ use TomasKulhanek\Serializer\Utils\SplFileInfo;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'ArchiveISDSDocumentResponse')]
-class ArchiveISDSDocument extends IResponse
+class ArchiveISDSDocument extends Response
 {
     use DataMessageStatus;
 

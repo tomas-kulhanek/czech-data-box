@@ -11,7 +11,7 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'SentMessageEnvelopeDownloadResponse')]
-class SentMessageEnvelopeDownload extends IResponse
+class SentMessageEnvelopeDownload extends Response
 {
     use DataMessageStatus;
 

@@ -11,7 +11,7 @@ use TomasKulhanek\CzechDataBox\Traits\StatusFilter;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'GetListOfSentMessages')]
-class GetListOfSentMessages implements IRequest
+class GetListOfSentMessages implements Request
 {
     use StatusFilter;
 

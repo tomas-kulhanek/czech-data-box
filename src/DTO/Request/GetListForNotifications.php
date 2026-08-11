@@ -9,7 +9,7 @@ use JMS\Serializer\Annotation as Serializer;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'GetListForNotifications')]
-class GetListForNotifications implements IRequest
+class GetListForNotifications implements Request
 {
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]
     #[Serializer\SerializedName('ntfFromTime')]

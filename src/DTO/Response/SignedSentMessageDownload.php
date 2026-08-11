@@ -11,7 +11,7 @@ use TomasKulhanek\CzechDataBox\Traits\Signature;
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'SignedSentMessageDownloadResponse')]
 #[Serializer\AccessorOrder(order: 'custom', custom: ['signature', 'status'])]
-class SignedSentMessageDownload extends IResponse
+class SignedSentMessageDownload extends Response
 {
     use DataMessageStatus;
     use Signature;

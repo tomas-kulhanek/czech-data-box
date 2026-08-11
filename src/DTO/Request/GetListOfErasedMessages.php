@@ -9,7 +9,7 @@ use JMS\Serializer\Annotation as Serializer;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'GetListOfErasedMessages')]
-class GetListOfErasedMessages implements IRequest
+class GetListOfErasedMessages implements Request
 {
     public const MESSAGE_TYPE_SENT = 'SENT';
     public const MESSAGE_TYPE_RECEIVED = 'RECEIVED';

@@ -9,7 +9,7 @@ use TomasKulhanek\CzechDataBox\Traits\DataBoxStatus;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'CheckDataBoxResponse')]
-class CheckDataBox extends IResponse
+class CheckDataBox extends Response
 {
     use DataBoxStatus;
 

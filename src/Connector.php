@@ -45,7 +45,7 @@ use TomasKulhanek\CzechDataBox\DTO\Request\GetListOfSentMessages;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetMessageAuthor2;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetMessageStateChanges;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetSignedDeliveryInfo;
-use TomasKulhanek\CzechDataBox\DTO\Request\IRequest;
+use TomasKulhanek\CzechDataBox\DTO\Request\Request;
 use TomasKulhanek\CzechDataBox\DTO\Request\ISDSSearch3;
 use TomasKulhanek\CzechDataBox\DTO\Request\MarkMessageAsDownloaded;
 use TomasKulhanek\CzechDataBox\DTO\Request\MessageDownload;
@@ -66,7 +66,7 @@ use TomasKulhanek\CzechDataBox\DTO\Request\VerifyMessage;
 use TomasKulhanek\CzechDataBox\DTO\Response\GetOwnerInfoFromLogin;
 use TomasKulhanek\CzechDataBox\DTO\Response\GetPasswordInfo;
 use TomasKulhanek\CzechDataBox\DTO\Response\GetUserInfoFromLogin;
-use TomasKulhanek\CzechDataBox\DTO\Response\IResponse;
+use TomasKulhanek\CzechDataBox\DTO\Response\Response;
 use TomasKulhanek\CzechDataBox\Enum\ServiceTypeEnum;
 use TomasKulhanek\CzechDataBox\Exception\AttachmentCountOverflow;
 use TomasKulhanek\CzechDataBox\Exception\ConnectionException;
@@ -518,8 +518,8 @@ readonly class Connector
     }
 
     /**
-     * @template T of DTO\Response\IResponse
-     * @return IResponse
+     * @template T of DTO\Response\Response
+     * @return Response
      * @phpstan-param class-string<T> $responseClass
      * @phpstan-return T
      * @throws Exception\ConnectionException
@@ -527,10 +527,10 @@ readonly class Connector
     protected function send(
         Account $account,
         ServiceTypeEnum $serviceType,
-        IRequest $request,
+        Request $request,
         string $responseClass
-    ): IResponse {
-        if (!is_subclass_of($responseClass, IResponse::class)) {
+    ): Response {
+        if (!is_subclass_of($responseClass, Response::class)) {
             throw new ConnectionException();
         }
 

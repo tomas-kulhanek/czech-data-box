@@ -11,7 +11,7 @@ use TomasKulhanek\CzechDataBox\Traits\DataBoxStatus;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'GetUserInfoFromLoginResponse')]
-class GetUserInfoFromLogin extends IResponse
+class GetUserInfoFromLogin extends Response
 {
     use DataBoxStatus;
 

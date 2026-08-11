@@ -10,7 +10,7 @@ use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'CreateBigMessageResponse')]
-class CreateBigMessage extends IResponse
+class CreateBigMessage extends Response
 {
     use DataMessageId;
     use DataMessageStatus;

@@ -10,7 +10,7 @@ use TomasKulhanek\CzechDataBox\DTO\BigAttachment;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'UploadAttachment')]
-class UploadAttachment implements IRequest
+class UploadAttachment implements Request
 {
     #[Serializer\Type(BigAttachment::class)]
     #[Serializer\SerializedName('dmFile')]

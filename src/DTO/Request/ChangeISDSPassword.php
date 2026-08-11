@@ -12,7 +12,7 @@ use function mb_substr;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'ChangeISDSPassword')]
-class ChangeISDSPassword implements IRequest
+class ChangeISDSPassword implements Request
 {
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dbOldPassword')]

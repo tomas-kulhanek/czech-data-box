@@ -14,7 +14,7 @@ use TomasKulhanek\CzechDataBox\Traits\GetMainFile;
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'CreateMultipleMessage')]
 #[Serializer\AccessorOrder(order: 'custom', custom: ['recipients', 'envelope', 'files'])]
-class CreateMessage implements IRequest
+class CreateMessage implements Request
 {
     use GetMainFile;
 

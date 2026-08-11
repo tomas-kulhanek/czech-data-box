@@ -6,7 +6,7 @@ namespace TomasKulhanek\CzechDataBox\DTO;
 
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
-use TomasKulhanek\CzechDataBox\DTO\Response\IResponseStatus;
+use TomasKulhanek\CzechDataBox\DTO\Response\ResponseStatus;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'dmSingleStatus')]
@@ -16,7 +16,7 @@ class MessageStatus
     #[Serializer\SerializedName('dmStatus')]
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
-    protected IResponseStatus $status;
+    protected ResponseStatus $status;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
@@ -24,7 +24,7 @@ class MessageStatus
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     protected ?string $dataMessageId = null;
 
-    public function getStatus(): IResponseStatus
+    public function getStatus(): ResponseStatus
     {
         return $this->status;
     }

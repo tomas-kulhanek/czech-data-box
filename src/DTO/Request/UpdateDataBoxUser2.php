@@ -13,7 +13,7 @@ use TomasKulhanek\CzechDataBox\Traits\ExtApproval;
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'UpdateDataBoxUser2')]
 #[Serializer\AccessorOrder(order: 'custom', custom: ['dataBoxId', 'isdsId', 'newUserInfo', 'approved', 'externRefNumber'])]
-class UpdateDataBoxUser2 implements IRequest
+class UpdateDataBoxUser2 implements Request
 {
     use DataBoxId;
     use ExtApproval;

@@ -10,7 +10,7 @@ use TomasKulhanek\CzechDataBox\Traits\Signature;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'GetSignedDeliveryInfoResponse')]
-class GetSignedDeliveryInfo extends IResponse
+class GetSignedDeliveryInfo extends Response
 {
     use DataMessageStatus;
     use Signature;

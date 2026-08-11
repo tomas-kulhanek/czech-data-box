@@ -6,11 +6,11 @@ namespace TomasKulhanek\CzechDataBox\DTO;
 
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
-use TomasKulhanek\CzechDataBox\DTO\Response\IResponseStatus;
+use TomasKulhanek\CzechDataBox\DTO\Response\ResponseStatus;
 
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'dmStatus')]
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
-class DataMessageStatus implements IResponseStatus
+class DataMessageStatus implements ResponseStatus
 {
     #[Serializer\Type('string')]
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]

@@ -10,7 +10,7 @@ use TomasKulhanek\Serializer\Utils\SplFileInfo;
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'AuthenticateMessage')]
 #[Serializer\AccessType(type: 'public_method')]
-class AuthenticateMessage implements IRequest
+class AuthenticateMessage implements Request
 {
     #[Serializer\Type('base64File')]
     #[Serializer\SerializedName('dmMessage')]

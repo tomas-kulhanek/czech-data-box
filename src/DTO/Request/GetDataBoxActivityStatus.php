@@ -11,7 +11,7 @@ use TomasKulhanek\CzechDataBox\Traits\DataBoxId;
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'GetDataBoxActivityStatus')]
 #[Serializer\AccessorOrder(order: 'custom', custom: ['dataBoxId', 'from', 'to'])]
-class GetDataBoxActivityStatus implements IRequest
+class GetDataBoxActivityStatus implements Request
 {
     use DataBoxId;
 

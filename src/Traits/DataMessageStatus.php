@@ -6,7 +6,7 @@ namespace TomasKulhanek\CzechDataBox\Traits;
 
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
-use TomasKulhanek\CzechDataBox\DTO\Response\IResponseStatus;
+use TomasKulhanek\CzechDataBox\DTO\Response\ResponseStatus;
 
 trait DataMessageStatus
 {
@@ -14,14 +14,14 @@ trait DataMessageStatus
     #[Serializer\SerializedName('dmStatus')]
     #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
     #[Assert\Valid()]
-    protected IResponseStatus $status;
+    protected ResponseStatus $status;
 
-    public function getStatus(): IResponseStatus
+    public function getStatus(): ResponseStatus
     {
         return $this->status;
     }
 
-    public function setStatus(IResponseStatus $status): self
+    public function setStatus(ResponseStatus $status): self
     {
         $this->status = $status;
         return $this;

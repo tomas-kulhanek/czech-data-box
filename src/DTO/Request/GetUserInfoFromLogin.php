@@ -9,7 +9,7 @@ use TomasKulhanek\CzechDataBox\Traits\Dummy;
 
 #[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'GetUserInfoFromLogin')]
-class GetUserInfoFromLogin implements IRequest
+class GetUserInfoFromLogin implements Request
 {
     use Dummy;
 }
