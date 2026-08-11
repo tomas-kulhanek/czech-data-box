@@ -53,6 +53,13 @@ $provider = GuzzleClientProvider::create(EndpointProvider::test());    // test (
 $provider = GuzzleClientProvider::create(new EndpointProvider('datovka.cms2.cz')); // vlastní doména (KIVS)
 ```
 
+> [!WARNING]
+> Vlastní doména musí pocházet z **důvěryhodné konfigurace, nikdy z uživatelského vstupu**. Na výslednou
+> URL se posílají přihlašovací údaje (Basic Auth) i klientský certifikát, takže podvržená doména znamená
+> jejich únik. `EndpointProvider` proto přijímá pouze holé jméno hostu — bez schématu, přihlašovacích
+> údajů, portu a cesty (`datovka.cms2.cz` ano, `https://datovka.cms2.cz/` ne). Neplatná hodnota skončí
+> výjimkou `TomasKulhanek\CzechDataBox\Exception\InvalidEndpointDomain`.
+
 ## Využití s Symfony HTTP client
 ### Instalace
 ```bash
