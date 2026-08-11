@@ -214,6 +214,7 @@ Základní pomoc je poskytována zcela zdarma pomocí Issues.
 
 ## Odkazy
 - Changelog knihovny - [CHANGELOG.md](CHANGELOG.md)
+- Jak přispívat - [CONTRIBUTING.md](CONTRIBUTING.md)
 - Produkční ISDS - https://www.datovka.gov.cz
 - Testovací ISDS - https://datovka-test.gov.cz
 - Provozní řád ISDS - https://datovka.gov.cz/info/cs/80.html
