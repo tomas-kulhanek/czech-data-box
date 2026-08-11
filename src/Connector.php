@@ -11,6 +11,7 @@ use TomasKulhanek\CzechDataBox\DTO\Response\GetOwnerInfoFromLogin2;
 use TomasKulhanek\CzechDataBox\DTO\Response\GetUserInfoFromLogin2;
 use DOMDocument;
 use DOMElement;
+use DOMNode;
 use DOMNodeList;
 use DOMXPath;
 use JMS\Serializer\SerializerInterface;
