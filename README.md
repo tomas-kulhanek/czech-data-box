@@ -325,12 +325,12 @@ Legenda: ✅ implementováno · ⛔ záměrně vynecháno (operaci nahradila nov
 | --- | ---: | ---: | ---: | ---: |
 | [`db_access.wsdl`](#db_accesswsdl) | 6 | 6 | 0 | 0 |
 | [`db_search.wsdl`](#db_searchwsdl) | 14 | 11 | 3 | 0 |
-| [`db_manipulations.wsdl`](#db_manipulationswsdl) | 23 | 4 | 10 | 9 |
+| [`db_manipulations.wsdl`](#db_manipulationswsdl) | 23 | 7 | 10 | 6 |
 | [`dm_operations.wsdl`](#dm_operationswsdl) | 8 | 8 | 0 | 0 |
 | [`dm_info.wsdl`](#dm_infowsdl) | 17 | 16 | 1 | 0 |
 | [`dm_VoDZ.wsdl`](#dm_vodzwsdl) | 7 | 7 | 0 | 0 |
 | [`dm_arch.wsdl`](#dm_archwsdl) | 1 | 1 | 0 | 0 |
-| **Celkem** | **76** | **53** | **14** | **9** |
+| **Celkem** | **76** | **56** | **14** | **6** |
 
 ### `db_access.wsdl`
 
@@ -385,15 +385,15 @@ Legenda: ✅ implementováno · ⛔ záměrně vynecháno (operaci nahradila nov
 | `UpdateDataBoxUser` | — | ⛔ | starší varianta, ISDS ji nahradilo operací `UpdateDataBoxUser2` |
 | `UpdateDataBoxUser2` | `updateDataBoxUser2()` | ✅ | — |
 | `NewAccessData` | — | ⛔ | starší varianta, ISDS ji nahradilo operací `NewAccessData2` |
-| `NewAccessData2` | — | ❌ | vygenerování nových přístupových údajů uživatele |
+| `NewAccessData2` | `newAccessData2()` | ✅ | — |
 | `DisableDataBoxExternally` | — | ⛔ | starší varianta, ISDS ji nahradilo operací `DisableDataBoxExternally2` |
 | `DisableDataBoxExternally2` | — | ❌ | znepřístupnění cizí schránky (agenda OVM) |
 | `DisableOwnDataBox` | — | ⛔ | starší varianta, ISDS ji nahradilo operací `DisableOwnDataBox2` |
 | `DisableOwnDataBox2` | — | ❌ | znepřístupnění vlastní schránky |
 | `EnableOwnDataBox` | — | ⛔ | starší varianta, ISDS ji nahradilo operací `EnableOwnDataBox2` |
 | `EnableOwnDataBox2` | — | ❌ | zpřístupnění vlastní schránky |
-| `SetOpenAddressing` | — | ❌ | zapnutí příjmu poštovních datových zpráv |
-| `ClearOpenAddressing` | — | ❌ | vypnutí příjmu poštovních datových zpráv |
+| `SetOpenAddressing` | `setOpenAddressing()` | ✅ | — |
+| `ClearOpenAddressing` | `clearOpenAddressing()` | ✅ | — |
 | `GetDataBoxUsers2` | `getDataBoxUsers2()` | ✅ | — |
 
 ### `dm_operations.wsdl`
