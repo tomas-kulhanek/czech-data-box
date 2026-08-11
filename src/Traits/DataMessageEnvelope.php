@@ -143,9 +143,10 @@ trait DataMessageEnvelope
         return $this->recipientId;
     }
 
-    public function setRecipientId(?string $recipientId): void
+    public function setRecipientId(?string $recipientId): self
     {
         $this->recipientId = $recipientId;
+        return $this;
     }
 
     public function getToHands(): ?string
@@ -153,8 +154,9 @@ trait DataMessageEnvelope
         return $this->toHands;
     }
 
-    public function setToHands(?string $toHands): void
+    public function setToHands(?string $toHands): self
     {
         $this->toHands = $toHands;
+        return $this;
     }
 }
