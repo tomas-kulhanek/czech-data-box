@@ -16,6 +16,8 @@ use DOMNodeList;
 use DOMXPath;
 use JMS\Serializer\SerializerInterface;
 use TomasKulhanek\CzechDataBox\DTO\ExtFile;
+use TomasKulhanek\CzechDataBox\DTO\BigMessageEnvelope;
+use TomasKulhanek\CzechDataBox\DTO\Envelope;
 use TomasKulhanek\CzechDataBox\DTO\File;
 use TomasKulhanek\CzechDataBox\DTO\Request\ArchiveISDSDocument;
 use TomasKulhanek\CzechDataBox\DTO\Request\AuthenticateBigMessage;
@@ -72,6 +74,7 @@ use TomasKulhanek\CzechDataBox\Enum\ServiceTypeEnum;
 use TomasKulhanek\CzechDataBox\Exception\AttachmentCountOverflow;
 use TomasKulhanek\CzechDataBox\Exception\ConnectionException;
 use TomasKulhanek\CzechDataBox\Exception\DisallowedAttachmentFormat;
+use TomasKulhanek\CzechDataBox\Exception\FieldLengthOverflow;
 use TomasKulhanek\CzechDataBox\Exception\FileSizeOverflow;
 use TomasKulhanek\CzechDataBox\Exception\MissingMainFile;
 use TomasKulhanek\CzechDataBox\Exception\MissingRequiredField;
@@ -92,6 +95,12 @@ readonly class Connector
     public const int MAX_MESSAGE_ATTACHMENTS_SIZE = 20 * 1024 ** 2;
 
     public const int MAX_BIG_MESSAGE_ATTACHMENTS_SIZE = 100 * 1024 ** 2;
+
+    public const int MAX_ANNOTATION_LENGTH = 255;
+
+    public const int MAX_REF_NUMBER_LENGTH = 50;
+
+    public const int MAX_IDENT_LENGTH = 50;
 
     public const int DEFAULT_MAX_RESPONSE_SIZE = 256 * 1024 ** 2;
 
@@ -245,6 +254,7 @@ readonly class Connector
         if (empty($input->getEnvelope()->getAnnotation())) {
             throw new MissingRequiredField('annotation');
         }
+        $this->assertEnvelopeLengths($input->getEnvelope());
         return $this->send($account, ServiceTypeEnum::OPERATIONS, $input, DTO\Response\CreateMessage::class);
     }
 
@@ -463,6 +473,7 @@ readonly class Connector
         if (empty($envelope->getAnnotation())) {
             throw new MissingRequiredField('annotation');
         }
+        $this->assertEnvelopeLengths($envelope);
 
         return $this->send($account, ServiceTypeEnum::VODZ, $input, DTO\Response\CreateBigMessage::class);
     }
@@ -563,6 +574,37 @@ readonly class Connector
         }
 
         return $sumFileSize;
+    }
+
+    private function assertEnvelopeLengths(Envelope|BigMessageEnvelope $envelope): void
+    {
+        $this->assertFieldLength('dmAnnotation', $envelope->getAnnotation(), self::MAX_ANNOTATION_LENGTH);
+        $this->assertFieldLength(
+            'dmRecipientRefNumber',
+            $envelope->getRecipientRefNumber(),
+            self::MAX_REF_NUMBER_LENGTH
+        );
+        $this->assertFieldLength('dmSenderRefNumber', $envelope->getSenderRefNumber(), self::MAX_REF_NUMBER_LENGTH);
+        $this->assertFieldLength('dmRecipientIdent', $envelope->getRecipientIdent(), self::MAX_IDENT_LENGTH);
+        $this->assertFieldLength('dmSenderIdent', $envelope->getSenderIdent(), self::MAX_IDENT_LENGTH);
+    }
+
+    private function assertFieldLength(string $fieldName, ?string $value, int $maxLength): void
+    {
+        if ($value === null) {
+            return;
+        }
+        $length = mb_strlen($value);
+        if ($length > $maxLength) {
+            throw new FieldLengthOverflow(
+                sprintf(
+                    'The field \'%s\' can be at most %d characters long. Currently it has %d.',
+                    $fieldName,
+                    $maxLength,
+                    $length
+                )
+            );
+        }
     }
 
     private function assertAttachmentSize(int $size, int $maxSize): void

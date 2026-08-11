@@ -9,6 +9,32 @@ use TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum;
 
 trait AccountTrait
 {
+    private const array REQUIRED_ENVIRONMENT_VARIABLES = [
+        'FO_LOGIN_USER',
+        'PFO_LOGIN_USER',
+        'OVM_LOGIN_USER',
+        'OVM_CERT_LOGIN_USER',
+    ];
+
+    private const string CERTIFICATE_PATH = __DIR__ . '/../../.data/cert.pem';
+
+    public static function setUpBeforeClass(): void
+    {
+        foreach (self::REQUIRED_ENVIRONMENT_VARIABLES as $variable) {
+            if (getenv($variable) === false || getenv($variable) === '') {
+                self::markTestSkipped(
+                    sprintf('Integration tests need ISDS credentials, %s is not set.', $variable)
+                );
+            }
+        }
+
+        if (!is_file(self::CERTIFICATE_PATH)) {
+            self::markTestSkipped(
+                sprintf('Integration tests need a client certificate in %s.', self::CERTIFICATE_PATH)
+            );
+        }
+    }
+
     protected function createPFOAccount(): Account
     {
         $account = new Account();

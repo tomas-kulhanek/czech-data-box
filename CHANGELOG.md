@@ -18,6 +18,7 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 - **Limit velikosti příloh snížen z 25 MiB na 20 MB** (limit běžné datové zprávy dle řádu); do součtu se nově počítají i přílohy `dmXMLContent`.
 - **`createMessage()` nově vyhazuje** `AttachmentCountOverflow` (více než 100 příloh, resp. 10 kontejnerových ZIP/ASiC) a `DisallowedAttachmentFormat` (přípona mimo whitelist vyhlášky č. 194/2009 Sb.).
 - **Nullabilita dle XSD**: `getAttachmentSize(): ?int` (`MessageRecord`, `ReturnedMessage`, `ReturnedMessageEnvelope`), `DataMessageEvent::getTime(): ?DateTimeImmutable`, `$qTimestamp` nullable.
+- **`Traits\GetMainFile::getFiles()` je nově `abstract`** — místo tichého `return []` musí třída, která trait použije, metodu implementovat (všechny DTO v knihovně ji implementují). Dřív zapomenutá implementace znamenala, že `getMainFile()` vždy vrátilo `null`.
 - **`Account::setProduction()` / `isProduction()` odstraněno** — prostředí nově určuje `EndpointProvider` (`EndpointProvider::production()`, `EndpointProvider::test()`, nebo vlastní doména `new EndpointProvider('datovka.cms2.cz')` pro KIVS). HTTP providery přijímají `EndpointProviderInterface`, factory `create()` má volitelný parametr. Vlastní doména se validuje jako holé jméno hostu (bez schématu, přihlašovacích údajů, portu a cesty); neplatná hodnota vyhodí `InvalidEndpointDomain`. Doména musí vždy pocházet z důvěryhodné konfigurace — na výslednou URL se posílají přihlašovací údaje i klientský certifikát.
 
 ### Přidáno
@@ -37,6 +38,7 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 - **Výjimka `SoapFault`** — `Connector` nově detekuje SOAP Fault (1.1 i 1.2) v odpovědi a vyhazuje `SoapFault` (potomek `ConnectionException`) s `faultCode` a `faultString` místo obecné chyby. Všechny výjimky knihovny navíc implementují nový marker interface `CzechDataBoxException`, takže je lze zachytit jedním `catch`.
 - **SOAP obálka požadavku se skládá řetězcově bez DOM** — odpadl druhý plný DOM průchod (parse + `importNode` + `saveXml`) nad serializovaným požadavkem; u VoDZ `uploadAttachment()` to šetří ~35 % CPU času a špičkovou paměť nově určuje jen samotná serializace. Horní mez paměti hlídá nový test ve skupině `memory` (z výchozího běhu vyloučena, spouští se `--group memory`).
 - **`Utils\StatusGuard`** — volitelný pomocník `assertOk()` / `assertStatusOk()`, který při ne-OK stavu odpovědi vyhodí typovanou výjimku `IsdsStatusError` (s `statusCode`, `statusMessage`, `refNumber`); obsahuje mapu známých kódů ISDS s českým vysvětlením (např. 1281, 1201, 2046). U `CreateMessage` kontroluje i dílčí stavy `dmMultipleStatus`.
+- **Kontrola délkových limitů obálky dle XSD.** `createMessage()` i `createBigMessage()` nově odmítnou příliš dlouhý `dmAnnotation` (255 znaků), `dmSenderRefNumber` / `dmRecipientRefNumber` a `dmSenderIdent` / `dmRecipientIdent` (50 znaků) novou výjimkou `FieldLengthOverflow` ještě před odesláním. Délka se počítá ve znacích, ne v bajtech. Limity jsou dostupné jako konstanty `Connector::MAX_ANNOTATION_LENGTH`, `MAX_REF_NUMBER_LENGTH` a `MAX_IDENT_LENGTH`.
 - **README**: příklady použití — odeslání VoDZ (`uploadAttachment()` + `createBigMessage()`) a načtení seznamu přijatých zpráv s filtrem.
 
 ### Opraveno
@@ -50,6 +52,16 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 - Poškozená nebo neúplná SOAP odpověď vypisovala PHP warning z `DOMDocument::loadXML()` a končila prázdnou `ConnectionException`. Parsování nově běží s `libxml_use_internal_errors()` a chyba se hlásí jako `ConnectionException` s popisem.
 - Composer skript `check` odkazoval na neexistující `@phpunit` a `check:rector`/`fix:rector` zpracovávaly neexistující složku `public/`; README instaloval Guzzle `^7.0`, dev závislost je `^8.0`.
 - Mapování HTTP 503 → `SystemExclusion` nikdy nefungovalo — Guzzle provider testoval symfonní `TransportExceptionInterface`, kterou Guzzle nevyhazuje, a Symfony provider dostával `ServerExceptionInterface`. Oba providery nově vyhodnocují stavový kód odpovědi; HTTP 500 (a další chyby ≥ 400) s neprázdným tělem se navíc předává `Connectoru`, aby šel detekovat SOAP Fault.
+- Composer skript `check` neobsahoval testy, takže lokální brána prošla i s rozbitou unit test suite. `check` nově spouští stejnou sadu jako CI (`check:phpstan`, `check:cs`, `check:rector`, `test:unit`); duplicitní `check:all` byl zrušen.
+- `composer test:integration` bez přihlašovacích údajů končil chybami místo přeskočení. Integrační testy se nově přeskočí (`markTestSkipped`), pokud chybí proměnné prostředí `*_LOGIN_USER` nebo soubor `.data/cert.pem`.
+- Smazán mrtvý `ruleset.xml` — odkazoval na balíček `ninjify/coding-standard`, který v projektu není. Kontrola stylu reálně běží přes `phpcs --standard=PSR12` (skript `check:cs`).
+- **`jms/serializer` je nově explicitní závislost** (`^3.32`). `Connector::__construct()` přijímá `JMS\Serializer\SerializerInterface`, takže jde o součást veřejného API — dosud se balíček instaloval jen tranzitivně přes `tomas-kulhanek/serializer`.
+- Constraint PHP zpřísněn z `>=8.4` na `^8.4`, aby se knihovna neinstalovala na dosud nevydané PHP 9.
+- `GuzzleClientProvider::__construct()` přijímá `GuzzleHttp\ClientInterface` místo konkrétní třídy `GuzzleHttp\Client` — stejně jako `SymfonyClientProvider` s `HttpClientInterface`. Umožňuje předat dekorovaného či mockovaného klienta.
+- `setRecipientId()` a `setToHands()` v obálce stažené zprávy vracely `void`, takže se fluent řetězec setterů uprostřed rozbil. Nově vracejí `self` jako ostatní settery.
+- `DTO\Recipient` posílal do každého požadavku prázdný element `<p:dmToHands></p:dmToHands>`; pole `dmToHands` je nově označeno `#[Serializer\SkipWhenEmpty]`.
+- `Utils\BinarySuffix` ořezával desetinnou část (`%d`), takže hláška o překročení limitu tvrdila „Maximum size … can be 20 MB. Current size is 20 MB." i pro 20,9 MB. Velikosti se nově formátují s jedním desetinným místem.
+- Dist balíček z Packagistu vezl i vývojové soubory (`tests/`, `.github/`, `phpunit.xml`, `phpstan.neon`, `rector.php`, `Dockerfile`) — `.gitattributes` je nově označuje `export-ignore`. `archive.exclude` v `composer.json` platí jen pro `composer archive`, na distribuci přes Packagist vliv nemá.
 
 ### Zabezpečení
 
