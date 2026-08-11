@@ -35,6 +35,7 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 - **Týdenní integrační běh proti `datovka-test.gov.cz`** — testy rozděleny na suite `unit` a `integration` (composer skripty `test:unit` / `test:integration`); nové workflow `integration.yml` spouští integrační testy každé pondělí v 07:00 UTC (mimo servisní okno ISDS) a lze jej spustit i ručně.
 - **XSD validace serializovaných requestů** proti schématům přílohy 1 a 2 Provozního řádu (`tests/_data/xsd/`) — každý request DTO se serializuje a validuje proti `dmBaseTypes.xsd` resp. `dbTypes.xsd`, úplnost pokrytí hlídá reflexní test.
 - **Výjimka `SoapFault`** — `Connector` nově detekuje SOAP Fault (1.1 i 1.2) v odpovědi a vyhazuje `SoapFault` (potomek `ConnectionException`) s `faultCode` a `faultString` místo obecné chyby. Všechny výjimky knihovny navíc implementují nový marker interface `CzechDataBoxException`, takže je lze zachytit jedním `catch`.
+- **SOAP obálka požadavku se skládá řetězcově bez DOM** — odpadl druhý plný DOM průchod (parse + `importNode` + `saveXml`) nad serializovaným požadavkem; u VoDZ `uploadAttachment()` to šetří ~35 % CPU času a špičkovou paměť nově určuje jen samotná serializace. Horní mez paměti hlídá nový test ve skupině `memory` (z výchozího běhu vyloučena, spouští se `--group memory`).
 
 ### Opraveno
 
