@@ -11,7 +11,6 @@ use TomasKulhanek\CzechDataBox\DTO\Response\GetOwnerInfoFromLogin2;
 use TomasKulhanek\CzechDataBox\DTO\Response\GetUserInfoFromLogin2;
 use DOMDocument;
 use DOMElement;
-use DOMNode;
 use DOMNodeList;
 use DOMXPath;
 use JMS\Serializer\SerializerInterface;
@@ -664,32 +663,23 @@ readonly class Connector
             throw new ConnectionException();
         }
 
-        $request = $this->serializer->serialize($request, 'xml');
-        $request = $this->getXmlDocument($request);
-
-        $requestDocument = $this->getXmlDocument(null, $serviceType->usesSoap12());
-        $requestDocumentXpath = new DOMXPath($requestDocument);
-        if (empty($requestDocument->documentElement)) {
-            throw new ConnectionException();
+        $body = $this->serializer->serialize($request, 'xml');
+        if (str_starts_with($body, '<?')) {
+            $declarationEnd = strpos($body, '?>');
+            if ($declarationEnd !== false) {
+                $offset = $declarationEnd + 2;
+                $offset += strspn($body, " \t\r\n", $offset);
+                $body = substr($body, $offset);
+            }
         }
-        $bodyNode = $requestDocumentXpath->evaluate('//' . $requestDocument->documentElement->prefix . ':Body');
-        if (!$bodyNode instanceof DOMNodeList) {
-            throw new ConnectionException();
-        }
-        $body = $bodyNode->item(0);
-        if (!$body instanceof DOMNode || $body->ownerDocument === null || $request->documentElement === null) {
-            throw new ConnectionException();
-        }
-        $new = $body->ownerDocument->importNode($request->documentElement, true);
-        if ($body->nextSibling !== null) {
-            $body->insertBefore($new, $body->nextSibling);
-        } else {
-            $body->appendChild($new);
-        }
-        $xmlBody = $requestDocument->saveXml();
-        if (!$xmlBody) {
-            throw new ConnectionException();
-        }
+        $soapNamespace = $serviceType->usesSoap12()
+            ? 'http://www.w3.org/2003/05/soap-envelope'
+            : 'http://schemas.xmlsoap.org/soap/envelope/';
+        $xmlBody = '<?xml version="1.0" encoding="UTF-8"?>'
+            . '<SOAP-ENV:Envelope xmlns:SOAP-ENV="' . $soapNamespace . '"><SOAP-ENV:Header/><SOAP-ENV:Body>'
+            . $body
+            . '</SOAP-ENV:Body></SOAP-ENV:Envelope>';
+        unset($body);
 
         $response = $this->provider->sendRequest($account, $serviceType, $xmlBody);
         if (strlen($response) > $this->maxResponseSize) {

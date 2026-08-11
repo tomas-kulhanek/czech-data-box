@@ -5,6 +5,11 @@
       <directory>./tests</directory>
     </testsuite>
   </testsuites>
+  <groups>
+    <exclude>
+      <group>memory</group>
+    </exclude>
+  </groups>
   <source>
     <include>
       <directory suffix=".php">./src</directory>
