@@ -12,7 +12,7 @@ use TomasKulhanek\CzechDataBox\Connector;
 use TomasKulhanek\CzechDataBox\DTO\BigAttachment;
 use TomasKulhanek\CzechDataBox\DTO\Request\UploadAttachment;
 use TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum;
-use TomasKulhanek\Serializer\Utils\SplFileInfo;
+use TomasKulhanek\CzechDataBox\Serializer\SplFileInfo;
 use TomasKulhanek\Tests\CzechDataBox\SerializerTrait;
 
 class VodzMemoryTest extends TestCase

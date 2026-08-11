@@ -21,7 +21,7 @@ use TomasKulhanek\CzechDataBox\Exception\FileSizeOverflow;
 use TomasKulhanek\CzechDataBox\Exception\MissingMainFile;
 use TomasKulhanek\CzechDataBox\Exception\MissingRequiredField;
 use TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface;
-use TomasKulhanek\Serializer\Utils\SplFileInfo;
+use TomasKulhanek\CzechDataBox\Serializer\SplFileInfo;
 use TomasKulhanek\Tests\CzechDataBox\SerializerTrait;
 
 class VodzValidationTest extends TestCase

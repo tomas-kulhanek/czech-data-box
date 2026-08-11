@@ -80,7 +80,7 @@ use TomasKulhanek\CzechDataBox\DTO\Recipient;
 use TomasKulhanek\CzechDataBox\DTO\Request;
 use TomasKulhanek\CzechDataBox\DTO\UserInfoExt2;
 use TomasKulhanek\Tests\CzechDataBox\SerializerTrait;
-use TomasKulhanek\Serializer\Utils\SplFileInfo;
+use TomasKulhanek\CzechDataBox\Serializer\SplFileInfo;
 
 class RequestXsdValidationTest extends TestCase
 {

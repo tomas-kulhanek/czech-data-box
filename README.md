@@ -102,8 +102,8 @@ use TomasKulhanek\CzechDataBox\DTO\File;
 use TomasKulhanek\CzechDataBox\DTO\Recipient;
 use TomasKulhanek\CzechDataBox\DTO\Request\CreateMessage;
 use TomasKulhanek\CzechDataBox\Provider\GuzzleClientProvider;
-use TomasKulhanek\Serializer\SerializerFactory;
-use TomasKulhanek\Serializer\Utils\SplFileInfo;
+use TomasKulhanek\CzechDataBox\Serializer\SerializerFactory;
+use TomasKulhanek\CzechDataBox\Serializer\SplFileInfo;
 
 $connector = new Connector(SerializerFactory::create(), GuzzleClientProvider::create());
 
@@ -148,7 +148,7 @@ use TomasKulhanek\CzechDataBox\Connector;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetListOfReceivedMessages;
 use TomasKulhanek\CzechDataBox\Enum\FilterEnum;
 use TomasKulhanek\CzechDataBox\Provider\GuzzleClientProvider;
-use TomasKulhanek\Serializer\SerializerFactory;
+use TomasKulhanek\CzechDataBox\Serializer\SerializerFactory;
 
 $connector = new Connector(SerializerFactory::create(), GuzzleClientProvider::create());
 
@@ -175,7 +175,7 @@ composer require tomas-kulhanek/czech-data-box symfony/http-client
 ```
 #### Instancování
 ```php
-$serializer = \TomasKulhanek\Serializer\SerializerFactory::create();
+$serializer = \TomasKulhanek\CzechDataBox\Serializer\SerializerFactory::create();
 $guzzleProvider = \TomasKulhanek\CzechDataBox\Provider\SymfonyClientProvider::create();
 $connector = new \TomasKulhanek\CzechDataBox\Connector($serializer, $guzzleProvider);
 ```
@@ -187,7 +187,7 @@ composer require tomas-kulhanek/czech-data-box guzzlehttp/guzzle:^8.0
 ```
 #### Instancování 
 ```php
-$serializer = \TomasKulhanek\Serializer\SerializerFactory::create();
+$serializer = \TomasKulhanek\CzechDataBox\Serializer\SerializerFactory::create();
 $guzzleProvider = \TomasKulhanek\CzechDataBox\Provider\GuzzleClientProvider::create();
 $connector = new \TomasKulhanek\CzechDataBox\Connector($serializer, $guzzleProvider);
 ```
@@ -211,8 +211,8 @@ use TomasKulhanek\CzechDataBox\DTO\Request\CreateBigMessage;
 use TomasKulhanek\CzechDataBox\DTO\Request\UploadAttachment;
 use TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum;
 use TomasKulhanek\CzechDataBox\Provider\GuzzleClientProvider;
-use TomasKulhanek\Serializer\SerializerFactory;
-use TomasKulhanek\Serializer\Utils\SplFileInfo;
+use TomasKulhanek\CzechDataBox\Serializer\SerializerFactory;
+use TomasKulhanek\CzechDataBox\Serializer\SplFileInfo;
 
 $account = new Account();
 $account->setPassword('mojeTajneHeslo')

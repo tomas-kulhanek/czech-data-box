@@ -28,8 +28,7 @@
     "ext-openssl": "*",
     "ext-xml": "*",
     "composer/ca-bundle": "^1.5",
-    "jms/serializer": "^3.32",
-    "tomas-kulhanek/serializer": "^2.0.3"
+    "jms/serializer": "^3.32"
   },
   "autoload": {
     "psr-4": {

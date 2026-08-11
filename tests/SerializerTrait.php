@@ -6,18 +6,13 @@ namespace TomasKulhanek\Tests\CzechDataBox;
 
 use JMS\Serializer\SerializerInterface;
 use LogicException;
-use TomasKulhanek\Serializer\SerializerFactory;
+use TomasKulhanek\CzechDataBox\Serializer\SerializerFactory;
 
 trait SerializerTrait
 {
     private static function createSerializer(): SerializerInterface
     {
-        $serializer = SerializerFactory::create();
-        if (!$serializer instanceof SerializerInterface) {
-            throw new LogicException('SerializerFactory::create() did not return a SerializerInterface.');
-        }
-
-        return $serializer;
+        return SerializerFactory::create();
     }
 
     /**

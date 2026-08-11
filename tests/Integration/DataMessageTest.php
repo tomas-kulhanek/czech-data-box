@@ -25,7 +25,7 @@ use TomasKulhanek\CzechDataBox\DTO\Envelope;
 use TomasKulhanek\CzechDataBox\DTO\File;
 use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use PHPUnit\Framework\TestCase;
-use TomasKulhanek\Serializer\Utils\SplFileInfo;
+use TomasKulhanek\CzechDataBox\Serializer\SplFileInfo;
 
 class DataMessageTest extends TestCase
 {
