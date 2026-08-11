@@ -6,17 +6,45 @@ namespace TomasKulhanek\CzechDataBox\DTO;
 
 use DateTimeImmutable;
 use JMS\Serializer\Annotation as Serializer;
-use TomasKulhanek\CzechDataBox\Traits\Address;
-use TomasKulhanek\CzechDataBox\Traits\DataBoxId;
-use TomasKulhanek\CzechDataBox\Traits\PersonName;
 
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'dbOwnerInfo')]
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
-class OwnerInfo
+#[Serializer\AccessorOrder(order: 'custom', custom: [
+    'dataBoxType',
+    'ic',
+    'lastNameAtBirth',
+    'firmName',
+    'biDate',
+    'biCity',
+    'biCounty',
+    'biState',
+    'nationality',
+    'email',
+    'telNumber',
+    'identifier',
+    'registryCode',
+    'dataBoxState',
+    'dataBoxEffectiveOvm',
+    'dataBoxOpenAddressing',
+    'dataBoxId',
+    'firstName',
+    'middleName',
+    'lastName',
+    'adCity',
+    'adDistrict',
+    'adStreet',
+    'adNumberInStreet',
+    'adNumberInMunicipality',
+    'adZipCode',
+    'adState',
+    'adAMCode',
+])]
+class OwnerInfo extends PersonInfo
 {
-    use DataBoxId;
-    use PersonName;
-    use Address;
+    #[Serializer\Type('string')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbID')]
+    protected ?string $dataBoxId = null;
 
     #[Serializer\Type('string')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
@@ -28,12 +56,6 @@ class OwnerInfo
     #[Serializer\SerializedName('ic')]
     #[Serializer\SkipWhenEmpty]
     protected ?string $ic = null;
-
-    #[Serializer\Type('string')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
-    #[Serializer\SerializedName('pnLastNameAtBirth')]
-    #[Serializer\SkipWhenEmpty]
-    protected ?string $lastNameAtBirth = null;
 
     #[Serializer\Type('string')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
@@ -113,6 +135,17 @@ class OwnerInfo
     #[Serializer\SerializedName('dbOpenAddressing')]
     protected ?bool $dataBoxOpenAddressing = null;
 
+    public function getDataBoxId(): ?string
+    {
+        return $this->dataBoxId;
+    }
+
+    public function setDataBoxId(?string $dataBoxId): OwnerInfo
+    {
+        $this->dataBoxId = $dataBoxId;
+        return $this;
+    }
+
     public function getDataBoxType(): ?string
     {
         return $this->dataBoxType;
@@ -132,17 +165,6 @@ class OwnerInfo
     public function setIc(?string $ic): OwnerInfo
     {
         $this->ic = $ic;
-        return $this;
-    }
-
-    public function getLastNameAtBirth(): ?string
-    {
-        return $this->lastNameAtBirth;
-    }
-
-    public function setLastNameAtBirth(?string $lastNameAtBirth): OwnerInfo
-    {
-        $this->lastNameAtBirth = $lastNameAtBirth;
         return $this;
     }
 
