@@ -7,14 +7,11 @@ namespace TomasKulhanek\CzechDataBox\DTO;
 use DateTimeImmutable;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
-use TomasKulhanek\CzechDataBox\Traits\QTimestamp;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'dmDelivery')]
 class Delivery
 {
-    use QTimestamp;
-
     #[Serializer\Type(MessageEnvelope::class)]
     #[Serializer\SerializedName('dmDm')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
@@ -56,6 +53,16 @@ class Delivery
         new Assert\Type(type: DataMessageEvent::class)
     ])]
     protected array $events = [];
+
+    #[Serializer\Type('string')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dmQTimestamp')]
+    protected ?string $qTimestamp = null;
+
+    public function getQTimestamp(): ?string
+    {
+        return $this->qTimestamp;
+    }
 
     public function getHash(): Hash
     {

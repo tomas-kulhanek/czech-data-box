@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace TomasKulhanek\CzechDataBox\Traits;
+namespace TomasKulhanek\CzechDataBox\DTO\Response;
 
 use JMS\Serializer\Annotation as Serializer;
 use TomasKulhanek\CzechDataBox\Serializer\SplFileInfo;
 
-trait Signature
+abstract class SignedDataMessageResponse extends DataMessageResponse
 {
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('base64File')]
@@ -20,7 +20,7 @@ trait Signature
         return $this->signature;
     }
 
-    public function setSignature(?SplFileInfo $signature): self
+    public function setSignature(?SplFileInfo $signature): static
     {
         $this->signature = $signature;
         return $this;
