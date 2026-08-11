@@ -36,6 +36,9 @@ use TomasKulhanek\CzechDataBox\DTO\Request\AddDataBoxUser2;
 use TomasKulhanek\CzechDataBox\DTO\Request\DeleteDataBoxUser2;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetConstants;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetDataBoxUsers2;
+use TomasKulhanek\CzechDataBox\DTO\Request\NewAccessData2;
+use TomasKulhanek\CzechDataBox\DTO\Request\ClearOpenAddressing;
+use TomasKulhanek\CzechDataBox\DTO\Request\SetOpenAddressing;
 use TomasKulhanek\CzechDataBox\DTO\Request\UpdateDataBoxUser2;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetDataBoxActivityStatus;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetDataBoxAddress;
@@ -192,6 +195,32 @@ readonly class Connector
     public function deleteDataBoxUser2(Account $account, DeleteDataBoxUser2 $input): DTO\Response\DeleteDataBoxUser2
     {
         return $this->send($account, ServiceTypeEnum::ACCESS, $input, DTO\Response\DeleteDataBoxUser2::class);
+    }
+
+    /**
+     * Zapne otevřené adresování — schránka může přijímat poštovní datové zprávy od kohokoli (§ 18a).
+     */
+    public function setOpenAddressing(Account $account, SetOpenAddressing $input): DTO\Response\SetOpenAddressing
+    {
+        return $this->send($account, ServiceTypeEnum::ACCESS, $input, DTO\Response\SetOpenAddressing::class);
+    }
+
+    /**
+     * Vypne otevřené adresování schránky.
+     */
+    public function clearOpenAddressing(
+        Account $account,
+        ClearOpenAddressing $input
+    ): DTO\Response\ClearOpenAddressing {
+        return $this->send($account, ServiceTypeEnum::ACCESS, $input, DTO\Response\ClearOpenAddressing::class);
+    }
+
+    /**
+     * Vygeneruje nové přístupové údaje uživatele schránky.
+     */
+    public function newAccessData2(Account $account, NewAccessData2 $input): DTO\Response\NewAccessData2
+    {
+        return $this->send($account, ServiceTypeEnum::ACCESS, $input, DTO\Response\NewAccessData2::class);
     }
 
     public function changeIsdsPassword(Account $account, ChangeISDSPassword $input): DTO\Response\ChangeISDSPassword

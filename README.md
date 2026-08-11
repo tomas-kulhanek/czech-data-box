@@ -271,6 +271,44 @@ a `FieldLengthOverflow` (překročení délkových limitů obálky dle XSD — `
 `dmSenderRefNumber`/`dmRecipientRefNumber` a `dmSenderIdent`/`dmRecipientIdent` 50 znaků) —
 všechny z namespace `TomasKulhanek\CzechDataBox\Exception`.
 
+## Správa vlastní schránky (db_manipulations)
+
+Operace služby `db_manipulations` (endpoint `…/DS/DsManage`) vyžadují oprávnění `PRIVIL_OWNER_ADM`.
+Knihovna pokrývá správu pověřených osob — `getDataBoxUsers2()`, `addDataBoxUser2()`,
+`updateDataBoxUser2()`, `deleteDataBoxUser2()` — a nově i tyto tři operace vlastníka schránky:
+
+- `setOpenAddressing()` — zapne otevřené adresování (§ 18a), schránka pak může přijímat poštovní
+  datové zprávy od kohokoli. Vstupem je jen `dbID` (a volitelně `dbApproved` / `dbExternRefNumber`).
+- `clearOpenAddressing()` — otevřené adresování zase vypne, stejný vstup.
+- `newAccessData2()` — vyžádá vydání nových přístupových údajů uživateli `isdsID` ve schránce `dbID`.
+  Povinný je příznak `dbFeePaid` (zaplacený správní poplatek); pro virtuální obálku se navíc posílá
+  `dbVirtual` a `email`, na nějž přijde odkaz na Aktivační portál. Odpověď vrací nové `dbUserID` a
+  `dbAccessDataId` — samotné heslo webová služba nikdy nevrací, ISDS je doručuje mimo rozhraní.
+
+```php
+<?php
+
+use TomasKulhanek\CzechDataBox\DTO\Request\NewAccessData2;
+use TomasKulhanek\CzechDataBox\DTO\Request\SetOpenAddressing;
+
+$response = $connector->setOpenAddressing($account, new SetOpenAddressing()->setDataBoxId('abcdefg'));
+if (!$response->getStatus()->isOk()) {
+    throw new RuntimeException($response->getStatus()->getMessage());
+}
+
+$request = new NewAccessData2();
+$request->setDataBoxId('abcdefg')
+    ->setIsdsId('a23456789012')
+    ->setFeePaid(true);
+
+$newAccessData = $connector->newAccessData2($account, $request);
+echo $newAccessData->getAccessDataId();
+```
+
+Ostatní operace služby (`CreateDataBox2`, `DeleteDataBox2`, `EnableOwnDataBox2`, `DisableOwnDataBox2`,
+`UpdateDataBoxDescr2`, `DisableDataBoxExternally2`) jsou určeny pro OVM/správce a knihovna je zatím
+nepokrývá.
+
 ## Povinnosti aplikace dle Provozního řádu ISDS
 
 Knihovna řeší komunikaci s ISDS, ale některé povinnosti [Provozního řádu](https://datovka.gov.cz/info/cs/80.html) musí zajistit až vaše aplikace:
