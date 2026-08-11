@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace TomasKulhanek\Tests\CzechDataBox\Unit;
 
+use TomasKulhanek\Tests\CzechDataBox\SerializerTrait;
 use PHPUnit\Framework\TestCase;
 use TomasKulhanek\CzechDataBox\DTO\Envelope;
 use TomasKulhanek\CzechDataBox\DTO\MessageRecord;
 use TomasKulhanek\CzechDataBox\DTO\PublishOwnId;
-use TomasKulhanek\Serializer\SerializerFactory;
 
 class Wsdl3xAttributesTest extends TestCase
 {
+    use SerializerTrait;
+
     public function testMessageRecordDeserializesVodzAndSpecMessFlag(): void
     {
-        $serializer = SerializerFactory::create();
         $xml = <<<XML_WRAP
 <?xml version="1.0" encoding="UTF-8"?>
 <p:dmRecord xmlns:p="https://isds.czechpoint.cz/v20" dmType="V" dmVODZ="true" specMessFlag="1">
@@ -27,7 +28,7 @@ class Wsdl3xAttributesTest extends TestCase
   <p:dmAttachmentSize>2</p:dmAttachmentSize>
 </p:dmRecord>
 XML_WRAP;
-        $record = $serializer->deserialize($xml, MessageRecord::class, 'xml');
+        $record = self::deserializeXml($xml, MessageRecord::class);
         self::assertTrue($record->isVodz());
         self::assertTrue($record->isSuspicious());
         self::assertSame(1, $record->getSpecMessFlag());
@@ -36,7 +37,6 @@ XML_WRAP;
 
     public function testMessageRecordWithoutNewAttributes(): void
     {
-        $serializer = SerializerFactory::create();
         $xml = <<<XML_WRAP
 <?xml version="1.0" encoding="UTF-8"?>
 <p:dmRecord xmlns:p="https://isds.czechpoint.cz/v20" dmType="V">
@@ -44,7 +44,7 @@ XML_WRAP;
   <p:dmMessageStatus>4</p:dmMessageStatus>
 </p:dmRecord>
 XML_WRAP;
-        $record = $serializer->deserialize($xml, MessageRecord::class, 'xml');
+        $record = self::deserializeXml($xml, MessageRecord::class);
         self::assertFalse($record->isVodz());
         self::assertFalse($record->isSuspicious());
         self::assertNull($record->getSpecMessFlag());
@@ -52,7 +52,7 @@ XML_WRAP;
 
     public function testEnvelopeSerializesPublishOwnIdWithIdLevel(): void
     {
-        $serializer = SerializerFactory::create();
+        $serializer = self::createSerializer();
         $envelope = new Envelope();
         $envelope->setAnnotation('Test');
         $envelope->setPublishOwnId(new PublishOwnId()->setValue(true)->setIdLevel(3));

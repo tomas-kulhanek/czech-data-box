@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TomasKulhanek\Tests\CzechDataBox\Unit;
 
+use TomasKulhanek\Tests\CzechDataBox\SerializerTrait;
 use LogicException;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
@@ -15,13 +16,14 @@ use TomasKulhanek\CzechDataBox\DTO\Response\GetDataBoxAddress;
 use TomasKulhanek\CzechDataBox\DTO\Response\GetListForNotifications;
 use TomasKulhanek\CzechDataBox\DTO\Response\GetMessageAuthor2;
 use TomasKulhanek\CzechDataBox\DTO\Response\GetUserInfoFromLogin2;
-use TomasKulhanek\Serializer\SerializerFactory;
 
 class NewOperationsTest extends TestCase
 {
+    use SerializerTrait;
+
     public function testEraseMessageRequestIsSerialized(): void
     {
-        $serializer = SerializerFactory::create();
+        $serializer = self::createSerializer();
         $request = new EraseMessage();
         $request->setDataMessageId('1234567');
         $request->setIncoming(true);
@@ -38,7 +40,7 @@ class NewOperationsTest extends TestCase
 
     public function testSuspMessageReportRequestIsSerialized(): void
     {
-        $serializer = SerializerFactory::create();
+        $serializer = self::createSerializer();
         $request = new SuspMessageReport();
         $request->setDataMessageId('7654321');
         $request->setReporterName('Jan Novák');
@@ -65,7 +67,7 @@ class NewOperationsTest extends TestCase
 
     public function testGetListOfErasedMessagesRequestIsSerialized(): void
     {
-        $serializer = SerializerFactory::create();
+        $serializer = self::createSerializer();
         $request = new GetListOfErasedMessages();
         $request->setFromDate(new DateTimeImmutable('2026-01-01'));
         $request->setToDate(new DateTimeImmutable('2026-01-31'));
@@ -90,7 +92,6 @@ class NewOperationsTest extends TestCase
 
     public function testGetMessageAuthor2ResponseIsDeserialized(): void
     {
-        $serializer = SerializerFactory::create();
         $xml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <p:GetMessageAuthor2Response xmlns:p="https://isds.czechpoint.cz/v20">
@@ -105,7 +106,7 @@ class NewOperationsTest extends TestCase
   </p:dmStatus>
 </p:GetMessageAuthor2Response>
 XML;
-        $response = $serializer->deserialize($xml, GetMessageAuthor2::class, 'xml');
+        $response = self::deserializeXml($xml, GetMessageAuthor2::class);
         self::assertCount(3, $response->getAuthorItems());
         self::assertSame('userType', $response->getAuthorItems()[0]->getKey());
         self::assertSame('PRIMARY_USER', $response->getAuthorItems()[0]->getValue());
@@ -118,7 +119,6 @@ XML;
 
     public function testGetListForNotificationsResponseIsDeserialized(): void
     {
-        $serializer = SerializerFactory::create();
         $xml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <p:GetListForNotificationsResponse xmlns:p="https://isds.czechpoint.cz/v20">
@@ -141,7 +141,7 @@ XML;
   </p:dmStatus>
 </p:GetListForNotificationsResponse>
 XML;
-        $response = $serializer->deserialize($xml, GetListForNotifications::class, 'xml');
+        $response = self::deserializeXml($xml, GetListForNotifications::class);
         $records = $response->getRecords();
         self::assertCount(1, $records);
         self::assertSame(1, $records[0]->getNotificationType());
@@ -159,7 +159,6 @@ XML;
 
     public function testGetConstantsResponseIsDeserialized(): void
     {
-        $serializer = SerializerFactory::create();
         $xml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <p:GetConstantsResponse xmlns:p="https://isds.czechpoint.cz/v20">
@@ -182,7 +181,7 @@ XML;
   </p:dbStatus>
 </p:GetConstantsResponse>
 XML;
-        $response = $serializer->deserialize($xml, GetConstants::class, 'xml');
+        $response = self::deserializeXml($xml, GetConstants::class);
         $records = $response->getRecords();
         self::assertCount(2, $records);
         self::assertSame('MAX_ATTACHMENT_SIZE', $records[0]->getName());
@@ -198,7 +197,6 @@ XML;
 
     public function testGetDataBoxAddressResponseIsDeserialized(): void
     {
-        $serializer = SerializerFactory::create();
         $xml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <p:GetDataBoxAddressResponse xmlns:p="https://isds.czechpoint.cz/v20">
@@ -215,7 +213,7 @@ XML;
   <p:adFullAddress2>110 00 Praha 1</p:adFullAddress2>
 </p:GetDataBoxAddressResponse>
 XML;
-        $response = $serializer->deserialize($xml, GetDataBoxAddress::class, 'xml');
+        $response = self::deserializeXml($xml, GetDataBoxAddress::class);
         self::assertSame('12345678', $response->getAdCode());
         self::assertSame('Praha', $response->getAdCity());
         self::assertSame('Praha 1', $response->getAdDistrict());
@@ -234,7 +232,6 @@ XML;
 
     public function testGetUserInfoFromLogin2ResponseIsDeserialized(): void
     {
-        $serializer = SerializerFactory::create();
         $xml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <p:GetUserInfoFromLogin2Response xmlns:p="https://isds.czechpoint.cz/v20">
@@ -257,7 +254,7 @@ XML;
   </p:dbStatus>
 </p:GetUserInfoFromLogin2Response>
 XML;
-        $response = $serializer->deserialize($xml, GetUserInfoFromLogin2::class, 'xml');
+        $response = self::deserializeXml($xml, GetUserInfoFromLogin2::class);
         $userInfo = $response->getUserInfo();
         self::assertNotNull($userInfo);
         self::assertFalse($userInfo->getAifoIsds());
