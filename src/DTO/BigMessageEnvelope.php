@@ -371,7 +371,7 @@ class BigMessageEnvelope
     public function setPublishOwnId(PublishOwnId|bool|null $publishOwnId): BigMessageEnvelope
     {
         if (is_bool($publishOwnId)) {
-            $publishOwnId = (new PublishOwnId())->setValue($publishOwnId);
+            $publishOwnId = new PublishOwnId()->setValue($publishOwnId);
         }
         $this->publishOwnId = $publishOwnId;
         return $this;

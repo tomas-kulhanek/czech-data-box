@@ -16,7 +16,7 @@ use TomasKulhanek\Serializer\SerializerFactory;
 
 class DataBoxUserManagementTest extends TestCase
 {
-    private const NAMESPACE = 'https://isds.czechpoint.cz/v20';
+    private const string NAMESPACE = 'https://isds.czechpoint.cz/v20';
 
     public function testGetDataBoxUsers2RequestSerialization(): void
     {

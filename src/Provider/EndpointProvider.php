@@ -17,7 +17,7 @@ class EndpointProvider implements EndpointProviderInterface
     /**
      * Bare host name: dot separated DNS labels, no scheme, userinfo, port, path or control characters.
      */
-    private const DOMAIN_PATTERN = '/^(?=.{1,253}\z)[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*\z/i';
+    private const string DOMAIN_PATTERN = '/^(?=.{1,253}\z)[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*\z/i';
 
     /**
      * @param string $domain Bare host name of the ISDS environment, e.g. 'datovka.cms2.cz' for KIVS.
