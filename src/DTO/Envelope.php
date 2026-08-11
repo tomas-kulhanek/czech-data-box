@@ -5,14 +5,20 @@ declare(strict_types=1);
 namespace TomasKulhanek\CzechDataBox\DTO;
 
 use JMS\Serializer\Annotation as Serializer;
-use TomasKulhanek\CzechDataBox\Traits\DataMessageEnvelopeSub;
+use TomasKulhanek\CzechDataBox\Traits\MultipleMessageEnvelopeSub;
 
+/**
+ * Envelope of a message sent by the CreateMultipleMessage operation, matching the
+ * tMultipleMessageEnvelopeSub type of dmBaseTypes.xsd. Recipients - including their
+ * organisational unit - are addressed outside of the envelope through DTO\Recipient,
+ * the envelope itself carries no recipient element.
+ */
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'dmEnvelope')]
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\AccessorOrder(order: 'custom', custom: ['senderOrgUnit', 'senderOrgUnitNum', 'annotation', 'recipientRefNumber', 'senderRefNumber', 'recipientIdent', 'senderIdent', 'legalTitleLaw', 'legalTitleYear', 'legalTitleSect', 'legalTitlePar', 'legalTitlePoint', 'personalDelivery', 'allowSubstDelivery', 'ovm', 'publishOwnId'])]
 class Envelope
 {
-    use DataMessageEnvelopeSub;
+    use MultipleMessageEnvelopeSub;
 
     #[Serializer\Type('string')]
     #[Serializer\SkipWhenEmpty]
@@ -236,28 +242,6 @@ class Envelope
             $publishOwnId = new PublishOwnId()->setValue($publishOwnId);
         }
         $this->publishOwnId = $publishOwnId;
-        return $this;
-    }
-
-    public function getRecipientOrgUnit(): ?string
-    {
-        return $this->recipientOrgUnit;
-    }
-
-    public function setRecipientOrgUnit(?string $recipientOrgUnit): Envelope
-    {
-        $this->recipientOrgUnit = $recipientOrgUnit;
-        return $this;
-    }
-
-    public function getRecipientOrgUnitNum(): ?int
-    {
-        return $this->recipientOrgUnitNum;
-    }
-
-    public function setRecipientOrgUnitNum(?int $recipientOrgUnitNum): Envelope
-    {
-        $this->recipientOrgUnitNum = $recipientOrgUnitNum;
         return $this;
     }
 }

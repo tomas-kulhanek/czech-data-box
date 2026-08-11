@@ -80,6 +80,64 @@ $provider = GuzzleClientProvider::create(new EndpointProvider('datovka.cms2.cz')
 > údajů, portu a cesty (`datovka.cms2.cz` ano, `https://datovka.cms2.cz/` ne). Neplatná hodnota skončí
 > výjimkou `TomasKulhanek\CzechDataBox\Exception\InvalidEndpointDomain`.
 
+### Odeslání datové zprávy
+
+`Connector::createMessage()` volá **hromadnou** operaci ISDS `CreateMultipleMessage` — i pro jedinou
+zprávu. Z toho plynou dvě věci:
+
+1. **Příjemci se zadávají mimo obálku**, přes `Recipient` (`dmRecipients`/`tRecipients`). Organizační
+   jednotku příjemce nastavíte `Recipient::setOrgUnit()` / `setOrgUnitNum()`, „k rukám" pak
+   `Recipient::setToHand()`. Obálka (`Envelope`, XSD typ `tMultipleMessageEnvelopeSub`) žádný prvek
+   o příjemci nemá.
+2. **Odpověď nemá přímé `dmID`.** Je typu `tMultipleMessageCreateOutput`, takže ID odeslané zprávy
+   najdete až v dílčím stavu — `getMultipleStatus()` vrací pole `MessageStatus` (jeden na příjemce)
+   a ID se čte z `MessageStatus::getDataMessageId()`.
+
+```php
+<?php
+
+use TomasKulhanek\CzechDataBox\Connector;
+use TomasKulhanek\CzechDataBox\DTO\Envelope;
+use TomasKulhanek\CzechDataBox\DTO\File;
+use TomasKulhanek\CzechDataBox\DTO\Recipient;
+use TomasKulhanek\CzechDataBox\DTO\Request\CreateMessage;
+use TomasKulhanek\CzechDataBox\Provider\GuzzleClientProvider;
+use TomasKulhanek\Serializer\SerializerFactory;
+use TomasKulhanek\Serializer\Utils\SplFileInfo;
+
+$connector = new Connector(SerializerFactory::create(), GuzzleClientProvider::create());
+
+$recipient = new Recipient();
+$recipient->setDataBoxId('abcdefg')
+    ->setOrgUnit('Odbor právní')   // organizační jednotka příjemce patří sem, ne do obálky
+    ->setToHand('Jan Novák');
+
+$envelope = new Envelope();
+$envelope->setAnnotation('Žádost o vyjádření')
+    ->setSenderRefNumber('MUJ-2026/123');
+
+$file = new File();
+$file->setMimeType('application/pdf')
+    ->setMetaType('main')
+    ->setDescription('zadost.pdf')
+    ->setEncodedContent(new SplFileInfo('/cesta/zadost.pdf'));
+
+$request = new CreateMessage();
+$request->setEnvelope($envelope)
+    ->addRecipient($recipient)
+    ->addFile($file);
+
+$response = $connector->createMessage($account, $request);
+if (!$response->isOk()) {
+    throw new RuntimeException($response->getStatus()->getMessage());
+}
+
+foreach ($response->getMultipleStatus() as $messageStatus) {
+    // ID odeslané zprávy (dmID) je až tady, i když se posílala jediná zpráva
+    echo $messageStatus->getDataMessageId() . ': ' . $messageStatus->getStatus()->getMessage() . PHP_EOL;
+}
+```
+
 ### Načtení seznamu přijatých zpráv
 
 Minimální příklad reálné operace — seznam přijatých zpráv s filtrem stavů a časovým rozsahem:
