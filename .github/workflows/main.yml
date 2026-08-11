@@ -79,6 +79,9 @@ jobs:
           args:  "${{ env.composer-install-args }}"
       - run: composer check:cs
 
+      - name: WSDL coverage matrix
+        run: composer check:wsdl-coverage
+
   static-analysis:
     name: "Static analysis"
     runs-on: ubuntu-latest
