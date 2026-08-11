@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace TomasKulhanek\CzechDataBox\DTO\Request;
 
 use JMS\Serializer\Annotation as Serializer;
-use TomasKulhanek\CzechDataBox\Traits\DataBoxId;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'CheckDataBox')]
-class CheckDataBox implements Request
+class CheckDataBox extends DataBoxRequest
 {
-    use DataBoxId;
-
     #[Serializer\Type('booL')]
     #[Serializer\SerializedName('dbApproved')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]

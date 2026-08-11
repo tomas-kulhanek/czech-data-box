@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace TomasKulhanek\CzechDataBox\DTO\Request;
 
 use JMS\Serializer\Annotation as Serializer;
-use TomasKulhanek\CzechDataBox\Traits\DataMessageId;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetMessageAuthor2')]
-class GetMessageAuthor2 implements Request
+class GetMessageAuthor2 extends DataMessageRequest
 {
-    use DataMessageId;
 }

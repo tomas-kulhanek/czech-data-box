@@ -7,13 +7,15 @@ namespace TomasKulhanek\CzechDataBox\DTO\Response;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\DTO\Period;
-use TomasKulhanek\CzechDataBox\Traits\DataBoxId;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetDataBoxActivityStatusResponse')]
 class GetDataBoxActivityStatus extends DataBoxResponse
 {
-    use DataBoxId;
+    #[Serializer\Type('string')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('dbID')]
+    protected ?string $dataBoxId = null;
 
     /**
      * @var Period[]
@@ -27,6 +29,17 @@ class GetDataBoxActivityStatus extends DataBoxResponse
     ])]
     #[Assert\Valid()]
     protected array $period = [];
+
+    public function getDataBoxId(): ?string
+    {
+        return $this->dataBoxId;
+    }
+
+    public function setDataBoxId(?string $dataBoxId): GetDataBoxActivityStatus
+    {
+        $this->dataBoxId = $dataBoxId;
+        return $this;
+    }
 
     /**
      * @return Period[]
