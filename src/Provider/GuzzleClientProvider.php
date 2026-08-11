@@ -17,14 +17,14 @@ use TomasKulhanek\CzechDataBox\Exception\SystemExclusion;
 
 readonly class GuzzleClientProvider implements ClientProviderInterface
 {
-    public static function create(): self
+    public static function create(?EndpointProviderInterface $endpointProvider = null): self
     {
-        return new self(new Client(), new EndpointProvider());
+        return new self(new Client(), $endpointProvider ?? new EndpointProvider());
     }
 
     public function __construct(
         private Client $client,
-        private EndpointProvider $endpointProvider,
+        private EndpointProviderInterface $endpointProvider,
         private string $caCertPath = __DIR__ . '/../cacert.pem'
     ) {
     }

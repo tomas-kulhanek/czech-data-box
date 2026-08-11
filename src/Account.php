@@ -13,7 +13,6 @@ class Account
     private ?string $dataBoxId = null;
     private ?string $password = null;
     private LoginTypeEnum $loginType = LoginTypeEnum::NAME_PASSWORD;
-    private bool $production = true;
     private ?string $publicKey = null;
     private ?string $privateKey = null;
     private ?string $privateKeyPassPhrase = null;
@@ -115,15 +114,5 @@ class Account
             LoginTypeEnum::HOSTED_SPIS, LoginTypeEnum::SPIS_CERT, LoginTypeEnum::CERT_LOGIN_NAME_PASSWORD => true,
             default => false,
         };
-    }
-
-    public function isProduction(): bool
-    {
-        return $this->production;
-    }
-
-    public function setProduction(bool $production): void
-    {
-        $this->production = $production;
     }
 }

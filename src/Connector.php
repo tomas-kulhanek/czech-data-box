@@ -127,6 +127,9 @@ readonly class Connector
         return $this->send($account, ServiceTypeEnum::SEARCH, $input, DTO\Response\CheckDataBox::class);
     }
 
+    /**
+     * @deprecated Use getOwnerInfoFromLogin2() which returns extended data (aifoIsds, dbIdOVM, RUIAN address).
+     */
     public function getOwnerInfoFromLogin(Account $account): GetOwnerInfoFromLogin
     {
         return $this->send(
@@ -157,6 +160,9 @@ readonly class Connector
         return $this->send($account, ServiceTypeEnum::OPERATIONS, $input, DTO\Response\AuthenticateMessage::class);
     }
 
+    /**
+     * @deprecated Use getUserInfoFromLogin2() which returns extended data (aifoIsds, isdsID, RUIAN address).
+     */
     public function getUserInfoFromLogin(Account $account): GetUserInfoFromLogin
     {
         return $this->send(

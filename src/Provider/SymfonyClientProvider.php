@@ -17,14 +17,14 @@ use TomasKulhanek\CzechDataBox\Exception\SystemExclusion;
 
 readonly class SymfonyClientProvider implements ClientProviderInterface
 {
-    public static function create(): self
+    public static function create(?EndpointProviderInterface $endpointProvider = null): self
     {
-        return new self(HttpClient::create(), new EndpointProvider());
+        return new self(HttpClient::create(), $endpointProvider ?? new EndpointProvider());
     }
 
     public function __construct(
         private HttpClientInterface $client,
-        private EndpointProvider $endpointProvider,
+        private EndpointProviderInterface $endpointProvider,
         private string $caCertPath = __DIR__ . '/../cacert.pem'
     ) {
     }

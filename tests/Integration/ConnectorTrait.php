@@ -22,13 +22,13 @@ trait ConnectorTrait
 
     protected function createGuzzleProvider(): GuzzleClientProvider
     {
-        $endpointProvider = new EndpointProvider();
+        $endpointProvider = EndpointProvider::test();
         return new GuzzleClientProvider(new Client(), $endpointProvider);
     }
 
     protected function createSymfonyProvider(): SymfonyClientProvider
     {
-        $endpointProvider = new EndpointProvider();
+        $endpointProvider = EndpointProvider::test();
         return new SymfonyClientProvider(HttpClient::create(), $endpointProvider);
     }
 

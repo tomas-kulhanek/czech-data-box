@@ -32,8 +32,7 @@ class CreateMessageValidationTest extends TestCase
         $account = new Account();
         $account->setLoginName('login')
             ->setPassword('password')
-            ->setLoginType(LoginTypeEnum::NAME_PASSWORD)
-            ->setProduction(false);
+            ->setLoginType(LoginTypeEnum::NAME_PASSWORD);
         return $account;
     }
 

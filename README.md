@@ -39,8 +39,18 @@ Pro každou operaci je potřebné zadat přístupové údaje
 $account = new \TomasKulhanek\CzechDataBox\Account();
 $account->setPassword('mojeTajneHeslo')
         ->setLoginName('mujLogin')
-        ->setLoginType(\TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum::NAME_PASSWORD)
-        ->setProduction(false);
+        ->setLoginType(\TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum::NAME_PASSWORD);
+```
+
+Prostředí (produkce/test) určuje `EndpointProvider` předaný HTTP providerovi — výchozí je produkce:
+
+```php
+use TomasKulhanek\CzechDataBox\Provider\EndpointProvider;
+use TomasKulhanek\CzechDataBox\Provider\GuzzleClientProvider;
+
+$provider = GuzzleClientProvider::create();                            // produkce (datovka.gov.cz)
+$provider = GuzzleClientProvider::create(EndpointProvider::test());    // test (datovka-test.gov.cz)
+$provider = GuzzleClientProvider::create(new EndpointProvider('datovka.cms2.cz')); // vlastní doména (KIVS)
 ```
 
 ## Využití s Symfony HTTP client

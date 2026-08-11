@@ -25,7 +25,6 @@ class VodzOperationsTest extends TestCase
     private function createAccount(): Account
     {
         $account = new Account();
-        $account->setProduction(false);
         $account->setLoginType(LoginTypeEnum::NAME_PASSWORD);
 
         return $account;
