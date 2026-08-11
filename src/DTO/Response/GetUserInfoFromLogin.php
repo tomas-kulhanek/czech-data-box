@@ -19,9 +19,9 @@ class GetUserInfoFromLogin extends Response
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dbUserInfo')]
     #[Assert\Valid()]
-    protected UserInfo $userInfo;
+    protected ?UserInfo $userInfo = null;
 
-    public function getUserInfo(): UserInfo
+    public function getUserInfo(): ?UserInfo
     {
         return $this->userInfo;
     }

@@ -21,14 +21,14 @@ class DataMessageEvent
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dmEventDescr')]
     #[Assert\NotBlank(allowNull: false)]
-    protected string $description;
+    protected ?string $description = null;
 
     public function getTime(): ?DateTimeImmutable
     {
         return $this->time;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }

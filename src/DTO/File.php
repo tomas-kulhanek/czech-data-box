@@ -132,7 +132,7 @@ class File
         return $this->encodedContent;
     }
 
-    public function setEncodedContent(SplFileInfo $encodedContent): File
+    public function setEncodedContent(?SplFileInfo $encodedContent): File
     {
         $this->encodedContent = $encodedContent;
         return $this;
@@ -143,7 +143,7 @@ class File
         return $this->xmlContent;
     }
 
-    public function setXmlContent(string $xmlContent): File
+    public function setXmlContent(?string $xmlContent): File
     {
         $this->xmlContent = $xmlContent;
         return $this;

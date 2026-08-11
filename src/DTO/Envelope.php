@@ -44,7 +44,7 @@ class Envelope
         return $this->type;
     }
 
-    public function setType(string $type): Envelope
+    public function setType(?string $type): Envelope
     {
         $this->type = $type;
         return $this;

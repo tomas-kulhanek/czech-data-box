@@ -19,7 +19,7 @@ class ReturnedMessageEnvelope
     #[Serializer\SerializedName('dmType')]
     #[Serializer\XmlAttribute]
     #[Assert\NotBlank(allowNull: false)]
-    protected string $type;
+    protected ?string $type = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('bool')]
@@ -75,12 +75,12 @@ class ReturnedMessageEnvelope
     #[Assert\Positive()]
     protected ?int $attachmentSize = null;
 
-    public function getType(): string
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    public function setType(string $type): ReturnedMessageEnvelope
+    public function setType(?string $type): ReturnedMessageEnvelope
     {
         $this->type = $type;
         return $this;

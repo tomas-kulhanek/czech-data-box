@@ -16,9 +16,9 @@ class PDZSendInfo extends Response
     #[Serializer\Type('bool')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('PDZsiResult')]
-    protected bool $result;
+    protected ?bool $result = null;
 
-    public function isResult(): bool
+    public function isResult(): ?bool
     {
         return $this->result;
     }

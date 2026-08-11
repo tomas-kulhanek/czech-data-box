@@ -20,7 +20,7 @@ trait Signature
         return $this->signature;
     }
 
-    public function setSignature(SplFileInfo $signature): self
+    public function setSignature(?SplFileInfo $signature): self
     {
         $this->signature = $signature;
         return $this;

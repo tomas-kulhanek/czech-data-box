@@ -14,7 +14,7 @@ trait DataMessageEnvelope
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dbIDSender')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
-    protected string $senderId;
+    protected ?string $senderId = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
@@ -31,7 +31,7 @@ trait DataMessageEnvelope
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dmSender')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
-    protected string $sender;
+    protected ?string $sender = null;
 
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dmSenderAddress')]
@@ -42,12 +42,12 @@ trait DataMessageEnvelope
     #[Serializer\Type('int')]
     #[Serializer\SerializedName('dmSenderType')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
-    protected int $senderType;
+    protected ?int $senderType = null;
 
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dmRecipient')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
-    protected string $recipient;
+    protected ?string $recipient = null;
 
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('dmRecipientAddress')]
@@ -61,23 +61,23 @@ trait DataMessageEnvelope
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?bool $ambiguousRecipient = null;
 
-    public function getSenderId(): string
+    public function getSenderId(): ?string
     {
         return $this->senderId;
     }
 
-    public function setSenderId(string $senderId): self
+    public function setSenderId(?string $senderId): self
     {
         $this->senderId = $senderId;
         return $this;
     }
 
-    public function getSender(): string
+    public function getSender(): ?string
     {
         return $this->sender;
     }
 
-    public function setSender(string $sender): self
+    public function setSender(?string $sender): self
     {
         $this->sender = $sender;
         return $this;
@@ -94,23 +94,23 @@ trait DataMessageEnvelope
         return $this;
     }
 
-    public function getSenderType(): int
+    public function getSenderType(): ?int
     {
         return $this->senderType;
     }
 
-    public function setSenderType(int $senderType): self
+    public function setSenderType(?int $senderType): self
     {
         $this->senderType = $senderType;
         return $this;
     }
 
-    public function getRecipient(): string
+    public function getRecipient(): ?string
     {
         return $this->recipient;
     }
 
-    public function setRecipient(string $recipient): self
+    public function setRecipient(?string $recipient): self
     {
         $this->recipient = $recipient;
         return $this;

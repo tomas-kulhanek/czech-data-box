@@ -11,14 +11,14 @@ trait DataBoxId
     #[Serializer\Type('string')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('dbID')]
-    protected string $dataBoxId;
+    protected ?string $dataBoxId = null;
 
-    public function getDataBoxId(): string
+    public function getDataBoxId(): ?string
     {
         return $this->dataBoxId;
     }
 
-    public function setDataBoxId(string $dataBoxId): self
+    public function setDataBoxId(?string $dataBoxId): self
     {
         $this->dataBoxId = $dataBoxId;
         return $this;
