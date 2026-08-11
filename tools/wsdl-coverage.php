@@ -1,14 +1,5 @@
 <?php
 
-/**
- * Prints (or verifies) the coverage matrix of the ISDS WSDL operations against Connector.
- *
- * Usage:
- *   php tools/wsdl-coverage.php            print the matrix to stdout
- *   php tools/wsdl-coverage.php --check    fail (exit code 1) when README.md is out of sync
- *   php tools/wsdl-coverage.php --write    rewrite the matrix block in README.md
- */
-
 declare(strict_types=1);
 
 use TomasKulhanek\CzechDataBox\Tools\WsdlCoverage;

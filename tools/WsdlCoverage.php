@@ -14,20 +14,6 @@ use RuntimeException;
 use TomasKulhanek\CzechDataBox\Connector;
 
 /**
- * Builds the coverage matrix of the ISDS WSDL operations against the public API of {@see Connector}.
- *
- * Operations are read from the WSDL fixtures in tests/_data/wsdl/ (a verbatim copy of appendix 2 of the
- * ISDS operating rules) and matched against the public methods of the connector by reflection. Every
- * operation ends up in exactly one of three buckets:
- *
- *  - supported   ... a connector method implements the operation,
- *  - dropped     ... ISDS itself deprecated the operation and the library deliberately implements only
- *                    the newer variant (see {@see self::successorOf()} and self::DEPRECATED_WITHOUT_SUCCESSOR),
- *  - unsupported ... a real gap in the library.
- *
- * The rendered matrix lives between the marker comments in README.md; --check verifies that the committed
- * README still matches the code, so the matrix cannot silently rot.
- *
  * @phpstan-type CoverageRow array{operation: string, status: string, method: string|null, note: string|null}
  * @phpstan-type CoverageSection array{file: string, description: string, rows: list<CoverageRow>}
  */
@@ -45,12 +31,6 @@ final readonly class WsdlCoverage
 
     private const string WSDL_NAMESPACE = 'http://schemas.xmlsoap.org/wsdl/';
 
-    /**
-     * Reading order of the WSDL files plus their Czech captions. Files missing from this list are
-     * appended (sorted) with an empty caption, so a newly published WSDL still shows up in the matrix.
-     *
-     * @var array<string, string>
-     */
     private const array WSDL_DESCRIPTIONS = [
         'db_access.wsdl' => 'služby související s přístupem do ISDS',
         'db_search.wsdl' => 'vyhledávání datových schránek',
@@ -61,53 +41,22 @@ final readonly class WsdlCoverage
         'dm_arch.wsdl' => 'archivace (přerazítkování) ZFO',
     ];
 
-    /**
-     * Operation -> connector method for the pairs that cannot be derived from the name.
-     *
-     * Everything else is matched case-insensitively, which already covers the acronym casing used by
-     * ISDS (ArchiveISDSDocument -> archiveIsdsDocument, ISDSSearch3 -> isdsSearch3, PDZInfo -> pdzInfo).
-     * The optional second item is a Czech note rendered in the matrix.
-     *
-     * @var array<string, array{0: string, 1: string|null}>
-     */
     private const array OPERATION_METHOD_MAP = [
-        // The library always sends the multi-recipient envelope; the WSDL request of CreateMessage is a
-        // subset of CreateMultipleMessage, so a single connector method covers both operations.
         'CreateMessage' => ['createMessage', 'knihovna posílá obálku `CreateMultipleMessage`, která pokrývá i jednoho příjemce'],
         'CreateMultipleMessage' => ['createMessage', 'hromadné odeslání (více příjemců v jednom volání)'],
-        // A hyphen cannot appear in a PHP method name.
         'Re-signISDSDocument' => ['resignIsdsDocument', null],
-        // Historical naming: the response DTO is GetPasswordInfo, the method says what it returns.
         'GetPasswordInfo' => ['getPasswordExpirationInfo', null],
     ];
 
-    /**
-     * Operations that ISDS deprecated without publishing a numbered successor in the same WSDL, so the
-     * successor heuristic cannot recognise them.
-     *
-     * @var array<string, string>
-     */
     private const array DEPRECATED_WITHOUT_SUCCESSOR = [
         'FindPersonalDataBox' => 'zrušeno v ISDS 2018, nahrazeno `FindDataBox2`',
     ];
 
-    /**
-     * Operations whose connector method existed in 5.x and was removed as a documented BC break of 6.0.0.
-     *
-     * @var list<string>
-     */
     private const array REMOVED_IN_SIX = [
         'FindDataBox',
         'FindPersonalDataBox',
     ];
 
-    /**
-     * Czech one-liners describing what the not yet implemented operations do, so the matrix reads as a
-     * backlog instead of a bare list of names. Purely cosmetic — an operation missing from this list is
-     * still reported as a gap.
-     *
-     * @var array<string, string>
-     */
     private const array UNSUPPORTED_NOTES = [
         'CreateDataBox2' => 'zřízení datové schránky (jen pro OVM s příslušnou rolí)',
         'DeleteDataBox2' => 'znepřístupnění datové schránky',
@@ -120,12 +69,6 @@ final readonly class WsdlCoverage
         'ClearOpenAddressing' => 'vypnutí příjmu poštovních datových zpráv',
     ];
 
-    /**
-     * ISDS services the library deliberately does not implement. They are not part of the WSDL fixtures
-     * either, so they are rendered from this list instead of being derived from files.
-     *
-     * @var array<string, string>
-     */
     private const array OUT_OF_SCOPE = [
         '`ChangePassword.wsdl` (služba `asws`)' =>
             'změna hesla přes SMS kód / OTP (`SendSMSCode`, `ChangePasswordOTP`) běží na samostatné službě '
@@ -146,9 +89,6 @@ final readonly class WsdlCoverage
     ) {
     }
 
-    /**
-     * Renders the whole matrix as the Markdown block stored in README.md.
-     */
     public function render(): string
     {
         $sections = $this->buildSections();
@@ -197,7 +137,6 @@ final readonly class WsdlCoverage
 
         foreach ($sections as $section) {
             $lines[] = '';
-            // The heading holds nothing but the file name, so the anchors built by self::anchor() hold.
             $lines[] = sprintf('### `%s`', $section['file']);
             $lines[] = '';
             if ($section['description'] !== '') {
@@ -230,7 +169,7 @@ final readonly class WsdlCoverage
     }
 
     /**
-     * @return list<string> human readable differences; an empty list means the README is in sync
+     * @return list<string>
      */
     public function check(): array
     {
@@ -258,9 +197,6 @@ final readonly class WsdlCoverage
         return $differences;
     }
 
-    /**
-     * Replaces the matrix block in README.md. Returns true when the file actually changed.
-     */
     public function write(): bool
     {
         $readme = $this->readFile($this->readmePath);
@@ -298,7 +234,7 @@ final readonly class WsdlCoverage
     }
 
     /**
-     * @return array<string, list<string>> operations indexed by the WSDL file name
+     * @return array<string, list<string>>
      */
     private function collectOperations(): array
     {
@@ -325,17 +261,11 @@ final readonly class WsdlCoverage
     }
 
     /**
-     * Reads the operation names of a single WSDL.
-     *
-     * The portType is the contract, but the official dm_operations.wsdl declares SignedSentMessageDownload
-     * and DummyOperation only in the binding, so both are read and merged in that order.
-     *
      * @return list<string>
      */
     private function readOperations(string $file): array
     {
         $content = $this->readFile($file);
-        // The published WSDL files start with a UTF-8 BOM.
         $content = (string) preg_replace('/^\xEF\xBB\xBF/', '', $content);
 
         $document = new DOMDocument();
@@ -372,7 +302,7 @@ final readonly class WsdlCoverage
     }
 
     /**
-     * @return array<string, ReflectionMethod> public connector methods indexed by their lowercased name
+     * @return array<string, ReflectionMethod>
      */
     private function connectorMethods(): array
     {
@@ -388,7 +318,7 @@ final readonly class WsdlCoverage
     }
 
     /**
-     * @param list<string> $wsdlOperations all operations of the same WSDL
+     * @param list<string> $wsdlOperations
      * @param array<string, ReflectionMethod> $methods
      * @return CoverageRow
      */
@@ -437,10 +367,6 @@ final readonly class WsdlCoverage
         ];
     }
 
-    /**
-     * ISDS versions its operations by a numeric suffix (FindDataBox -> FindDataBox2, ISDSSearch2 ->
-     * ISDSSearch3). An operation is considered superseded when its successor lives in the same WSDL.
-     */
     private function successorOf(string $operation): string
     {
         $base = rtrim($operation, '0123456789');
@@ -487,11 +413,6 @@ final readonly class WsdlCoverage
         };
     }
 
-    /**
-     * GitHub builds a heading anchor by lowercasing the text and dropping everything that is not a letter,
-     * a digit, a space, a hyphen or an underscore. The per-WSDL headings contain only "`<file>`", so
-     * stripping the backticks and the dot is enough.
-     */
     private function anchor(string $file): string
     {
         return str_replace('.', '', strtolower($file));

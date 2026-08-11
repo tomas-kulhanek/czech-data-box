@@ -79,7 +79,6 @@ jobs:
           args:  "${{ env.composer-install-args }}"
       - run: composer check:cs
 
-      # Hlídá, že matice pokrytí WSDL v README.md odpovídá WSDL a veřejnému API Connectoru.
       - name: WSDL coverage matrix
         run: composer check:wsdl-coverage
 
