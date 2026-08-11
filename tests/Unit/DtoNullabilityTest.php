@@ -28,14 +28,6 @@ use ReflectionProperty;
 use RuntimeException;
 use TomasKulhanek\Tests\CzechDataBox\SerializerTrait;
 
-/**
- * ISDS marks most envelope elements as nillable="true" or minOccurs="0", so a single record with a
- * missing or nilled element used to blow up the whole call with a PHP Error the caller cannot catch.
- *
- * These tests deserialize every response DTO from the smallest document the schema still allows and
- * then call every public getter through reflection. Any Error means a property is typed more strictly
- * than the schema guarantees.
- */
 final class DtoNullabilityTest extends TestCase
 {
     use SerializerTrait;
@@ -54,11 +46,7 @@ final class DtoNullabilityTest extends TestCase
         }
     }
 
-    /**
-     * A response carrying only the elements the schema makes mandatory must not break any getter.
-     *
-     * @param class-string $class
-     */
+    /** @param class-string $class */
     #[DataProvider('responseDtoProvider')]
     public function testEveryGetterSurvivesMinimalResponse(string $class): void
     {
@@ -69,12 +57,7 @@ final class DtoNullabilityTest extends TestCase
         self::assertInstanceOf($class, $dto);
     }
 
-    /**
-     * ISDS sends xsi:nil="true" instead of omitting a nillable element; assigning that null must not
-     * hit a non-nullable property.
-     *
-     * @param class-string $class
-     */
+    /** @param class-string $class */
     #[DataProvider('responseDtoProvider')]
     public function testEveryGetterSurvivesNilledResponse(string $class): void
     {
@@ -98,8 +81,6 @@ final class DtoNullabilityTest extends TestCase
             try {
                 $method->invoke($dto);
             } catch (Error $error) {
-                // An Error means the property is typed more strictly than the schema allows - that is
-                // exactly the class of failure a caller cannot catch. Declared exceptions are fine.
                 self::fail(sprintf(
                     "%s::%s() failed on a schema-valid response: %s: %s\nDocument: %s",
                     $dto::class,
@@ -109,8 +90,6 @@ final class DtoNullabilityTest extends TestCase
                     $xml
                 ));
             } catch (Exception) {
-                // A documented domain exception (e.g. GetDataBoxAddress::getStatus()) is a deliberate
-                // contract, not an initialisation bug.
             }
             $called++;
         }
@@ -135,7 +114,6 @@ final class DtoNullabilityTest extends TestCase
                 if ($reflection->isAbstract() || $reflection->isInterface() || $reflection->isEnum()) {
                     continue;
                 }
-                // Request-only structures are deliberately left non-nullable, see CHANGELOG 6.0.0.
                 if (in_array($class, self::requestOnlyClasses(), true)) {
                     continue;
                 }
@@ -162,12 +140,7 @@ final class DtoNullabilityTest extends TestCase
         ];
     }
 
-    /**
-     * Renders the smallest schema-valid document for a DTO: every property without a default is
-     * mandatory, so it gets a value; nullable ones are either omitted or nilled.
-     *
-     * @param class-string $class
-     */
+    /** @param class-string $class */
     private static function buildXml(string $class, bool $nilOptional): string
     {
         $reflection = new ReflectionClass($class);
@@ -218,9 +191,6 @@ final class DtoNullabilityTest extends TestCase
             }
 
             $name = self::serializedName($property);
-            // Nilling is driven by the schema, not by the current PHP type - otherwise narrowing a
-            // property back to non-nullable would silently stop it from being nilled and the test
-            // would go green again.
             if (
                 $nilOptional
                 && self::isNillableInSchema($name)
@@ -242,8 +212,6 @@ final class DtoNullabilityTest extends TestCase
     }
 
     /**
-     * Mandatory properties are always rendered; nullable ones only when they are being nilled.
-     *
      * @param ReflectionClass<object> $reflection
      * @return list<ReflectionProperty>
      */
@@ -254,8 +222,6 @@ final class DtoNullabilityTest extends TestCase
             if ($property->isStatic() || self::isCollection($property)) {
                 continue;
             }
-            // An element carrying XmlValue has no separate tag to omit - leaving it out would produce
-            // an empty element the serializer cannot convert back.
             if (self::attribute($property, Serializer\XmlValue::class) !== null) {
                 $properties[] = $property;
                 continue;
@@ -263,7 +229,6 @@ final class DtoNullabilityTest extends TestCase
             if (self::isNullable($property) && !$nilOptional) {
                 continue;
             }
-            // A nilled attribute makes no sense - xsi:nil only applies to elements.
             if (
                 $nilOptional && self::isNullable($property)
                 && self::attribute($property, Serializer\XmlAttribute::class) !== null
@@ -297,7 +262,6 @@ final class DtoNullabilityTest extends TestCase
         if ($type === null || !class_exists($type)) {
             return null;
         }
-        // Value objects with their own serializer handler are rendered as scalars.
         if (is_a($type, DateTimeImmutable::class, true)) {
             return null;
         }
@@ -322,15 +286,10 @@ final class DtoNullabilityTest extends TestCase
         return $property->getName();
     }
 
-    /**
-     * Produces a value the serializer accepts for the declared type - the point is only that the
-     * property ends up initialised.
-     */
     private static function scalarValue(ReflectionProperty $property): string
     {
         $type = self::serializerType($property) ?? 'string';
         if (str_starts_with($type, 'DateTimeImmutable') || str_starts_with($type, 'DateTime')) {
-            // The serializer type carries its own format, e.g. DateTimeImmutable<'Y-m-d'>.
             $format = preg_match("/<'([^']+)'/", $type, $matches) === 1 ? $matches[1] : 'Y-m-d\\TH:i:s.uP';
 
             return new DateTimeImmutable('2026-08-11 10:00:00', new DateTimeZone('Europe/Prague'))
@@ -378,14 +337,7 @@ final class DtoNullabilityTest extends TestCase
         return $attributes[0]->newInstance();
     }
 
-    /**
-     * The dynamic tests above only prove the DTOs are internally consistent - they would go green
-     * again if a property were narrowed back to a non-nullable type. This one is the actual
-     * regression lock: it reads the schema and demands nullability wherever ISDS is allowed to omit
-     * or nil an element.
-     *
-     * @param class-string $class
-     */
+    /** @param class-string $class */
     #[DataProvider('responseDtoProvider')]
     public function testOptionalInSchemaMeansNullableInDto(string $class): void
     {
@@ -414,36 +366,17 @@ final class DtoNullabilityTest extends TestCase
                     $name
                 )
             );
-            // The return type is deliberately not asserted here: a getter may narrow null to a
-            // meaningful default (isVodz() answers false, not null). A getter that narrows without
-            // handling null blows up in testEveryGetterSurvivesNilledResponse instead.
         }
 
         self::assertGreaterThanOrEqual(0, $checked);
     }
 
-    /**
-     * Elements left non-nullable on purpose even though the schema permits omission or nil.
-     * Every entry is a decision, not an oversight - see CHANGELOG 6.0.0.
-     *
-     * dmStatus/dbStatus is optional in a handful of output types, but Response::getStatus() returning
-     * ResponseStatus is the base contract of the whole library - making it nullable would force a null
-     * check on every single call site for responses that are unusable without a status anyway.
-     *
-     * @var list<string>
-     */
+    /** @var list<string> */
     private const array DELIBERATELY_NON_NULLABLE = [
         'dmStatus',
         'dbStatus',
     ];
 
-
-    /**
-     * True when *every* occurrence of the element in the schema is nillable - ISDS is then free to
-     * send xsi:nil in any context, so the DTO has to survive it. Names that are nillable in one type
-     * and mandatory in another (dmEventTime, dbType, PDZType) are excluded on purpose: the DTO models
-     * the context where the value is guaranteed.
-     */
     private static function isNillableInSchema(string $name): bool
     {
         $occurrences = 0;
@@ -466,14 +399,6 @@ final class DtoNullabilityTest extends TestCase
         return $occurrences > 0;
     }
 
-    /**
-     * True only when *every* occurrence of the name in the schema may be missing or nilled.
-     *
-     * Requiring all occurrences avoids false alarms: names such as dmStatus or dmHash are reused
-     * across types and are mandatory in most of them, so "optional somewhere" would flag properties
-     * that are in fact guaranteed in the context the DTO models. What survives this filter is
-     * unconditionally optional - exactly the case that used to throw a PHP Error.
-     */
     private static function isOptionalInSchema(string $name): bool
     {
         $occurrences = 0;
@@ -536,10 +461,6 @@ final class DtoNullabilityTest extends TestCase
         return $cache;
     }
 
-    /**
-     * Guards the guard: a property typed with a class the builder cannot render would otherwise
-     * quietly fall back to a string and stop testing anything.
-     */
     public function testBuilderCoversEveryNonNullableProperty(): void
     {
         $checked = 0;
