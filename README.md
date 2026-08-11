@@ -189,7 +189,9 @@ if ($response->getStatus()->isOk()) {
 Knihovna ještě před odesláním validuje vstupy a může vyhodit výjimky `MissingRequiredField`
 (chybějící popis, obsah, příjemce či anotace), `MissingMainFile` (žádná příloha s `metaType` `main`),
 `DisallowedAttachmentFormat` (přípona mimo whitelist vyhlášky č. 194/2009 Sb.),
-`AttachmentCountOverflow` (příliš mnoho příloh) a `FileSizeOverflow` (překročení 100 MB) —
+`AttachmentCountOverflow` (příliš mnoho příloh), `FileSizeOverflow` (překročení 100 MB)
+a `FieldLengthOverflow` (překročení délkových limitů obálky dle XSD — `dmAnnotation` 255 znaků,
+`dmSenderRefNumber`/`dmRecipientRefNumber` a `dmSenderIdent`/`dmRecipientIdent` 50 znaků) —
 všechny z namespace `TomasKulhanek\CzechDataBox\Exception`.
 
 ## Povinnosti aplikace dle Provozního řádu ISDS
