@@ -32,6 +32,7 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 - **Nové atributy DTO**: `specMessFlag` + `isSuspicious()` (podezřelá zpráva), `dmVODZ` + `isVodz()` a `attsNum` (rozpoznání VoDZ v seznamech), `PublishOwnId` s `IdLevel`.
 - **Nová pole DTO**: `pnLastNameAtBirth`, `caState`, `adDistrict`, `adAMCode`.
 - **`Utils\AllowedAttachmentFormats`** — whitelist 51 povolených přípon vč. kontejnerových formátů.
+- **`Psr18ClientProvider`** — HTTP provider pro libovolného PSR-18 klienta (PSR-17 factories, např. `nyholm/psr7`). Klientský certifikát (mTLS) je nutné nakonfigurovat přímo na podkladovém klientovi — PSR-18 nemá přenosové volby, certifikát uložený v `Account` provider odmítne s `ConnectionException`.
 
 ### Opraveno
 

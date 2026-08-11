@@ -83,6 +83,30 @@ $serializer = \TomasKulhanek\Serializer\SerializerFactory::create();
 $guzzleProvider = \TomasKulhanek\CzechDataBox\Provider\GuzzleClientProvider::create();
 $connector = new \TomasKulhanek\CzechDataBox\Connector($serializer, $guzzleProvider);
 ```
+
+## Využití s PSR-18 klientem
+### Instalace
+```bash
+composer require tomas-kulhanek/czech-data-box psr/http-client psr/http-factory nyholm/psr7
+```
+Dále nainstalujte libovolného PSR-18 klienta (např. `guzzlehttp/guzzle`, `symfony/http-client` + `psr18-client`, `php-http/curl-client`).
+#### Instancování
+```php
+$serializer = \TomasKulhanek\Serializer\SerializerFactory::create();
+$psr17Factory = new \Nyholm\Psr7\Factory\Psr17Factory();
+$provider = new \TomasKulhanek\CzechDataBox\Provider\Psr18ClientProvider(
+    $psr18Client, // libovolná implementace Psr\Http\Client\ClientInterface
+    $psr17Factory,
+    $psr17Factory,
+);
+$connector = new \TomasKulhanek\CzechDataBox\Connector($serializer, $provider);
+```
+
+> ⚠️ PSR-18 nemá přenosové (transport) volby, takže provider neumí odeslat klientský certifikát
+> uložený v `Account`. Pro přihlášení certifikátem (`SPIS_CERT`, `HOSTED_SPIS`,
+> `CERT_LOGIN_NAME_PASSWORD`) nakonfigurujte mTLS přímo na podkladovém PSR-18 klientovi a certifikát
+> do `Account` nenastavujte — jinak provider vyhodí `ConnectionException`.
+
 ## Povinnosti aplikace dle Provozního řádu ISDS
 
 Knihovna řeší komunikaci s ISDS, ale některé povinnosti [Provozního řádu](https://datovka.gov.cz/info/cs/80.html) musí zajistit až vaše aplikace:

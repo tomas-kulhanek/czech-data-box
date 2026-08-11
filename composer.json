@@ -44,6 +44,8 @@
   "suggest": {
     "ext-curl": "for comunication with czech databox servers",
     "guzzlehttp/guzzle": "for usage with guzzle",
+    "psr/http-client": "for usage with any PSR-18 client",
+    "psr/http-factory": "for usage with any PSR-18 client",
     "symfony/http-client": "for usage with symfony"
   },
   "require-dev": {
@@ -53,6 +55,8 @@
     "symfony/http-client": "7.*|8.*",
     "phpstan/phpstan": "^2.2",
     "phpunit/phpunit": "^13.3",
+    "psr/http-client": "^1.0",
+    "psr/http-factory": "^1.0",
     "rector/rector": "^2.6",
     "squizlabs/php_codesniffer": "^4.0"
   },
