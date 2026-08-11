@@ -21,13 +21,14 @@
     "source": "https://github.com/tomas-kulhanek/czech-data-box"
   },
   "require": {
-    "php": ">=8.4",
+    "php": "^8.4",
     "ext-curl": "*",
     "ext-dom": "*",
     "ext-mbstring": "*",
     "ext-openssl": "*",
     "ext-xml": "*",
     "composer/ca-bundle": "^1.5",
+    "jms/serializer": "^3.32",
     "symfony/validator": "^7.0",
     "tomas-kulhanek/serializer": "^2.0.3"
   },

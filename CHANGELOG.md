@@ -53,6 +53,8 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 - Composer skript `check` neobsahoval testy, takže lokální brána prošla i s rozbitou unit test suite. `check` nově spouští stejnou sadu jako CI (`check:phpstan`, `check:cs`, `check:rector`, `test:unit`); duplicitní `check:all` byl zrušen.
 - `composer test:integration` bez přihlašovacích údajů končil chybami místo přeskočení. Integrační testy se nově přeskočí (`markTestSkipped`), pokud chybí proměnné prostředí `*_LOGIN_USER` nebo soubor `.data/cert.pem`.
 - Smazán mrtvý `ruleset.xml` — odkazoval na balíček `ninjify/coding-standard`, který v projektu není. Kontrola stylu reálně běží přes `phpcs --standard=PSR12` (skript `check:cs`).
+- **`jms/serializer` je nově explicitní závislost** (`^3.32`). `Connector::__construct()` přijímá `JMS\Serializer\SerializerInterface`, takže jde o součást veřejného API — dosud se balíček instaloval jen tranzitivně přes `tomas-kulhanek/serializer`.
+- Constraint PHP zpřísněn z `>=8.4` na `^8.4`, aby se knihovna neinstalovala na dosud nevydané PHP 9.
 - Dist balíček z Packagistu vezl i vývojové soubory (`tests/`, `.github/`, `phpunit.xml`, `phpstan.neon`, `rector.php`, `Dockerfile`) — `.gitattributes` je nově označuje `export-ignore`. `archive.exclude` v `composer.json` platí jen pro `composer archive`, na distribuci přes Packagist vliv nemá.
 
 ### Zabezpečení
