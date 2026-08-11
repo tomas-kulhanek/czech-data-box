@@ -6,16 +6,35 @@ namespace TomasKulhanek\CzechDataBox\DTO;
 
 use DateTimeImmutable;
 use JMS\Serializer\Annotation as Serializer;
-use TomasKulhanek\CzechDataBox\Traits\Address;
-use TomasKulhanek\CzechDataBox\Traits\PersonName;
 
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'dbUserInfo')]
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
-class UserInfo
+#[Serializer\AccessorOrder(order: 'custom', custom: [
+    'biDate',
+    'userId',
+    'userType',
+    'userPrivils',
+    'ic',
+    'firmName',
+    'caStreet',
+    'caCity',
+    'caZipCode',
+    'caState',
+    'firstName',
+    'middleName',
+    'lastName',
+    'lastNameAtBirth',
+    'adCity',
+    'adDistrict',
+    'adStreet',
+    'adNumberInStreet',
+    'adNumberInMunicipality',
+    'adZipCode',
+    'adState',
+    'adAMCode',
+])]
+class UserInfo extends PersonInfo
 {
-    use PersonName;
-    use Address;
-
     #[Serializer\SkipWhenEmpty]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\Type("DateTimeImmutable<'Y-m-d'>")]
@@ -183,105 +202,6 @@ class UserInfo
     public function setCaState(?string $caState): UserInfo
     {
         $this->caState = $caState;
-        return $this;
-    }
-
-    public function getAdCity(): ?string
-    {
-        return $this->adCity;
-    }
-
-    public function setAdCity(?string $adCity): UserInfo
-    {
-        $this->adCity = $adCity;
-        return $this;
-    }
-
-    public function getAdStreet(): ?string
-    {
-        return $this->adStreet;
-    }
-
-    public function setAdStreet(?string $adStreet): UserInfo
-    {
-        $this->adStreet = $adStreet;
-        return $this;
-    }
-
-    public function getAdNumberInStreet(): ?string
-    {
-        return $this->adNumberInStreet;
-    }
-
-    public function setAdNumberInStreet(?string $adNumberInStreet): UserInfo
-    {
-        $this->adNumberInStreet = $adNumberInStreet;
-        return $this;
-    }
-
-    public function getAdNumberInMunicipality(): ?string
-    {
-        return $this->adNumberInMunicipality;
-    }
-
-    public function setAdNumberInMunicipality(?string $adNumberInMunicipality): UserInfo
-    {
-        $this->adNumberInMunicipality = $adNumberInMunicipality;
-        return $this;
-    }
-
-    public function getAdZipCode(): ?string
-    {
-        return $this->adZipCode;
-    }
-
-    public function setAdZipCode(?string $adZipCode): UserInfo
-    {
-        $this->adZipCode = $adZipCode;
-        return $this;
-    }
-
-    public function getAdState(): ?string
-    {
-        return $this->adState;
-    }
-
-    public function setAdState(?string $adState): UserInfo
-    {
-        $this->adState = $adState;
-        return $this;
-    }
-
-    public function getFirstName(): ?string
-    {
-        return $this->firstName;
-    }
-
-    public function setFirstName(?string $firstName): UserInfo
-    {
-        $this->firstName = $firstName;
-        return $this;
-    }
-
-    public function getMiddleName(): ?string
-    {
-        return $this->middleName;
-    }
-
-    public function setMiddleName(?string $middleName): UserInfo
-    {
-        $this->middleName = $middleName;
-        return $this;
-    }
-
-    public function getLastName(): ?string
-    {
-        return $this->lastName;
-    }
-
-    public function setLastName(?string $lastName): UserInfo
-    {
-        $this->lastName = $lastName;
         return $this;
     }
 }

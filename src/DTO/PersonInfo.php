@@ -2,12 +2,36 @@
 
 declare(strict_types=1);
 
-namespace TomasKulhanek\CzechDataBox\Traits;
+namespace TomasKulhanek\CzechDataBox\DTO;
 
 use JMS\Serializer\Annotation as Serializer;
 
-trait Address
+abstract class PersonInfo
 {
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type('string')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('pnFirstName')]
+    protected ?string $firstName = null;
+
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type('string')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('pnMiddleName')]
+    protected ?string $middleName = null;
+
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type('string')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('pnLastName')]
+    protected ?string $lastName = null;
+
+    #[Serializer\SkipWhenEmpty]
+    #[Serializer\Type('string')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
+    #[Serializer\SerializedName('pnLastNameAtBirth')]
+    protected ?string $lastNameAtBirth = null;
+
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
@@ -56,14 +80,69 @@ trait Address
     #[Serializer\SerializedName('adAMCode')]
     protected ?string $adAMCode = null;
 
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(?string $firstName): static
+    {
+        $this->firstName = $firstName;
+        return $this;
+    }
+
+    public function getMiddleName(): ?string
+    {
+        return $this->middleName;
+    }
+
+    public function setMiddleName(?string $middleName): static
+    {
+        $this->middleName = $middleName;
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(?string $lastName): static
+    {
+        $this->lastName = $lastName;
+        return $this;
+    }
+
+    public function getLastNameAtBirth(): ?string
+    {
+        return $this->lastNameAtBirth;
+    }
+
+    public function setLastNameAtBirth(?string $lastNameAtBirth): static
+    {
+        $this->lastNameAtBirth = $lastNameAtBirth;
+        return $this;
+    }
+
     public function getAdCity(): ?string
     {
         return $this->adCity;
     }
 
-    public function setAdCity(?string $adCity): self
+    public function setAdCity(?string $adCity): static
     {
         $this->adCity = $adCity;
+        return $this;
+    }
+
+    public function getAdDistrict(): ?string
+    {
+        return $this->adDistrict;
+    }
+
+    public function setAdDistrict(?string $adDistrict): static
+    {
+        $this->adDistrict = $adDistrict;
         return $this;
     }
 
@@ -72,7 +151,7 @@ trait Address
         return $this->adStreet;
     }
 
-    public function setAdStreet(?string $adStreet): self
+    public function setAdStreet(?string $adStreet): static
     {
         $this->adStreet = $adStreet;
         return $this;
@@ -83,7 +162,7 @@ trait Address
         return $this->adNumberInStreet;
     }
 
-    public function setAdNumberInStreet(?string $adNumberInStreet): self
+    public function setAdNumberInStreet(?string $adNumberInStreet): static
     {
         $this->adNumberInStreet = $adNumberInStreet;
         return $this;
@@ -94,7 +173,7 @@ trait Address
         return $this->adNumberInMunicipality;
     }
 
-    public function setAdNumberInMunicipality(?string $adNumberInMunicipality): self
+    public function setAdNumberInMunicipality(?string $adNumberInMunicipality): static
     {
         $this->adNumberInMunicipality = $adNumberInMunicipality;
         return $this;
@@ -105,7 +184,7 @@ trait Address
         return $this->adZipCode;
     }
 
-    public function setAdZipCode(?string $adZipCode): self
+    public function setAdZipCode(?string $adZipCode): static
     {
         $this->adZipCode = $adZipCode;
         return $this;
@@ -116,20 +195,9 @@ trait Address
         return $this->adState;
     }
 
-    public function setAdState(?string $adState): self
+    public function setAdState(?string $adState): static
     {
         $this->adState = $adState;
-        return $this;
-    }
-
-    public function getAdDistrict(): ?string
-    {
-        return $this->adDistrict;
-    }
-
-    public function setAdDistrict(?string $adDistrict): self
-    {
-        $this->adDistrict = $adDistrict;
         return $this;
     }
 
@@ -138,7 +206,7 @@ trait Address
         return $this->adAMCode;
     }
 
-    public function setAdAMCode(?string $adAMCode): self
+    public function setAdAMCode(?string $adAMCode): static
     {
         $this->adAMCode = $adAMCode;
         return $this;
