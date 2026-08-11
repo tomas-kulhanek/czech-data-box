@@ -54,8 +54,11 @@ use TomasKulhanek\CzechDataBox\DTO\Request\GetPasswordInfo;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetUserInfoFromLogin;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetUserInfoFromLogin2;
 use TomasKulhanek\CzechDataBox\DTO\Request\ISDSSearch3;
+use TomasKulhanek\CzechDataBox\DTO\Request\NewAccessData2;
 use TomasKulhanek\CzechDataBox\DTO\Request\PDZInfo;
 use TomasKulhanek\CzechDataBox\DTO\Request\PDZSendInfo;
+use TomasKulhanek\CzechDataBox\DTO\Request\ClearOpenAddressing;
+use TomasKulhanek\CzechDataBox\DTO\Request\SetOpenAddressing;
 use TomasKulhanek\CzechDataBox\DTO\Request\UpdateDataBoxUser2;
 use Closure;
 use JMS\Serializer\Annotation as Serializer;
@@ -545,6 +548,17 @@ class RequestXsdValidationTest extends TestCase
                     ->setHighlighting(true),
                 self::DB_TYPES,
             ],
+            'NewAccessData2' => [
+                static fn (): NewAccessData2 => new NewAccessData2()
+                    ->setDataBoxId('abcdefg')
+                    ->setIsdsId('a23456789012')
+                    ->setFeePaid(true)
+                    ->setVirtual(true)
+                    ->setEmail('jan.novak@example.com')
+                    ->setApproved(true)
+                    ->setExternRefNumber('cj-42'),
+                self::DB_TYPES,
+            ],
             'PDZInfo' => [
                 static fn (): PDZInfo => new PDZInfo()
                     ->setSender('abcdefg'),
@@ -554,6 +568,18 @@ class RequestXsdValidationTest extends TestCase
                 static fn (): PDZSendInfo => new PDZSendInfo()
                     ->setDataBoxId('abcdefg')
                     ->setType('Normal'),
+                self::DB_TYPES,
+            ],
+            'SetOpenAddressing' => [
+                static fn (): SetOpenAddressing => new SetOpenAddressing()
+                    ->setDataBoxId('abcdefg')
+                    ->setApproved(true)
+                    ->setExternRefNumber('cj-42'),
+                self::DB_TYPES,
+            ],
+            'ClearOpenAddressing' => [
+                static fn (): ClearOpenAddressing => new ClearOpenAddressing()
+                    ->setDataBoxId('abcdefg'),
                 self::DB_TYPES,
             ],
             'UpdateDataBoxUser2' => [

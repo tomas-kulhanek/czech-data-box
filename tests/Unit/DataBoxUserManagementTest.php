@@ -10,8 +10,14 @@ use DOMElement;
 use PHPUnit\Framework\TestCase;
 use TomasKulhanek\CzechDataBox\DTO\Request\AddDataBoxUser2;
 use TomasKulhanek\CzechDataBox\DTO\Request\DeleteDataBoxUser2;
+use TomasKulhanek\CzechDataBox\DTO\Request\ClearOpenAddressing;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetDataBoxUsers2;
+use TomasKulhanek\CzechDataBox\DTO\Request\NewAccessData2;
+use TomasKulhanek\CzechDataBox\DTO\Request\SetOpenAddressing;
+use TomasKulhanek\CzechDataBox\DTO\Response\ClearOpenAddressing as ClearOpenAddressingResponse;
 use TomasKulhanek\CzechDataBox\DTO\Response\GetDataBoxUsers2 as GetDataBoxUsers2Response;
+use TomasKulhanek\CzechDataBox\DTO\Response\NewAccessData2 as NewAccessData2Response;
+use TomasKulhanek\CzechDataBox\DTO\Response\SetOpenAddressing as SetOpenAddressingResponse;
 use TomasKulhanek\CzechDataBox\DTO\UserInfoExt2;
 
 class DataBoxUserManagementTest extends TestCase
@@ -100,6 +106,125 @@ class DataBoxUserManagementTest extends TestCase
         $document->loadXML($serializer->serialize($request, 'xml'));
 
         self::assertSame(['dbID', 'dbUserInfo'], $this->childElementNames($document));
+    }
+
+    public function testSetOpenAddressingRequestElementOrder(): void
+    {
+        $serializer = self::createSerializer();
+        $request = new SetOpenAddressing();
+        $request->setDataBoxId('abcdefg');
+        $request->setApproved(true);
+        $request->setExternRefNumber('cj-42');
+
+        $document = new DOMDocument();
+        $document->loadXML($serializer->serialize($request, 'xml'));
+
+        self::assertSame('SetOpenAddressing', $document->documentElement?->localName);
+        self::assertSame(
+            ['dbID', 'dbApproved', 'dbExternRefNumber'],
+            $this->childElementNames($document)
+        );
+        self::assertSame('abcdefg', $this->childElementValue($document, 'dbID'));
+    }
+
+    public function testClearOpenAddressingRequestSkipsEmptyOptionalElements(): void
+    {
+        $serializer = self::createSerializer();
+        $request = new ClearOpenAddressing();
+        $request->setDataBoxId('abcdefg');
+
+        $document = new DOMDocument();
+        $document->loadXML($serializer->serialize($request, 'xml'));
+
+        self::assertSame('ClearOpenAddressing', $document->documentElement?->localName);
+        self::assertSame(['dbID'], $this->childElementNames($document));
+    }
+
+    public function testNewAccessData2RequestElementOrder(): void
+    {
+        $serializer = self::createSerializer();
+        $request = new NewAccessData2();
+        $request->setDataBoxId('abcdefg');
+        $request->setIsdsId('a23456789012');
+        $request->setFeePaid(true);
+        $request->setVirtual(true);
+        $request->setEmail('jan.novak@example.com');
+        $request->setExternRefNumber('cj-42');
+
+        $document = new DOMDocument();
+        $document->loadXML($serializer->serialize($request, 'xml'));
+
+        self::assertSame(
+            ['dbID', 'isdsID', 'dbFeePaid', 'dbVirtual', 'email', 'dbExternRefNumber'],
+            $this->childElementNames($document)
+        );
+        self::assertSame('true', $this->childElementValue($document, 'dbFeePaid'));
+        self::assertSame('jan.novak@example.com', $this->childElementValue($document, 'email'));
+    }
+
+    public function testNewAccessData2RequestKeepsMandatoryFeePaidWhenFalse(): void
+    {
+        $serializer = self::createSerializer();
+        $request = new NewAccessData2();
+        $request->setDataBoxId('abcdefg');
+        $request->setIsdsId('a23456789012');
+
+        $document = new DOMDocument();
+        $document->loadXML($serializer->serialize($request, 'xml'));
+
+        self::assertSame(['dbID', 'isdsID', 'dbFeePaid'], $this->childElementNames($document));
+        self::assertSame('false', $this->childElementValue($document, 'dbFeePaid'));
+    }
+
+    public function testSetOpenAddressingResponseDeserialization(): void
+    {
+        $xml = <<<XML_WRAP
+<?xml version="1.0" encoding="UTF-8"?>
+<p:SetOpenAddressingResponse xmlns:p="http://isds.czechpoint.cz/v20">
+  <p:dbStatus>
+    <p:dbStatusCode>0000</p:dbStatusCode>
+    <p:dbStatusMessage>Ok.</p:dbStatusMessage>
+  </p:dbStatus>
+</p:SetOpenAddressingResponse>
+XML_WRAP;
+        $response = self::deserializeXml($xml, SetOpenAddressingResponse::class);
+        self::assertSame('0000', $response->getStatus()->getCode());
+        self::assertTrue($response->getStatus()->isOk());
+    }
+
+    public function testClearOpenAddressingResponseDeserialization(): void
+    {
+        $xml = <<<XML_WRAP
+<?xml version="1.0" encoding="UTF-8"?>
+<p:ClearOpenAddressingResponse xmlns:p="http://isds.czechpoint.cz/v20">
+  <p:dbStatus>
+    <p:dbStatusCode>1214</p:dbStatusCode>
+    <p:dbStatusMessage>Schránka nemá otevřené adresování.</p:dbStatusMessage>
+  </p:dbStatus>
+</p:ClearOpenAddressingResponse>
+XML_WRAP;
+        $response = self::deserializeXml($xml, ClearOpenAddressingResponse::class);
+        self::assertSame('1214', $response->getStatus()->getCode());
+        self::assertFalse($response->getStatus()->isOk());
+    }
+
+    public function testNewAccessData2ResponseDeserialization(): void
+    {
+        $xml = <<<XML_WRAP
+<?xml version="1.0" encoding="UTF-8"?>
+<p:NewAccessData2Response xmlns:p="http://isds.czechpoint.cz/v20">
+  <p:dbUserID>USR123</p:dbUserID>
+  <p:dbAccessDataId>ACC456</p:dbAccessDataId>
+  <p:dbStatus>
+    <p:dbStatusCode>0000</p:dbStatusCode>
+    <p:dbStatusMessage>Ok.</p:dbStatusMessage>
+  </p:dbStatus>
+</p:NewAccessData2Response>
+XML_WRAP;
+        $response = self::deserializeXml($xml, NewAccessData2Response::class);
+        self::assertSame('USR123', $response->getUserId());
+        self::assertSame('ACC456', $response->getAccessDataId());
+        self::assertSame('0000', $response->getStatus()->getCode());
     }
 
     /**
