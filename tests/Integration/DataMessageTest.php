@@ -282,8 +282,6 @@ class DataMessageTest extends TestCase
             ->setLegalTitleYear((int) date('Y'))
             ->setPublishOwnId(false)
             ->setRecipientIdent('recipientIdent')
-            ->setRecipientOrgUnit('recipientOrgUnit')
-            ->setRecipientOrgUnitNum(777)
             ->setRecipientRefNumber('recipientRefNumber')
             ->setSenderIdent('senderIdent')
             ->setSenderOrgUnit('senderOrgUnit')

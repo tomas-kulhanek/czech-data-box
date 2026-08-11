@@ -58,8 +58,11 @@ use TomasKulhanek\CzechDataBox\DTO\Request\PDZInfo;
 use TomasKulhanek\CzechDataBox\DTO\Request\PDZSendInfo;
 use TomasKulhanek\CzechDataBox\DTO\Request\UpdateDataBoxUser2;
 use Closure;
+use JMS\Serializer\Annotation as Serializer;
 use DateTimeImmutable;
 use DOMDocument;
+use DOMElement;
+use DOMXPath;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -114,6 +117,62 @@ class RequestXsdValidationTest extends TestCase
             implode("\n", $errors),
             $xml
         ));
+    }
+
+    public function testEnvelopeDeclaresOnlyMultipleMessageEnvelopeElements(): void
+    {
+        $allowed = self::collectXsdElementNames('tMultipleMessageEnvelopeSub');
+        self::assertContains('dmSenderOrgUnit', $allowed);
+        self::assertNotContains('dmRecipientOrgUnit', $allowed);
+
+        $declared = [];
+        foreach (new ReflectionClass(Envelope::class)->getProperties() as $property) {
+            if ($property->getAttributes(Serializer\XmlAttribute::class) !== []) {
+                continue;
+            }
+            foreach ($property->getAttributes(Serializer\SerializedName::class) as $attribute) {
+                $declared[] = $attribute->newInstance()->name;
+            }
+        }
+
+        self::assertSame([], array_values(array_diff($declared, $allowed)), sprintf(
+            'Envelope declares elements unknown to tMultipleMessageEnvelopeSub: %s',
+            implode(', ', array_diff($declared, $allowed))
+        ));
+    }
+
+    /**
+     * @return list<string>
+     */
+    private static function collectXsdElementNames(string $typeName): array
+    {
+        $document = new DOMDocument();
+        self::assertTrue($document->load(__DIR__ . '/../_data/xsd/' . self::DM_BASE_TYPES));
+
+        $xpath = new DOMXPath($document);
+        $xpath->registerNamespace('xs', 'http://www.w3.org/2001/XMLSchema');
+
+        $names = [];
+        $queue = [sprintf('/xs:schema/xs:complexType[@name="%s"]', $typeName)];
+        while ($queue !== []) {
+            $query = array_shift($queue);
+            $nodes = $xpath->query($query . '//xs:element[@name]');
+            self::assertNotFalse($nodes);
+            foreach ($nodes as $node) {
+                self::assertInstanceOf(DOMElement::class, $node);
+                $names[] = $node->getAttribute('name');
+            }
+
+            $groups = $xpath->query($query . '//xs:group[@ref]');
+            self::assertNotFalse($groups);
+            foreach ($groups as $group) {
+                self::assertInstanceOf(DOMElement::class, $group);
+                $reference = str_replace('tns:', '', $group->getAttribute('ref'));
+                $queue[] = sprintf('/xs:schema/xs:group[@name="%s"]', $reference);
+            }
+        }
+
+        return array_values(array_unique($names));
     }
 
     public function testEveryRequestClassIsCovered(): void
@@ -227,6 +286,10 @@ class RequestXsdValidationTest extends TestCase
                         ->setFiles([$file])
                         ->setRecipients([$recipient]);
                 },
+                self::DM_BASE_TYPES,
+            ],
+            'CreateMessageWithFullEnvelope' => [
+                self::createFullyPopulatedCreateMessage(...),
                 self::DM_BASE_TYPES,
             ],
             'DownloadAttachment' => [
@@ -501,6 +564,45 @@ class RequestXsdValidationTest extends TestCase
                 self::DB_TYPES,
             ],
         ];
+    }
+
+    private static function createFullyPopulatedCreateMessage(): CreateMessage
+    {
+        $recipient = new Recipient();
+        $recipient->setDataBoxId('abcdefg')
+            ->setOrgUnit('Odbor X')
+            ->setOrgUnitNum(42)
+            ->setToHand('Jan Novák');
+
+        $envelope = new Envelope();
+        $envelope->setType('K')
+            ->setSenderOrgUnit('Podatelna')
+            ->setSenderOrgUnitNum(1)
+            ->setAnnotation('Testovací zpráva')
+            ->setRecipientRefNumber('cj-1')
+            ->setSenderRefNumber('cj-2')
+            ->setRecipientIdent('sp-1')
+            ->setSenderIdent('sp-2')
+            ->setLegalTitleLaw(300)
+            ->setLegalTitleYear(2008)
+            ->setLegalTitleSect('18')
+            ->setLegalTitlePar('1')
+            ->setLegalTitlePoint('a')
+            ->setPersonalDelivery(true)
+            ->setAllowSubstDelivery(true)
+            ->setOvm(true)
+            ->setPublishOwnId(true);
+
+        $file = new File();
+        $file->setMimeType('application/pdf')
+            ->setMetaType('main')
+            ->setDescription('main.pdf')
+            ->setEncodedContent(SplFileInfo::createInTemp('obsah'));
+
+        return new CreateMessage()
+            ->setEnvelope($envelope)
+            ->setFiles([$file])
+            ->setRecipients([$recipient]);
     }
 
     private static function createUserInfo(): UserInfoExt2
