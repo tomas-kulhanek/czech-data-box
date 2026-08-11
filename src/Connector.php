@@ -26,7 +26,11 @@ use TomasKulhanek\CzechDataBox\DTO\Request\DataBoxCreditInfo;
 use TomasKulhanek\CzechDataBox\DTO\Request\DTInfo;
 use TomasKulhanek\CzechDataBox\DTO\Request\EraseMessage;
 use TomasKulhanek\CzechDataBox\DTO\Request\FindDataBox2;
+use TomasKulhanek\CzechDataBox\DTO\Request\AddDataBoxUser2;
+use TomasKulhanek\CzechDataBox\DTO\Request\DeleteDataBoxUser2;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetConstants;
+use TomasKulhanek\CzechDataBox\DTO\Request\GetDataBoxUsers2;
+use TomasKulhanek\CzechDataBox\DTO\Request\UpdateDataBoxUser2;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetDataBoxActivityStatus;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetDataBoxAddress;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetDataBoxList;
@@ -138,6 +142,26 @@ readonly class Connector
             (new DTO\Request\GetOwnerInfoFromLogin()),
             GetOwnerInfoFromLogin::class
         );
+    }
+
+    public function getDataBoxUsers2(Account $account, GetDataBoxUsers2 $input): DTO\Response\GetDataBoxUsers2
+    {
+        return $this->send($account, ServiceTypeEnum::ACCESS, $input, DTO\Response\GetDataBoxUsers2::class);
+    }
+
+    public function addDataBoxUser2(Account $account, AddDataBoxUser2 $input): DTO\Response\AddDataBoxUser2
+    {
+        return $this->send($account, ServiceTypeEnum::ACCESS, $input, DTO\Response\AddDataBoxUser2::class);
+    }
+
+    public function updateDataBoxUser2(Account $account, UpdateDataBoxUser2 $input): DTO\Response\UpdateDataBoxUser2
+    {
+        return $this->send($account, ServiceTypeEnum::ACCESS, $input, DTO\Response\UpdateDataBoxUser2::class);
+    }
+
+    public function deleteDataBoxUser2(Account $account, DeleteDataBoxUser2 $input): DTO\Response\DeleteDataBoxUser2
+    {
+        return $this->send($account, ServiceTypeEnum::ACCESS, $input, DTO\Response\DeleteDataBoxUser2::class);
     }
 
     public function changeIsdsPassword(Account $account, ChangeISDSPassword $input): DTO\Response\ChangeISDSPassword
