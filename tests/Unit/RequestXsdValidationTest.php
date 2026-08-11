@@ -119,11 +119,6 @@ class RequestXsdValidationTest extends TestCase
         ));
     }
 
-    /**
-     * CreateMultipleMessage carries tMultipleMessageEnvelopeSub, which - unlike the single
-     * message envelope - knows nothing about the recipient. Any element declared on Envelope
-     * beyond that type would be rejected by the ISDS schema once it was populated.
-     */
     public function testEnvelopeDeclaresOnlyMultipleMessageEnvelopeElements(): void
     {
         $allowed = self::collectXsdElementNames('tMultipleMessageEnvelopeSub');
@@ -147,8 +142,6 @@ class RequestXsdValidationTest extends TestCase
     }
 
     /**
-     * Collects the element names a complex type accepts, following xs:group references.
-     *
      * @return list<string>
      */
     private static function collectXsdElementNames(string $typeName): array
@@ -573,11 +566,6 @@ class RequestXsdValidationTest extends TestCase
         ];
     }
 
-    /**
-     * CreateMultipleMessage with every supported envelope element filled in. The recipient
-     * organisational unit belongs to dmRecipient (tRecipients), never to the dmEnvelope of
-     * tMultipleMessageEnvelopeSub.
-     */
     private static function createFullyPopulatedCreateMessage(): CreateMessage
     {
         $recipient = new Recipient();

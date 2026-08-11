@@ -109,7 +109,7 @@ $connector = new Connector(SerializerFactory::create(), GuzzleClientProvider::cr
 
 $recipient = new Recipient();
 $recipient->setDataBoxId('abcdefg')
-    ->setOrgUnit('Odbor právní')   // organizační jednotka příjemce patří sem, ne do obálky
+    ->setOrgUnit('Odbor právní')
     ->setToHand('Jan Novák');
 
 $envelope = new Envelope();
@@ -133,7 +133,6 @@ if (!$response->isOk()) {
 }
 
 foreach ($response->getMultipleStatus() as $messageStatus) {
-    // ID odeslané zprávy (dmID) je až tady, i když se posílala jediná zpráva
     echo $messageStatus->getDataMessageId() . ': ' . $messageStatus->getStatus()->getMessage() . PHP_EOL;
 }
 ```
