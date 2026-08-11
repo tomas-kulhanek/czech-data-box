@@ -21,17 +21,10 @@ use TomasKulhanek\CzechDataBox\Exception\FieldLengthOverflow;
 use TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface;
 use TomasKulhanek\Tests\CzechDataBox\SerializerTrait;
 
-/**
- * Text length limits of the message envelope, taken from the gMessageEnvelopeSub
- * and tMultipleMessageEnvelopeSub groups of dmBaseTypes.xsd.
- */
 class EnvelopeLengthValidationTest extends TestCase
 {
     use SerializerTrait;
 
-    /**
-     * Connector that fails the test as soon as anything is sent to ISDS.
-     */
     private function createConnector(): Connector
     {
         $provider = $this->createMock(ClientProviderInterface::class);
@@ -40,10 +33,6 @@ class EnvelopeLengthValidationTest extends TestCase
         return new Connector(self::createSerializer(), $provider);
     }
 
-    /**
-     * Connector whose provider proves the request passed validation — it is
-     * reached only when no length check rejected the envelope.
-     */
     private function createSendingConnector(): Connector
     {
         $provider = $this->createMock(ClientProviderInterface::class);

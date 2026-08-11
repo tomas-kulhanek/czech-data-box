@@ -9,11 +9,6 @@ use TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum;
 
 trait AccountTrait
 {
-    /**
-     * Credentials of the ISDS test environment, injected by the integration workflow.
-     *
-     * @var string[]
-     */
     private const array REQUIRED_ENVIRONMENT_VARIABLES = [
         'FO_LOGIN_USER',
         'PFO_LOGIN_USER',
@@ -23,10 +18,6 @@ trait AccountTrait
 
     private const string CERTIFICATE_PATH = __DIR__ . '/../../.data/cert.pem';
 
-    /**
-     * The integration suite talks to the real ISDS test environment. Without credentials
-     * and a client certificate it can only fail, so skip it instead of erroring out.
-     */
     public static function setUpBeforeClass(): void
     {
         foreach (self::REQUIRED_ENVIRONMENT_VARIABLES as $variable) {

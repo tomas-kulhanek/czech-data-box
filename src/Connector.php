@@ -576,11 +576,6 @@ readonly class Connector
         return $sumFileSize;
     }
 
-    /**
-     * Text lengths of the message envelope are restricted by the gMessageEnvelopeSub
-     * and tMultipleMessageEnvelopeSub groups of dmBaseTypes.xsd. ISDS rejects a longer
-     * value with a generic error, so it is cheaper to catch it before sending.
-     */
     private function assertEnvelopeLengths(Envelope|BigMessageEnvelope $envelope): void
     {
         $this->assertFieldLength('dmAnnotation', $envelope->getAnnotation(), self::MAX_ANNOTATION_LENGTH);
