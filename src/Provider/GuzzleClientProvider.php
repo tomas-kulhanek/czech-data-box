@@ -20,8 +20,6 @@ use TomasKulhanek\CzechDataBox\Exception\SystemExclusion;
 
 readonly class GuzzleClientProvider implements ClientProviderInterface
 {
-    use ClientRequestTrait;
-
     private string $caCertPath;
 
     public static function create(?EndpointProviderInterface $endpointProvider = null): self
@@ -32,7 +30,8 @@ readonly class GuzzleClientProvider implements ClientProviderInterface
     public function __construct(
         private ClientInterface $client,
         private EndpointProviderInterface $endpointProvider,
-        ?string $caCertPath = null
+        ?string $caCertPath = null,
+        private RequestOptionsFactory $requestOptionsFactory = new RequestOptionsFactory()
     ) {
         $this->caCertPath = $caCertPath ?? CaBundle::getSystemCaRootBundlePath();
     }
@@ -40,7 +39,7 @@ readonly class GuzzleClientProvider implements ClientProviderInterface
     public function sendRequest(Account $account, ServiceTypeEnum $serviceType, string $xmlBody): string
     {
         $requestOptions = [];
-        $authentication = $this->getAuthentication($account);
+        $authentication = $this->requestOptionsFactory->createBasicAuthentication($account);
         if ($authentication !== null) {
             $requestOptions[RequestOptions::AUTH] = $authentication;
         }
@@ -75,7 +74,7 @@ readonly class GuzzleClientProvider implements ClientProviderInterface
             $requestOptions[RequestOptions::SSL_KEY] = [$privateStream['uri'], $account->getPrivateKeyPassPhrase()];
         }
 
-        $requestOptions[RequestOptions::HEADERS] = $this->getHeaders($serviceType);
+        $requestOptions[RequestOptions::HEADERS] = $this->requestOptionsFactory->createHeaders($serviceType);
         $requestOptions[RequestOptions::BODY] = $xmlBody;
         if (file_exists($this->caCertPath)) {
             $requestOptions[RequestOptions::VERIFY] = $this->caCertPath;

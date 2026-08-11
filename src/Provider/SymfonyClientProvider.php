@@ -18,8 +18,6 @@ use TomasKulhanek\CzechDataBox\Exception\SystemExclusion;
 
 readonly class SymfonyClientProvider implements ClientProviderInterface
 {
-    use ClientRequestTrait;
-
     private string $caCertPath;
 
     public static function create(?EndpointProviderInterface $endpointProvider = null): self
@@ -30,7 +28,8 @@ readonly class SymfonyClientProvider implements ClientProviderInterface
     public function __construct(
         private HttpClientInterface $client,
         private EndpointProviderInterface $endpointProvider,
-        ?string $caCertPath = null
+        ?string $caCertPath = null,
+        private RequestOptionsFactory $requestOptionsFactory = new RequestOptionsFactory()
     ) {
         $this->caCertPath = $caCertPath ?? CaBundle::getSystemCaRootBundlePath();
     }
@@ -38,7 +37,7 @@ readonly class SymfonyClientProvider implements ClientProviderInterface
     public function sendRequest(Account $account, ServiceTypeEnum $serviceType, string $xmlBody): string
     {
         $requestOptions = [];
-        $authentication = $this->getAuthentication($account);
+        $authentication = $this->requestOptionsFactory->createBasicAuthentication($account);
         if ($authentication !== null) {
             $requestOptions['auth_basic'] = $authentication;
         }
@@ -74,7 +73,7 @@ readonly class SymfonyClientProvider implements ClientProviderInterface
             $requestOptions['passphrase'] = $account->getPrivateKeyPassPhrase();
         }
 
-        $requestOptions['headers'] = $this->getHeaders($serviceType);
+        $requestOptions['headers'] = $this->requestOptionsFactory->createHeaders($serviceType);
         $requestOptions['body'] = $xmlBody;
         if (is_dir($this->caCertPath)) {
             $requestOptions['capath'] = $this->caCertPath;

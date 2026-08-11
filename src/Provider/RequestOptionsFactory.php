@@ -9,16 +9,12 @@ use TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum;
 use TomasKulhanek\CzechDataBox\Enum\ServiceTypeEnum;
 use TomasKulhanek\CzechDataBox\Exception\MissingRequiredField;
 
-/**
- * Request composition shared by the {@see ClientProviderInterface} implementations, so that
- * switching the HTTP client never changes the headers nor the credentials sent to ISDS.
- */
-trait ClientRequestTrait
+final readonly class RequestOptionsFactory
 {
     /**
      * @return array<string, non-empty-string>
      */
-    private function getHeaders(ServiceTypeEnum $serviceType): array
+    public function createHeaders(ServiceTypeEnum $serviceType): array
     {
         $headers = [
             'Connection' => 'Keep-Alive',
@@ -35,13 +31,11 @@ trait ClientRequestTrait
     }
 
     /**
-     * Credentials for HTTP Basic authentication as a user and password pair, or null when the
-     * account is authenticated by the client certificate alone. Incomplete credentials are
-     * rejected here, before any request is sent - ISDS rate limits failed login attempts.
-     *
      * @return array{0: string, 1: string}|null
+     *
+     * @throws MissingRequiredField
      */
-    private function getAuthentication(Account $account): ?array
+    public function createBasicAuthentication(Account $account): ?array
     {
         switch ($account->getLoginType()) {
             case LoginTypeEnum::HOSTED_SPIS:

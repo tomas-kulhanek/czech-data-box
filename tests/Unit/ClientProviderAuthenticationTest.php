@@ -22,10 +22,6 @@ use TomasKulhanek\CzechDataBox\Provider\EndpointProvider;
 use TomasKulhanek\CzechDataBox\Provider\GuzzleClientProvider;
 use TomasKulhanek\CzechDataBox\Provider\SymfonyClientProvider;
 
-/**
- * Both HTTP providers have to be interchangeable: the very same account must result in the very
- * same request on the wire, no matter which HTTP client the application picked.
- */
 final class ClientProviderAuthenticationTest extends TestCase
 {
     private const string REQUEST_BODY = '<request/>';
@@ -53,10 +49,7 @@ final class ClientProviderAuthenticationTest extends TestCase
     }
 
     /**
-     * Guzzle composes the Authorization header itself out of RequestOptions::AUTH, so the header
-     * has to be read from the request the handler received.
-     *
-     * @return array<string, string> Lower cased header name => header value.
+     * @return array<string, string>
      */
     private function captureGuzzleHeaders(Account $account, ServiceTypeEnum $serviceType): array
     {
@@ -80,7 +73,7 @@ final class ClientProviderAuthenticationTest extends TestCase
     }
 
     /**
-     * @return array<string, string> Lower cased header name => header value.
+     * @return array<string, string>
      */
     private function captureSymfonyHeaders(Account $account, ServiceTypeEnum $serviceType): array
     {
@@ -100,8 +93,6 @@ final class ClientProviderAuthenticationTest extends TestCase
     }
 
     /**
-     * Symfony hands the headers over as "Name: value" lines keyed by the lower cased name.
-     *
      * @param array<mixed> $options
      *
      * @return array<string, string>
@@ -145,12 +136,10 @@ final class ClientProviderAuthenticationTest extends TestCase
                 LoginTypeEnum::CERT_LOGIN_NAME_PASSWORD,
                 'Basic ' . base64_encode(self::LOGIN_NAME . ':' . self::PASSWORD),
             ],
-            // RFC 7617 requires the colon separator even when the password is empty.
             'hosted spis' => [
                 LoginTypeEnum::HOSTED_SPIS,
                 'Basic ' . base64_encode(self::DATA_BOX_ID . ':'),
             ],
-            // The client certificate alone authenticates the account, no credentials are sent.
             'certificate only' => [
                 LoginTypeEnum::SPIS_CERT,
                 '',
