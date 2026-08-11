@@ -63,6 +63,8 @@
       "@phpunit"
     ],
     "test:phpunit": "php -d xdebug.mode=off vendor/phpunit/phpunit/phpunit",
+    "test:unit": "php -d xdebug.mode=off vendor/phpunit/phpunit/phpunit --testsuite unit",
+    "test:integration": "php -d xdebug.mode=off vendor/phpunit/phpunit/phpunit --testsuite integration",
     "check:phpstan": "php -d memory_limit=512M vendor/bin/phpstan analyse -c phpstan.neon",
     "check:rector": "php vendor/bin/rector process src tests public --dry-run",
     "check:cs": "phpcs --extensions=php --standard=PSR12 -n src tests",
