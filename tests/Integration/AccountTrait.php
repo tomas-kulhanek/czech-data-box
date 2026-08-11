@@ -12,7 +12,6 @@ trait AccountTrait
     protected function createPFOAccount(): Account
     {
         $account = new Account();
-        $account->setProduction(false);
         $account->setLoginType(LoginTypeEnum::NAME_PASSWORD);
         $account->setLoginName((string) getenv('PFO_LOGIN_USER'));
         $account->setPassword((string) getenv('PFO_PASSWORD_USER'));
@@ -23,7 +22,6 @@ trait AccountTrait
     protected function createPFOCertAccount(): Account
     {
         $account = new Account();
-        $account->setProduction(false);
         $account->setLoginType(LoginTypeEnum::HOSTED_SPIS);
         $account->setPublicKey((string) file_get_contents(__DIR__ . '/../../.data/cert.crt'));
         $account->setPrivateKey((string) file_get_contents(__DIR__ . '/../../.data/cert.pem'));
@@ -37,7 +35,6 @@ trait AccountTrait
     protected function createFOAccount(): Account
     {
         $account = new Account();
-        $account->setProduction(false);
         $account->setLoginType(LoginTypeEnum::NAME_PASSWORD);
         $account->setLoginName((string) getenv('FO_LOGIN_USER'));
         $account->setPassword((string) getenv('FO_PASSWORD_USER'));
@@ -48,7 +45,6 @@ trait AccountTrait
     protected function createFOCertAccount(): Account
     {
         $account = new Account();
-        $account->setProduction(false);
         $account->setLoginType(LoginTypeEnum::HOSTED_SPIS);
         $account->setPublicKey((string) file_get_contents(__DIR__ . '/../../.data/cert.crt'));
         $account->setPrivateKey((string) file_get_contents(__DIR__ . '/../../.data/cert.pem'));
@@ -62,7 +58,6 @@ trait AccountTrait
     protected function createOvmCertAccount(): Account
     {
         $account = new Account();
-        $account->setProduction(false);
         $account->setLoginType(LoginTypeEnum::HOSTED_SPIS);
         $account->setPublicKey((string) file_get_contents(__DIR__ . '/../../.data/cert.crt'));
         $account->setPrivateKey((string) file_get_contents(__DIR__ . '/../../.data/cert.pem'));
@@ -76,7 +71,6 @@ trait AccountTrait
     protected function createOVMAccount(): Account
     {
         $account = new Account();
-        $account->setProduction(false);
         $account->setLoginType(LoginTypeEnum::NAME_PASSWORD);
         $account->setLoginName((string) getenv('OVM_LOGIN_USER'));
         $account->setPassword((string) getenv('OVM_PASSWORD_USER'));

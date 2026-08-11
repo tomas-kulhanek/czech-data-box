@@ -39,9 +39,26 @@ Pro každou operaci je potřebné zadat přístupové údaje
 $account = new \TomasKulhanek\CzechDataBox\Account();
 $account->setPassword('mojeTajneHeslo')
         ->setLoginName('mujLogin')
-        ->setLoginType(\TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum::NAME_PASSWORD)
-        ->setProduction(false);
+        ->setLoginType(\TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum::NAME_PASSWORD);
 ```
+
+Prostředí (produkce/test) určuje `EndpointProvider` předaný HTTP providerovi — výchozí je produkce:
+
+```php
+use TomasKulhanek\CzechDataBox\Provider\EndpointProvider;
+use TomasKulhanek\CzechDataBox\Provider\GuzzleClientProvider;
+
+$provider = GuzzleClientProvider::create();                            // produkce (datovka.gov.cz)
+$provider = GuzzleClientProvider::create(EndpointProvider::test());    // test (datovka-test.gov.cz)
+$provider = GuzzleClientProvider::create(new EndpointProvider('datovka.cms2.cz')); // vlastní doména (KIVS)
+```
+
+> [!WARNING]
+> Vlastní doména musí pocházet z **důvěryhodné konfigurace, nikdy z uživatelského vstupu**. Na výslednou
+> URL se posílají přihlašovací údaje (Basic Auth) i klientský certifikát, takže podvržená doména znamená
+> jejich únik. `EndpointProvider` proto přijímá pouze holé jméno hostu — bez schématu, přihlašovacích
+> údajů, portu a cesty (`datovka.cms2.cz` ano, `https://datovka.cms2.cz/` ne). Neplatná hodnota skončí
+> výjimkou `TomasKulhanek\CzechDataBox\Exception\InvalidEndpointDomain`.
 
 ## Využití s Symfony HTTP client
 ### Instalace

@@ -18,6 +18,7 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 - **Limit velikosti příloh snížen z 25 MiB na 20 MB** (limit běžné datové zprávy dle řádu); do součtu se nově počítají i přílohy `dmXMLContent`.
 - **`createMessage()` nově vyhazuje** `AttachmentCountOverflow` (více než 100 příloh, resp. 10 kontejnerových ZIP/ASiC) a `DisallowedAttachmentFormat` (přípona mimo whitelist vyhlášky č. 194/2009 Sb.).
 - **Nullabilita dle XSD**: `getAttachmentSize(): ?int` (`MessageRecord`, `ReturnedMessage`, `ReturnedMessageEnvelope`), `DataMessageEvent::getTime(): ?DateTimeImmutable`, `$qTimestamp` nullable.
+- **`Account::setProduction()` / `isProduction()` odstraněno** — prostředí nově určuje `EndpointProvider` (`EndpointProvider::production()`, `EndpointProvider::test()`, nebo vlastní doména `new EndpointProvider('datovka.cms2.cz')` pro KIVS). HTTP providery přijímají `EndpointProviderInterface`, factory `create()` má volitelný parametr. Vlastní doména se validuje jako holé jméno hostu (bez schématu, přihlašovacích údajů, portu a cesty); neplatná hodnota vyhodí `InvalidEndpointDomain`. Doména musí vždy pocházet z důvěryhodné konfigurace — na výslednou URL se posílají přihlašovací údaje i klientský certifikát.
 
 ### Přidáno
 
@@ -49,6 +50,8 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 5. `getPublishOwnId()` vrací objekt: booleovskou hodnotu čtěte přes `->getValue()`.
 6. Zprávy nad 20 MB odesílejte přes VoDZ (`uploadAttachment()` + `createBigMessage()`).
 7. Počítejte s novými výjimkami `AttachmentCountOverflow` a `DisallowedAttachmentFormat` u `createMessage()`.
+8. `$account->setProduction(false)` → `GuzzleClientProvider::create(EndpointProvider::test())` (resp. `SymfonyClientProvider::create(...)`); volání `setProduction()` odstraňte.
+9. `getOwnerInfoFromLogin()` / `getUserInfoFromLogin()` jsou deprecated — přejděte na `getOwnerInfoFromLogin2()` / `getUserInfoFromLogin2()`.
 
 ## [5.0.0] – 2024-05-24
 
