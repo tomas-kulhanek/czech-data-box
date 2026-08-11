@@ -7,32 +7,32 @@ namespace TomasKulhanek\CzechDataBox\DTO;
 use DateTimeImmutable;
 use JMS\Serializer\Annotation as Serializer;
 
-#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'constRecord')]
-#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'constRecord')]
+#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 class ConstantRecord
 {
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('cName')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?string $name = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('string')]
     #[Serializer\SerializedName('cValue')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?string $value = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type("DateTimeImmutable<'Y-m-d'>")]
     #[Serializer\SerializedName('cFrom')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?DateTimeImmutable $from = null;
 
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type("DateTimeImmutable<'Y-m-d'>")]
     #[Serializer\SerializedName('cTo')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?DateTimeImmutable $to = null;
 
     public function getName(): ?string

@@ -11,8 +11,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Odkaz na dříve nahranou přílohu velkoobjemové datové zprávy (VoDZ)
  * — element dmExtFile v dmFiles operace CreateBigMessage.
  */
-#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'dmExtFile')]
-#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'dmExtFile')]
+#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 class ExtFile
 {
     #[Serializer\Type('string')]

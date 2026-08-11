@@ -32,6 +32,7 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 - **Nové atributy DTO**: `specMessFlag` + `isSuspicious()` (podezřelá zpráva), `dmVODZ` + `isVodz()` a `attsNum` (rozpoznání VoDZ v seznamech), `PublishOwnId` s `IdLevel`.
 - **Nová pole DTO**: `pnLastNameAtBirth`, `caState`, `adDistrict`, `adAMCode`.
 - **`Utils\AllowedAttachmentFormats`** — whitelist 51 povolených přípon vč. kontejnerových formátů.
+- **Týdenní integrační běh proti `datovka-test.gov.cz`** — testy rozděleny na suite `unit` a `integration` (composer skripty `test:unit` / `test:integration`); nové workflow `integration.yml` spouští integrační testy každé pondělí v 07:00 UTC (mimo servisní okno ISDS) a lze jej spustit i ručně.
 - **XSD validace serializovaných requestů** proti schématům přílohy 1 a 2 Provozního řádu (`tests/_data/xsd/`) — každý request DTO se serializuje a validuje proti `dmBaseTypes.xsd` resp. `dbTypes.xsd`, úplnost pokrytí hlídá reflexní test.
 
 ### Opraveno
@@ -43,6 +44,7 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 - Duplicitní prázdný atribut `#[Assert\All()]` v `Delivery` shazoval phpstan.
 - Integrační test importoval neexistující třídu `Utils\MessageStatus`.
 - Poškozená nebo neúplná SOAP odpověď vypisovala PHP warning z `DOMDocument::loadXML()` a končila prázdnou `ConnectionException`. Parsování nově běží s `libxml_use_internal_errors()` a chyba se hlásí jako `ConnectionException` s popisem.
+- Composer skript `check` odkazoval na neexistující `@phpunit` a `check:rector`/`fix:rector` zpracovávaly neexistující složku `public/`; README instaloval Guzzle `^7.0`, dev závislost je `^8.0`.
 
 ### Zabezpečení
 

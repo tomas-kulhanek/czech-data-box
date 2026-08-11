@@ -11,8 +11,8 @@ use TomasKulhanek\Serializer\Utils\SplFileInfo;
 /**
  * Příloha velkoobjemové datové zprávy (VoDZ) nahrávaná operací UploadAttachment.
  */
-#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'dmFile')]
-#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'dmFile')]
+#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 class BigAttachment
 {
     #[Serializer\Type('string')]
@@ -29,7 +29,7 @@ class BigAttachment
 
     #[Serializer\Type('base64File')]
     #[Serializer\SerializedName('dmEncodedContent')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SkipWhenEmpty]
     protected ?SplFileInfo $encodedContent = null;
 

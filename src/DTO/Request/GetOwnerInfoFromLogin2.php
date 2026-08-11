@@ -7,8 +7,8 @@ namespace TomasKulhanek\CzechDataBox\DTO\Request;
 use JMS\Serializer\Annotation as Serializer;
 use TomasKulhanek\CzechDataBox\Traits\Dummy;
 
-#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'GetOwnerInfoFromLogin2')]
+#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetOwnerInfoFromLogin2')]
 class GetOwnerInfoFromLogin2 implements Request
 {
     use Dummy;

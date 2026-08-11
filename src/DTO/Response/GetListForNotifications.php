@@ -9,8 +9,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use TomasKulhanek\CzechDataBox\DTO\NotificationRecord;
 use TomasKulhanek\CzechDataBox\Traits\DataMessageStatus;
 
-#[Serializer\XmlNamespace(uri: 'https://isds.czechpoint.cz/v20', prefix: 'p')]
-#[Serializer\XmlRoot(namespace: 'https://isds.czechpoint.cz/v20', name: 'GetListForNotificationsResponse')]
+#[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
+#[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetListForNotificationsResponse')]
 class GetListForNotifications extends Response
 {
     use DataMessageStatus;
@@ -19,9 +19,9 @@ class GetListForNotifications extends Response
      * @var NotificationRecord[]
      */
     #[Serializer\Type('array<TomasKulhanek\CzechDataBox\DTO\NotificationRecord>')]
-    #[Serializer\XmlList(entry: 'ntfRecord', inline: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlList(entry: 'ntfRecord', inline: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SerializedName('ntfRecords')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Assert\All([
         new Assert\Type(type: NotificationRecord::class)
     ])]
@@ -31,7 +31,7 @@ class GetListForNotifications extends Response
     #[Serializer\SkipWhenEmpty]
     #[Serializer\Type('bool')]
     #[Serializer\SerializedName('ntfListContinues')]
-    #[Serializer\XmlElement(cdata: false, namespace: 'https://isds.czechpoint.cz/v20')]
+    #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     protected ?bool $listContinues = null;
 
     /**

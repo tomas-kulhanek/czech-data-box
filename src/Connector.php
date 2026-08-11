@@ -706,27 +706,13 @@ readonly class Connector
         }
         $response = $this->getValueByXpath($soapResponse, '//' . $soapResponse->documentElement->prefix . ':Body');
         $soapResponse = null;
+        if (empty($response)) {
+            throw new ConnectionException('The response is empty');
+        }
         $dom = $this->getXmlDocument($response);
         if (empty($dom->documentElement)) {
             throw new ConnectionException('The response is empty');
         }
-        $prefix = $dom->documentElement->prefix;
-        if ($prefix !== 'p') {
-            $dom->documentElement->setAttributeNS(
-                'http://www.w3.org/2000/xmlns/',
-                'xmlns:p',
-                'https://isds.czechpoint.cz/v20'
-            );
-            /** @var string $response */
-            $response = $dom->saveXML();
-            $regex = ['/(<|<\/)' . $prefix . ':(\w*)(\s|>|\/>)/'];
-            $replace = ['\1p:\2\3'];
-            $response = preg_replace($regex, $replace, $response);
-        }
-        if (empty($response)) {
-            throw new ConnectionException('The response is empty');
-        }
-        $response = str_replace('http://isds.czechpoint.cz/v20', 'https://isds.czechpoint.cz/v20', $response);
 
         $deserialized = $this->serializer->deserialize($response, $responseClass, 'xml');
         if (!$deserialized instanceof $responseClass) {
