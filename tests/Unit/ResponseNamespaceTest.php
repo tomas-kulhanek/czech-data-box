@@ -113,7 +113,6 @@ XML);
     #[DataProvider('unprefixedEnvelopeProvider')]
     public function testUnprefixedEnvelopeDoesNotEmitPhpWarnings(string $soapNamespace): void
     {
-        /** @var string[] $errors */
         $errors = [];
         set_error_handler(static function (int $errno, string $message) use (&$errors): bool {
             $errors[] = $message;

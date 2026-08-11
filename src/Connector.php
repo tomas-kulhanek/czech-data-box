@@ -104,9 +104,6 @@ readonly class Connector
 
     public const int DEFAULT_MAX_RESPONSE_SIZE = 256 * 1024 ** 2;
 
-    /**
-     * @var array<string, string>
-     */
     private const array SOAP_NAMESPACES = [
         'soap11' => 'http://schemas.xmlsoap.org/soap/envelope/',
         'soap12' => 'http://www.w3.org/2003/05/soap-envelope',
@@ -685,9 +682,6 @@ readonly class Connector
         return $xpath;
     }
 
-    /**
-     * Reads the SOAP body regardless of the prefix the sender bound the envelope namespace to.
-     */
     private function getSoapBodyContent(DOMDocument $document): ?string
     {
         $bodies = $this->createSoapXpath($document)->query('//soap11:Body | //soap12:Body');
