@@ -5,11 +5,11 @@ Odesílá i přijímá datové zprávy, zvládá velkoobjemové datové zprávy 
 rozhraní ISDS podle Provozního řádu účinného od 26. 06. 2026 (WSDL 3.11).
 
 [![Run base actions](https://github.com/tomas-kulhanek/czech-data-box/actions/workflows/main.yml/badge.svg)](https://github.com/tomas-kulhanek/czech-data-box/actions/workflows/main.yml)
-[![Latest Stable Version](https://poser.pugx.org/tomas-kulhanek/czech-data-box/v/stable)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
-[![Total Downloads](https://poser.pugx.org/tomas-kulhanek/czech-data-box/downloads)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
-[![Monthly Downloads](https://poser.pugx.org/tomas-kulhanek/czech-data-box/d/monthly)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
+[![Latest Stable Version](https://img.shields.io/packagist/v/tomas-kulhanek/czech-data-box)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
+[![Total Downloads](https://img.shields.io/packagist/dt/tomas-kulhanek/czech-data-box)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
+[![Monthly Downloads](https://img.shields.io/packagist/dm/tomas-kulhanek/czech-data-box)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
 [![PHP verze](https://img.shields.io/packagist/dependency-v/tomas-kulhanek/czech-data-box/php)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
-[![License](https://poser.pugx.org/tomas-kulhanek/czech-data-box/license)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
+[![License](https://img.shields.io/packagist/l/tomas-kulhanek/czech-data-box)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
 
 ```bash
 composer require tomas-kulhanek/czech-data-box guzzlehttp/guzzle:^8.0
