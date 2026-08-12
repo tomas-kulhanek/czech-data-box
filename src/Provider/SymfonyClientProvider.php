@@ -10,6 +10,8 @@ use Composer\CaBundle\CaBundle;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
+use Symfony\Contracts\HttpClient\ResponseStreamInterface;
 use TomasKulhanek\CzechDataBox\Account;
 use TomasKulhanek\CzechDataBox\Enum\ServiceTypeEnum;
 use TomasKulhanek\CzechDataBox\Exception\ConnectionException;
@@ -30,7 +32,8 @@ readonly class SymfonyClientProvider implements ClientProviderInterface
         private HttpClientInterface $client,
         private EndpointProviderInterface $endpointProvider,
         ?string $caCertPath = null,
-        private RequestOptionsFactory $requestOptionsFactory = new RequestOptionsFactory()
+        private RequestOptionsFactory $requestOptionsFactory = new RequestOptionsFactory(),
+        private ResponseSizeLimit $responseSizeLimit = new ResponseSizeLimit()
     ) {
         $this->caCertPath = $caCertPath ?? CaBundle::getSystemCaRootBundlePath();
     }
@@ -40,8 +43,49 @@ readonly class SymfonyClientProvider implements ClientProviderInterface
         return sprintf('%s: %s', $exception::class, $exception->getMessage());
     }
 
-    public function sendRequest(Account $account, ServiceTypeEnum $serviceType, string $xmlBody): string
+    private static function announcedSize(ResponseInterface $response): ?string
     {
+        $contentLength = $response->getHeaders(false)['content-length'][0] ?? null;
+
+        return is_string($contentLength) ? $contentLength : null;
+    }
+
+    /**
+     * @return iterable<string>
+     */
+    private static function readChunks(ResponseStreamInterface $stream): iterable
+    {
+        foreach ($stream as $chunk) {
+            if ($chunk->isTimeout()) {
+                throw new ConnectionException('The connection timed out while reading the response.');
+            }
+            if ($chunk->isFirst() || $chunk->isLast()) {
+                continue;
+            }
+            yield $chunk->getContent();
+        }
+    }
+
+    private function readBody(ResponseInterface $response, ResponseSizeLimit $limit): string
+    {
+        try {
+            $limit->rejectAnnouncedSize(self::announcedSize($response));
+
+            return $limit->collect(self::readChunks($this->client->stream($response)));
+        } catch (ConnectionException $exception) {
+            $response->cancel();
+
+            throw $exception;
+        }
+    }
+
+    public function sendRequest(
+        Account $account,
+        ServiceTypeEnum $serviceType,
+        string $xmlBody,
+        ?int $maxResponseSize = null
+    ): string {
+        $limit = $this->responseSizeLimit->withMaxBytes($maxResponseSize);
         $requestOptions = [];
         $authentication = $this->requestOptionsFactory->createBasicAuthentication($account);
         if ($authentication !== null) {
@@ -86,6 +130,7 @@ readonly class SymfonyClientProvider implements ClientProviderInterface
 
         $requestOptions['headers'] = $this->requestOptionsFactory->createHeaders($serviceType);
         $requestOptions['body'] = $xmlBody;
+        $requestOptions['buffer'] = false;
         if (is_dir($this->caCertPath)) {
             $requestOptions['capath'] = $this->caCertPath;
         } elseif (file_exists($this->caCertPath)) {
@@ -99,10 +144,12 @@ readonly class SymfonyClientProvider implements ClientProviderInterface
                 $requestOptions
             );
             $statusCode = $response->getStatusCode();
-            $content = $response->getContent(false);
             if ($statusCode === 503) {
+                $response->cancel();
+
                 throw new SystemExclusion(sprintf('The server responded with HTTP %d.', $statusCode), $statusCode);
             }
+            $content = $this->readBody($response, $limit);
             if ($statusCode >= 400 && $content === '') {
                 throw new ConnectionException(sprintf('The server responded with HTTP %d and an empty body.', $statusCode), $statusCode);
             }

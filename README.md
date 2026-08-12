@@ -26,7 +26,7 @@ composer require tomas-kulhanek/czech-data-box guzzlehttp/guzzle:^8.0
 composer require tomas-kulhanek/czech-data-box symfony/http-client
 ```
 
-V případě využívání vlastního http klienta, stačí implementovat rozhraní `TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface` a předat ho do konstruktoru třídy `TomasKulhanek\CzechDataBox\Connector`. Samozřejmostí je třeba zajistit správné nastavení hlaviček nebo SSL klientských certifikátů.
+V případě využívání vlastního http klienta, stačí implementovat rozhraní `TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface` a předat ho do konstruktoru třídy `TomasKulhanek\CzechDataBox\Connector`. Samozřejmostí je třeba zajistit správné nastavení hlaviček nebo SSL klientských certifikátů. Poslední parametr `sendRequest()` nese maximální velikost odpovědi v bajtech (`null` = výchozí limit implementace); uplatněte ho ještě před načtením celého těla do paměti — hotové počítadlo i kontrolu hlavičky `Content-Length` nabízí `TomasKulhanek\CzechDataBox\Provider\ResponseSizeLimit`.
 
 ### Volitelná validace požadavků
 
