@@ -18,6 +18,9 @@ Pro instalaci balíčku je nutné jej instalovat skrze [composer](https://getcom
 composer require tomas-kulhanek/czech-data-box
 ```
 
+Knihovna vyžaduje PHP `^8.4`. Povyšujete-li z verze 5.x, řiďte se návodem
+[UPGRADE-6.0.md](UPGRADE-6.0.md).
+
 Dále je potřeba využít nějakého klienta. Buď je možné využít [Guzzle](https://github.com/guzzle/guzzle/) nebo [Symfony Http client](https://github.com/symfony/http-client)
 ```bash
 composer require tomas-kulhanek/czech-data-box guzzlehttp/guzzle:^8.0
@@ -488,6 +491,7 @@ Základní pomoc je poskytována zcela zdarma pomocí Issues.
 
 ## Odkazy
 - Changelog knihovny - [CHANGELOG.md](CHANGELOG.md)
+- Migrace z 5.x na 6.0 - [UPGRADE-6.0.md](UPGRADE-6.0.md)
 - Jak přispívat - [CONTRIBUTING.md](CONTRIBUTING.md)
 - Bezpečnostní politika - [SECURITY.md](SECURITY.md)
 - Produkční ISDS - https://www.datovka.gov.cz
