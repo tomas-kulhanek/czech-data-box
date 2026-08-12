@@ -84,6 +84,7 @@ use TomasKulhanek\CzechDataBox\Exception\MissingRequiredField;
 use TomasKulhanek\CzechDataBox\Exception\RecipientCountOverflow;
 use TomasKulhanek\CzechDataBox\Exception\SoapFault;
 use TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface;
+use TomasKulhanek\CzechDataBox\Provider\ResponseSizeLimit;
 use TomasKulhanek\CzechDataBox\Utils\AllowedAttachmentFormats;
 use TomasKulhanek\CzechDataBox\Utils\BinarySuffix;
 
@@ -105,7 +106,7 @@ readonly class Connector
 
     public const int MAX_IDENT_LENGTH = 50;
 
-    public const int DEFAULT_MAX_RESPONSE_SIZE = 256 * 1024 ** 2;
+    public const int DEFAULT_MAX_RESPONSE_SIZE = ResponseSizeLimit::DEFAULT_MAX_RESPONSE_SIZE;
 
     private const array SOAP_NAMESPACES = [
         'soap11' => 'http://schemas.xmlsoap.org/soap/envelope/',
@@ -786,7 +787,7 @@ readonly class Connector
             . '</SOAP-ENV:Body></SOAP-ENV:Envelope>';
         unset($body);
 
-        $response = $this->provider->sendRequest($account, $serviceType, $xmlBody);
+        $response = $this->provider->sendRequest($account, $serviceType, $xmlBody, $this->maxResponseSize);
         if (strlen($response) > $this->maxResponseSize) {
             throw new ConnectionException(
                 sprintf(

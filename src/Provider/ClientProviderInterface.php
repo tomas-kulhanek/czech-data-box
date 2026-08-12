@@ -9,5 +9,10 @@ use TomasKulhanek\CzechDataBox\Enum\ServiceTypeEnum;
 
 interface ClientProviderInterface
 {
-    public function sendRequest(Account $account, ServiceTypeEnum $serviceType, string $xmlBody): string;
+    public function sendRequest(
+        Account $account,
+        ServiceTypeEnum $serviceType,
+        string $xmlBody,
+        ?int $maxResponseSize = null
+    ): string;
 }

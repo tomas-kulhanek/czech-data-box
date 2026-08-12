@@ -11,6 +11,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\RequestOptions;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 use TomasKulhanek\CzechDataBox\Account;
 use TomasKulhanek\CzechDataBox\Enum\ServiceTypeEnum;
 use TomasKulhanek\CzechDataBox\Exception\ConnectionException;
@@ -31,7 +33,8 @@ readonly class GuzzleClientProvider implements ClientProviderInterface
         private ClientInterface $client,
         private EndpointProviderInterface $endpointProvider,
         ?string $caCertPath = null,
-        private RequestOptionsFactory $requestOptionsFactory = new RequestOptionsFactory()
+        private RequestOptionsFactory $requestOptionsFactory = new RequestOptionsFactory(),
+        private ResponseSizeLimit $responseSizeLimit = new ResponseSizeLimit()
     ) {
         $this->caCertPath = $caCertPath ?? CaBundle::getSystemCaRootBundlePath();
     }
@@ -41,8 +44,40 @@ readonly class GuzzleClientProvider implements ClientProviderInterface
         return sprintf('%s: %s', $exception::class, $exception->getMessage());
     }
 
-    public function sendRequest(Account $account, ServiceTypeEnum $serviceType, string $xmlBody): string
+    /**
+     * @return iterable<string>
+     */
+    private static function readChunks(StreamInterface $body, int $chunkSize): iterable
     {
+        while (!$body->eof()) {
+            $chunk = $body->read($chunkSize);
+            if ($chunk === '') {
+                break;
+            }
+            yield $chunk;
+        }
+    }
+
+    private static function readBody(ResponseInterface $response, ResponseSizeLimit $limit): string
+    {
+        $limit->rejectAnnouncedSize($response->getHeaderLine('Content-Length'));
+        $body = $response->getBody();
+        try {
+            return $limit->collect(self::readChunks($body, $limit->getChunkSize()));
+        } catch (ConnectionException $exception) {
+            $body->close();
+
+            throw $exception;
+        }
+    }
+
+    public function sendRequest(
+        Account $account,
+        ServiceTypeEnum $serviceType,
+        string $xmlBody,
+        ?int $maxResponseSize = null
+    ): string {
+        $limit = $this->responseSizeLimit->withMaxBytes($maxResponseSize);
         $requestOptions = [];
         $authentication = $this->requestOptionsFactory->createBasicAuthentication($account);
         if ($authentication !== null) {
@@ -86,29 +121,42 @@ readonly class GuzzleClientProvider implements ClientProviderInterface
 
         $requestOptions[RequestOptions::HEADERS] = $this->requestOptionsFactory->createHeaders($serviceType);
         $requestOptions[RequestOptions::BODY] = $xmlBody;
+        $requestOptions[RequestOptions::ON_HEADERS] = static function (ResponseInterface $response) use ($limit): void {
+            $limit->rejectAnnouncedSize($response->getHeaderLine('Content-Length'));
+        };
         if (file_exists($this->caCertPath)) {
             $requestOptions[RequestOptions::VERIFY] = $this->caCertPath;
         }
 
         try {
-            return $this->client->request(
-                'POST',
-                $this->endpointProvider->getServiceLocation($account, $serviceType),
-                $requestOptions
-            )->getBody()->getContents();
+            return self::readBody(
+                $this->client->request(
+                    'POST',
+                    $this->endpointProvider->getServiceLocation($account, $serviceType),
+                    $requestOptions
+                ),
+                $limit
+            );
         } catch (BadResponseException $exception) {
             $response = $exception->getResponse();
             $statusCode = $response->getStatusCode();
             if ($statusCode === 503) {
                 throw new SystemExclusion(self::describe($exception), $statusCode);
             }
-            $body = (string) $response->getBody();
+            $body = self::readBody($response, $limit);
             if ($body !== '') {
                 return $body;
             }
 
             throw new ConnectionException(self::describe($exception), $statusCode);
+        } catch (ConnectionException $exception) {
+            throw $exception;
         } catch (Throwable $exception) {
+            $cause = $exception->getPrevious();
+            if ($cause instanceof ConnectionException) {
+                throw $cause;
+            }
+
             throw new ConnectionException(self::describe($exception), $exception->getCode());
         } finally {
             if (is_resource($publicCert)) {
