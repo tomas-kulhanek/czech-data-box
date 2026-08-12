@@ -1,34 +1,63 @@
-# PHP knihovna pro komunikaci s Informačním systémem datových schránek (ISDS) Digitální a informační agentury
+# Czech Data Box — PHP knihovna pro datové schránky (ISDS)
 
-![DEV branch workflows](https://github.com/tomas-kulhanek/czech-data-box/actions/workflows/main.yml/badge.svg)
+Klient pro **Informační systém datových schránek (ISDS)** Digitální a informační agentury (DIA).
+Odesílá i přijímá datové zprávy, zvládá velkoobjemové datové zprávy (VoDZ) a odpovídá aktuálnímu
+rozhraní ISDS podle Provozního řádu účinného od 26. 06. 2026 (WSDL 3.11).
+
+[![Run base actions](https://github.com/tomas-kulhanek/czech-data-box/actions/workflows/main.yml/badge.svg)](https://github.com/tomas-kulhanek/czech-data-box/actions/workflows/main.yml)
 [![Latest Stable Version](https://poser.pugx.org/tomas-kulhanek/czech-data-box/v/stable)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
 [![Total Downloads](https://poser.pugx.org/tomas-kulhanek/czech-data-box/downloads)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
 [![Monthly Downloads](https://poser.pugx.org/tomas-kulhanek/czech-data-box/d/monthly)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
+[![PHP verze](https://img.shields.io/packagist/dependency-v/tomas-kulhanek/czech-data-box/php)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
 [![License](https://poser.pugx.org/tomas-kulhanek/czech-data-box/license)](https://packagist.org/packages/tomas-kulhanek/czech-data-box)
 
-
-⚠ **POZOR!!** Pokud implementujete napojení na ISDS, je potřeba aby jste se řídili dle [PROVOZNÍHO ŘÁDU](https://datovka.gov.cz/info/cs/80.html)⚠
-## Instalace
-
-### Composer
-
-Pro instalaci balíčku je nutné jej instalovat skrze [composer](https://getcomposer.org/).
-
-```bash
-composer require tomas-kulhanek/czech-data-box
-```
-
-Knihovna vyžaduje PHP `^8.4`. Povyšujete-li z verze 5.x, řiďte se návodem
-[UPGRADE-6.0.md](UPGRADE-6.0.md).
-
-Dále je potřeba využít nějakého klienta. Buď je možné využít [Guzzle](https://github.com/guzzle/guzzle/) nebo [Symfony Http client](https://github.com/symfony/http-client)
 ```bash
 composer require tomas-kulhanek/czech-data-box guzzlehttp/guzzle:^8.0
 ```
+
+- ✅ **Odesílání i příjem datových zpráv** — `createMessage()`, `getListOfReceivedMessages()`, `messageDownload()`
+- ✅ **Aktuální rozhraní ISDS** — WSDL verze 3.11 z přílohy 2 Provozního řádu účinného od 26. 06. 2026
+- ✅ **[56 ze 76 operací](#pokrytí-webových-služeb-isds)** sedmi WSDL služeb ISDS; matici pokrytí generuje a v CI hlídá skript
+- ✅ **Velkoobjemové datové zprávy (VoDZ)** do 100 MiB včetně uploadu příloh a stahování
+- ✅ **Guzzle 8 i Symfony HttpClient 7/8** (kompatibilní se Symfony 8), nebo vlastní klient přes rozhraní
+- ✅ **Produkční i testovací prostředí DIA** (`datovka.gov.cz` / `datovka-test.gov.cz`) i vlastní doména KIVS
+- ✅ **PHP 8.4+**, typovaná DTO, PHPStan na levelu `max`
+- ✅ **XSD validace serializovaných požadavků** proti schématům Provozního řádu + integrační testy proti testovacímu ISDS
+- ✅ **Bezpečnostní hardening** — parsování odpovědí bez sítě (`LIBXML_NONET`), limit velikosti odpovědi, `#[\SensitiveParameter]` u hesel a klíčů
+
+## Obsah
+
+- [Instalace](#instalace)
+- [Rychlý start](#rychlý-start)
+- [Kompatibilita s ISDS](#kompatibilita-s-isds)
+- [Odeslání datové zprávy](#odeslání-datové-zprávy)
+- [Načtení seznamu přijatých zpráv](#načtení-seznamu-přijatých-zpráv)
+- [Stažení obsahu zprávy](#stažení-obsahu-zprávy)
+- [Volba HTTP klienta](#volba-http-klienta)
+- [Velkoobjemové datové zprávy (VoDZ)](#velkoobjemové-datové-zprávy-vodz)
+- [Správa vlastní schránky](#správa-vlastní-schránky-db_manipulations)
+- [Pokrytí webových služeb ISDS](#pokrytí-webových-služeb-isds)
+- [Povinnosti aplikace dle Provozního řádu ISDS](#povinnosti-aplikace-dle-provozního-řádu-isds)
+- [Přechod z jiné ISDS knihovny](#přechod-z-jiné-isds-knihovny)
+
+## Instalace
+
+Balíček se instaluje přes [composer](https://getcomposer.org/) spolu s HTTP klientem —
+[Guzzle](https://github.com/guzzle/guzzle/) nebo [Symfony HttpClient](https://github.com/symfony/http-client):
+
+```bash
+composer require tomas-kulhanek/czech-data-box guzzlehttp/guzzle:^8.0
+```
+
 ```bash
 composer require tomas-kulhanek/czech-data-box symfony/http-client
 ```
 
+Knihovna vyžaduje PHP `^8.4` a rozšíření `curl`, `dom`, `mbstring`, `openssl` a `xml`.
+Povyšujete-li z verze 5.x, řiďte se návodem [UPGRADE-6.0.md](UPGRADE-6.0.md); přecházíte-li
+z jiné ISDS knihovny, viz [Přechod z jiné ISDS knihovny](#přechod-z-jiné-isds-knihovny).
+
+Podrobnosti k oběma klientům jsou v sekci [Volba HTTP klienta](#volba-http-klienta).
 V případě využívání vlastního http klienta, stačí implementovat rozhraní `TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface` a předat ho do konstruktoru třídy `TomasKulhanek\CzechDataBox\Connector`. Samozřejmostí je třeba zajistit správné nastavení hlaviček nebo SSL klientských certifikátů. Poslední parametr `sendRequest()` nese maximální velikost odpovědi v bajtech (`null` = výchozí limit implementace); uplatněte ho ještě před načtením celého těla do paměti — hotové počítadlo i kontrolu hlavičky `Content-Length` nabízí `TomasKulhanek\CzechDataBox\Provider\ResponseSizeLimit`.
 
 ### Volitelná validace požadavků
@@ -51,21 +80,55 @@ if (count($violations) > 0) {
 
 Knihovna si sama hlídá jen kontroly, které vyplývají z Provozního řádu (limity velikosti a počtu příloh, povolené formáty, povinná pověření). Regresní shodu serializovaných požadavků se schématy Provozního řádu hlídá XSD validace v testech.
 
-## Popis
-Tato knihovna slouží k základní komunikaci s Informačním systémem datových schránek [ISDS](https://www.datovka.gov.cz) nebo [ISDS test](https://datovka-test.gov.cz)
+## Rychlý start
 
-## Základní použití
-Pro každou operaci je potřebné zadat přístupové údaje
+Knihovna nemá stavové přihlášení — přístupové údaje nese `TomasKulhanek\CzechDataBox\Account`
+a předávají se do každé operace. `Connector` je jediný vstupní bod ke všem operacím ISDS:
 
 ```php
 <?php
-$account = new \TomasKulhanek\CzechDataBox\Account();
-$account->setPassword('mojeTajneHeslo')
-        ->setLoginName('mujLogin')
-        ->setLoginType(\TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum::NAME_PASSWORD);
+
+use TomasKulhanek\CzechDataBox\Account;
+use TomasKulhanek\CzechDataBox\Connector;
+use TomasKulhanek\CzechDataBox\Enum\LoginTypeEnum;
+use TomasKulhanek\CzechDataBox\Provider\GuzzleClientProvider;
+use TomasKulhanek\CzechDataBox\Serializer\SerializerFactory;
+
+$account = new Account();
+$account->setLoginName('mujLogin')
+    ->setPassword('mojeTajneHeslo')
+    ->setLoginType(LoginTypeEnum::NAME_PASSWORD);
+
+$connector = new Connector(SerializerFactory::create(), GuzzleClientProvider::create());
+
+// nejjednodušší ověření přístupových údajů — informace o vlastníkovi schránky
+$response = $connector->getOwnerInfoFromLogin2($account);
+if (!$response->getStatus()->isOk()) {
+    throw new RuntimeException($response->getStatus()->getMessage());
+}
+
+echo $response->getOwnerInfo()->getDataBoxId();
 ```
 
+> [!IMPORTANT]
+> Napojení na ISDS se řídí [Provozním řádem ISDS](https://datovka.gov.cz/info/cs/80.html). Část
+> povinností (evidence stažených zpráv, frekvence dotazů, nakládání s přístupovými údaji) musí
+> zajistit vaše aplikace — viz [Povinnosti aplikace dle Provozního řádu ISDS](#povinnosti-aplikace-dle-provozního-řádu-isds).
+
+## Kompatibilita s ISDS
+
+Řada **6.x** je sjednocená s Provozním řádem ISDS účinným od **26. 06. 2026** a s jeho přílohou 2,
+tedy **WSDL verze 3.11**. Rozsah pokrytých operací najdete v
+[matici pokrytí](#pokrytí-webových-služeb-isds), kterou generuje skript z WSDL v
+[`tests/_data/wsdl/`](tests/_data/wsdl) a kontroluje CI.
+
 Prostředí (produkce/test) určuje `EndpointProvider` předaný HTTP providerovi — výchozí je produkce:
+
+| Prostředí | Doména | Zápis |
+| --- | --- | --- |
+| Produkce | `datovka.gov.cz` | `GuzzleClientProvider::create()` |
+| Test | `datovka-test.gov.cz` | `GuzzleClientProvider::create(EndpointProvider::test())` |
+| Vlastní (KIVS) | např. `datovka.cms2.cz` | `GuzzleClientProvider::create(new EndpointProvider('datovka.cms2.cz'))` |
 
 ```php
 use TomasKulhanek\CzechDataBox\Provider\EndpointProvider;
@@ -76,6 +139,9 @@ $provider = GuzzleClientProvider::create(EndpointProvider::test());    // test (
 $provider = GuzzleClientProvider::create(new EndpointProvider('datovka.cms2.cz')); // vlastní doména (KIVS)
 ```
 
+Původní domény `mojedatovaschranka.cz` a `czebox.cz` zůstávají podle DIA funkční minimálně do
+31. 12. 2027, knihovna je ale od verze 6.0 už nepoužívá.
+
 > [!WARNING]
 > Vlastní doména musí pocházet z **důvěryhodné konfigurace, nikdy z uživatelského vstupu**. Na výslednou
 > URL se posílají přihlašovací údaje (Basic Auth) i klientský certifikát, takže podvržená doména znamená
@@ -83,18 +149,10 @@ $provider = GuzzleClientProvider::create(new EndpointProvider('datovka.cms2.cz')
 > údajů, portu a cesty (`datovka.cms2.cz` ano, `https://datovka.cms2.cz/` ne). Neplatná hodnota skončí
 > výjimkou `TomasKulhanek\CzechDataBox\Exception\InvalidEndpointDomain`.
 
-### Odeslání datové zprávy
+## Odeslání datové zprávy
 
-`Connector::createMessage()` volá **hromadnou** operaci ISDS `CreateMultipleMessage` — i pro jedinou
-zprávu. Z toho plynou dvě věci:
-
-1. **Příjemci se zadávají mimo obálku**, přes `Recipient` (`dmRecipients`/`tRecipients`). Organizační
-   jednotku příjemce nastavíte `Recipient::setOrgUnit()` / `setOrgUnitNum()`, „k rukám" pak
-   `Recipient::setToHand()`. Obálka (`Envelope`, XSD typ `tMultipleMessageEnvelopeSub`) žádný prvek
-   o příjemci nemá.
-2. **Odpověď nemá přímé `dmID`.** Je typu `tMultipleMessageCreateOutput`, takže ID odeslané zprávy
-   najdete až v dílčím stavu — `getMultipleStatus()` vrací pole `MessageStatus` (jeden na příjemce)
-   a ID se čte z `MessageStatus::getDataMessageId()`.
+Zprávu složíte ze tří částí: obálky (`Envelope`), jednoho či více příjemců (`Recipient`) a příloh
+(`File`, právě jedna z nich musí mít `metaType` `main`). Odesílá `Connector::createMessage()`:
 
 ```php
 <?php
@@ -109,6 +167,7 @@ use TomasKulhanek\CzechDataBox\Serializer\SerializerFactory;
 use TomasKulhanek\CzechDataBox\Serializer\SplFileInfo;
 
 $connector = new Connector(SerializerFactory::create(), GuzzleClientProvider::create());
+// $account vytvoříte podle sekce Rychlý start
 
 $recipient = new Recipient();
 $recipient->setDataBoxId('abcdefg')
@@ -140,13 +199,30 @@ foreach ($response->getMultipleStatus() as $messageStatus) {
 }
 ```
 
-### Načtení seznamu přijatých zpráv
+Dvě věci, které při odesílání překvapí nejčastěji — obojí plyne z toho, že
+`Connector::createMessage()` volá **hromadnou** operaci ISDS `CreateMultipleMessage` i pro jedinou
+zprávu (metoda `createMultipleMessage()` proto v knihovně neexistuje):
+
+1. **Příjemci se zadávají mimo obálku**, přes `Recipient` (`dmRecipients`/`tRecipients`). Organizační
+   jednotku příjemce nastavíte `Recipient::setOrgUnit()` / `setOrgUnitNum()`, „k rukám" pak
+   `Recipient::setToHand()`. Obálka (`Envelope`, XSD typ `tMultipleMessageEnvelopeSub`) žádný prvek
+   o příjemci nemá.
+2. **Odpověď nemá přímé `dmID`.** Je typu `tMultipleMessageCreateOutput`, takže ID odeslané zprávy
+   najdete až v dílčím stavu — `getMultipleStatus()` vrací pole `MessageStatus` (jeden na příjemce)
+   a ID se čte z `MessageStatus::getDataMessageId()`.
+
+Před odesláním knihovna sama hlídá limity Provozního řádu: 1–50 příjemců, nejvýše 100 příloh
+(z toho 10 kontejnerových), součet příloh do 20 MiB, povolené formáty dle vyhlášky č. 194/2009 Sb.
+a délky polí obálky. Větší zprávy patří mezi [velkoobjemové (VoDZ)](#velkoobjemové-datové-zprávy-vodz).
+
+## Načtení seznamu přijatých zpráv
 
 Minimální příklad reálné operace — seznam přijatých zpráv s filtrem stavů a časovým rozsahem:
 
 ```php
 <?php
 
+use DateTimeImmutable;
 use TomasKulhanek\CzechDataBox\Connector;
 use TomasKulhanek\CzechDataBox\DTO\Request\GetListOfReceivedMessages;
 use TomasKulhanek\CzechDataBox\Enum\FilterEnum;
@@ -171,35 +247,86 @@ foreach ($response->getRecord() as $record) {
 }
 ```
 
-## Využití s Symfony HTTP client
-### Instalace
-```bash
-composer require tomas-kulhanek/czech-data-box symfony/http-client
-```
-#### Instancování
+Odeslané zprávy vrací obdobná operace `getListOfSentMessages()` s `GetListOfSentMessages`
+(místo `setRecipientOrgUnitNum()` má `setSenderOrgUnitNum()`).
+
+> [!WARNING]
+> Volání `GetListOfReceivedMessages` je podle § 17 odst. 3 zákona č. 300/2008 Sb. **doručením
+> přihlášením** — žádná jiná operace doručení nezpůsobí. Seznamy proto nestahujte v kratších
+> intervalech, než odpovídá potřebě aplikace.
+
+## Stažení obsahu zprávy
+
+Seznam vrací jen obálky. Obsah zprávy včetně příloh stáhne `messageDownload()`; podepsanou variantu
+(`dmSignature`, dostupná přes `getSignature()`) pak `signedMessageDownload()`. Operace
+`markMessageAsDownloaded()` označí přijatou zprávu jako **přečtenou**:
+
 ```php
-$serializer = \TomasKulhanek\CzechDataBox\Serializer\SerializerFactory::create();
-$guzzleProvider = \TomasKulhanek\CzechDataBox\Provider\SymfonyClientProvider::create();
-$connector = new \TomasKulhanek\CzechDataBox\Connector($serializer, $guzzleProvider);
+<?php
+
+use TomasKulhanek\CzechDataBox\DTO\Request\MarkMessageAsDownloaded;
+use TomasKulhanek\CzechDataBox\DTO\Request\MessageDownload;
+
+$markRequest = new MarkMessageAsDownloaded();
+$markRequest->setDataMessageId('123456789');
+$connector->markMessageAsDownloaded($account, $markRequest);
+
+$downloadRequest = new MessageDownload();
+$downloadRequest->setDataMessageId('123456789');
+
+$downloaded = $connector->messageDownload($account, $downloadRequest);
+$envelope = $downloaded->getReturnedMessage()->getDataMessage();
+
+foreach ($envelope->getFiles() as $file) {
+    echo $file->getDescription() . ' (' . $file->getMetaType() . ')' . PHP_EOL;
+
+    $content = $file->getEncodedContent()?->getContents();
+    if ($content !== null) {
+        file_put_contents('/cesta/' . $file->getDescription(), $content);
+    }
+}
 ```
 
-## Využití s Guzzle 8
-### Instalace
+## Volba HTTP klienta
+
+Knihovna žádného HTTP klienta nevyžaduje — komunikaci obstarává implementace
+`TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface`. Přibalené jsou dvě:
+
 ```bash
 composer require tomas-kulhanek/czech-data-box guzzlehttp/guzzle:^8.0
 ```
-#### Instancování 
+
 ```php
 $serializer = \TomasKulhanek\CzechDataBox\Serializer\SerializerFactory::create();
-$guzzleProvider = \TomasKulhanek\CzechDataBox\Provider\GuzzleClientProvider::create();
-$connector = new \TomasKulhanek\CzechDataBox\Connector($serializer, $guzzleProvider);
+$provider = \TomasKulhanek\CzechDataBox\Provider\GuzzleClientProvider::create();
+$connector = new \TomasKulhanek\CzechDataBox\Connector($serializer, $provider);
 ```
+
+```bash
+composer require tomas-kulhanek/czech-data-box symfony/http-client
+```
+
+```php
+$serializer = \TomasKulhanek\CzechDataBox\Serializer\SerializerFactory::create();
+$provider = \TomasKulhanek\CzechDataBox\Provider\SymfonyClientProvider::create();
+$connector = new \TomasKulhanek\CzechDataBox\Connector($serializer, $provider);
+```
+
+Podporované rozsahy jsou `guzzlehttp/guzzle ^8.0` a `symfony/http-client 7.*|8.*` — knihovna je tedy
+použitelná i v aplikacích na Symfony 8.
+
 ## Velkoobjemové datové zprávy (VoDZ)
 
-Zprávy s přílohami nad 20 MB se odesílají jako velkoobjemové datové zprávy (VoDZ) s limitem **100 MB**.
-Komunikace probíhá přes SOAP 1.2 na endpointech `ws2[c].…/DS/vodz` — knihovna to řeší automaticky.
-Postup: každou přílohu nejprve nahrajte přes `uploadAttachment()`, poté odešlete zprávu přes
+Zprávy s přílohami nad 20 MiB se odesílají jako velkoobjemové datové zprávy (VoDZ) s limitem
+**100 MiB** (`Connector::MAX_BIG_MESSAGE_ATTACHMENTS_SIZE`; Provozní řád mluví o 100 MB, knihovna
+limit počítá binárně ve prospěch odesílatele). Komunikace probíhá přes SOAP 1.2 na endpointech
+`ws2[c].…/DS/vodz` — knihovna to řeší automaticky.
+
+Oproti běžné zprávě je postup dvoufázový a příjemce je právě jeden (hromadné odeslání ISDS u VoDZ
+nepodporuje): každou přílohu nejprve nahrajte přes `uploadAttachment()`, poté odešlete zprávu přes
 `createBigMessage()`, kde na nahrané přílohy odkážete pomocí `ExtFile` a vráceného identifikátoru.
+Stahování obstarávají `bigMessageDownload()`, `signedBigMessageDownload()`,
+`signedSentBigMessageDownload()`, `downloadAttachment()` a ověření `authenticateBigMessage()`.
 
 ```php
 <?php
@@ -224,7 +351,7 @@ $account->setPassword('mojeTajneHeslo')
 
 $connector = new Connector(SerializerFactory::create(), GuzzleClientProvider::create());
 
-// 1) Nahrání přílohy (volá se zvlášť pro každou přílohu, součet max. 100 MB)
+// 1) Nahrání přílohy (volá se zvlášť pro každou přílohu, součet max. 100 MiB)
 $attachment = new BigAttachment();
 $attachment->setMimeType('application/pdf')
     ->setDescription('smlouva.pdf')
@@ -269,7 +396,7 @@ if ($response->getStatus()->isOk()) {
 Knihovna ještě před odesláním validuje vstupy a může vyhodit výjimky `MissingRequiredField`
 (chybějící popis, obsah, příjemce či anotace), `MissingMainFile` (žádná příloha s `metaType` `main`),
 `DisallowedAttachmentFormat` (přípona mimo whitelist vyhlášky č. 194/2009 Sb.),
-`AttachmentCountOverflow` (příliš mnoho příloh), `FileSizeOverflow` (překročení 100 MB)
+`AttachmentCountOverflow` (příliš mnoho příloh), `FileSizeOverflow` (překročení 100 MiB)
 a `FieldLengthOverflow` (překročení délkových limitů obálky dle XSD — `dmAnnotation` 255 znaků,
 `dmSenderRefNumber`/`dmRecipientRefNumber` a `dmSenderIdent`/`dmRecipientIdent` 50 znaků) —
 všechny z namespace `TomasKulhanek\CzechDataBox\Exception`.
@@ -314,10 +441,14 @@ nepokrývá.
 ## Pokrytí webových služeb ISDS
 
 <!-- wsdl-coverage:start -->
+Tabulka ukazuje, které operace rozhraní ISDS knihovna umí — pro každou operaci z WSDL uvádí
+odpovídající metodu `Connector`, nebo důvod, proč pokrytá není. Slouží jako kontrola před
+nasazením: než začnete integraci psát, ověříte si v ní, že operace, kterou potřebujete, existuje.
+
 Matici generuje `php tools/wsdl-coverage.php` z WSDL v [`tests/_data/wsdl/`](tests/_data/wsdl)
 (příloha 2 Provozního řádu, verze 3.11) a z reflexe třídy
-`TomasKulhanek\CzechDataBox\Connector`. Soulad matice se skutečností hlídá CI
-(`composer check:wsdl-coverage`), matici proto needitujte ručně.
+`TomasKulhanek\CzechDataBox\Connector` — čísla proto nemohou zastarat vůči kódu. Soulad matice
+se skutečností hlídá CI (`composer check:wsdl-coverage`), matici proto needitujte ručně.
 
 Legenda: ✅ implementováno · ⛔ záměrně vynecháno (operaci nahradila novější varianta) ·
 ❌ neimplementováno (skutečná mezera).
@@ -440,7 +571,7 @@ Legenda: ✅ implementováno · ⛔ záměrně vynecháno (operaci nahradila nov
 
 ### `dm_VoDZ.wsdl`
 
-*velkoobjemové datové zprávy (VoDZ, do 100 MB)*
+*velkoobjemové datové zprávy (VoDZ, do 100 MiB)*
 
 | Operace | Metoda `Connector` | Stav | Poznámka |
 | --- | --- | --- | --- |
@@ -479,8 +610,17 @@ Knihovna řeší komunikaci s ISDS, ale některé povinnosti [Provozního řádu
 - **⚠ Přístupové údaje nesmí opustit zařízení pod plnou kontrolou uživatele.** Předání jména a hesla cloudové/webové aplikaci třetí strany je porušením § 9 odst. 2 zákona č. 300/2008 Sb. — Správce může takové údaje zneplatnit. Doporučená autentizace pro externí systémy je systémový certifikát (`LoginTypeEnum::SPIS_CERT`).
 - **Doručení přihlášením** (§ 17 odst. 3) způsobuje výhradně volání `GetListOfReceivedMessages` — ostatní operace doručení nezpůsobí.
 - **Údržba ISDS** probíhá zpravidla v pátek 0:00–1:00 (možná krátká nedostupnost); knihovna při HTTP 503 vyhazuje `SystemExclusion`.
-- **Zprávy nad 20 MB** odesílejte jako velkoobjemové (VoDZ, do 100 MB) přes `uploadAttachment()` + `createBigMessage()`; hromadné odeslání u VoDZ není podporováno.
+- **Zprávy nad 20 MiB** odesílejte jako velkoobjemové (VoDZ, do 100 MiB) přes `uploadAttachment()` + `createBigMessage()`; hromadné odeslání u VoDZ není podporováno.
 - Změny webových služeb oznamuje DIA zpravidla 2 měsíce předem na [stránce pro dodavatele](https://datovka.gov.cz/info/cs/74.html); dodavatelům aplikací se doporučuje [registrace do pracovního prostoru](https://registrace.poradnaisds.cz).
+
+## Přechod z jiné ISDS knihovny
+
+Migrujete-li existující integraci z balíčku `dfridrich/czech-data-box`, projděte si
+[Přechod z dfridrich/czech-data-box](MIGRATION-FROM-DFRIDRICH.md) — obsahuje mapu API obou
+knihoven, dva úplné příklady „před → po“ (přihlášení se seznamem přijatých zpráv a odeslání
+zprávy) a checklist migrace.
+
+Povyšujete-li z verze 5.x této knihovny, řiďte se návodem [UPGRADE-6.0.md](UPGRADE-6.0.md).
 
 ## Pomoc a řešení chyb
 
@@ -492,6 +632,7 @@ Základní pomoc je poskytována zcela zdarma pomocí Issues.
 ## Odkazy
 - Changelog knihovny - [CHANGELOG.md](CHANGELOG.md)
 - Migrace z 5.x na 6.0 - [UPGRADE-6.0.md](UPGRADE-6.0.md)
+- Přechod z `dfridrich/czech-data-box` - [MIGRATION-FROM-DFRIDRICH.md](MIGRATION-FROM-DFRIDRICH.md)
 - Jak přispívat - [CONTRIBUTING.md](CONTRIBUTING.md)
 - Bezpečnostní politika - [SECURITY.md](SECURITY.md)
 - Produkční ISDS - https://www.datovka.gov.cz
@@ -502,8 +643,14 @@ Základní pomoc je poskytována zcela zdarma pomocí Issues.
 
 ## Žádosti o zřízení datové schránky
 ### Produkční prostředí
-- orgány veřejné moci - [odkaz](https://www.datoveschranky.info/documents/1744842/1746058/sprava_dalsich_DS_OVM.zfo/cfd889e3-0c11-4228-d87f-5c426dfc5ebb)
-- ostatní - [odkaz](https://www.datoveschranky.info/documents/1744842/1746063/zadost_zrizeni_ds.zfo/42ee7c26-16dd-427f-94c8-319453efdae4)
+Formuláře žádostí pro orgány veřejné moci i ostatní typy schránek vydává DIA na stránce
+[Zřízení datové schránky](https://datovka.gov.cz/info/cs/66.html). Původní odkazy na
+`datoveschranky.info` už nefungují, portál se přesunul na `datovka.gov.cz`.
 
 ### Testovací prostředí
 Zřízení testovací schránky v prostředí datovka-test.gov.cz je možné skrze formulář na produkčním portálu www.datovka.gov.cz po přihlášení v nastavení
+
+---
+
+Používáte knihovnu v produkci? Budu rád za ⭐ na GitHubu — pomáhá ostatním vývojářům najít
+aktuálně udržovanou implementaci ISDS.

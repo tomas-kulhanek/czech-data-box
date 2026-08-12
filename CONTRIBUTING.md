@@ -70,7 +70,7 @@ PHPStan běží na nejvyšším levelu. Chybu prosím řešte opravou příčiny
 
 ## Konvence commitů
 
-Používáme [Conventional Commits](https://www.conventionalcommits.org/cs/v1.0.0/):
+Používáme [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/):
 
 ```
 <typ>(<rozsah>): <stručný popis>

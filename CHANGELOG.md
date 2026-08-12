@@ -2,13 +2,31 @@
 
 Formát vychází z [Keep a Changelog](https://keepachangelog.com/cs/1.1.0/), verzování dle [SemVer](https://semver.org/lang/cs/).
 
+## [Nevydáno]
+
+### Přidáno
+
+- **Příručka [MIGRATION-FROM-DFRIDRICH.md](MIGRATION-FROM-DFRIDRICH.md)** pro přechod z balíčku `dfridrich/czech-data-box` — mapa API obou knihoven, dva příklady „před → po“ (přihlášení se seznamem přijatých zpráv, odeslání datové zprávy), rozdíly v architektuře a checklist migrace.
+- **README: sekce „Stažení obsahu zprávy“** (`markMessageAsDownloaded()` + `messageDownload()` včetně vytažení příloh) a **„Kompatibilita s ISDS“** s tabulkou prostředí (produkce / test / vlastní doména KIVS).
+
+### Změněno
+
+- **Přestavěn začátek README** — přehled schopností, instalační příkaz a obsah hned pod nadpisem, následuje „Rychlý start“ a teprve pak podrobnosti. Upozornění na Provozní řád zůstává, nově jako `[!IMPORTANT]` blok s odkazem na sekci s povinnostmi aplikace. Sekce pro Guzzle a Symfony sloučeny do „Volba HTTP klienta“.
+- **Packagist metadata** — konkrétnější `description` (odesílání i příjem, VoDZ, WSDL 3.11), rozšířené `keywords`, doplněné `homepage` a `support.docs`.
+- **Sjednoceny jednotky velikosti na MiB** v README a v generované matici pokrytí — konstanty `MAX_MESSAGE_ATTACHMENTS_SIZE` a `MAX_BIG_MESSAGE_ATTACHMENTS_SIZE` počítají binárně (20 MiB, resp. 100 MiB).
+
+### Opraveno
+
+- **Příklad načtení přijatých zpráv v README** neměl import `DateTimeImmutable`, takže by v souboru s `namespace` selhal.
+- **Nefunkční odkazy v dokumentaci** — žádosti o zřízení schránky vedly na zaniklý portál `datoveschranky.info` (nyní `datovka.gov.cz`), odkaz na helpdesk DIA v `SECURITY.md` vracel 404 (nahrazen infolinkou) a český překlad Conventional Commits v `CONTRIBUTING.md` už neexistuje (nahrazen originálem).
+
 ## [6.0.0] – 2026-08-12
 
 Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.11). Podrobnosti v PR [#33](https://github.com/tomas-kulhanek/czech-data-box/pull/33), [#34](https://github.com/tomas-kulhanek/czech-data-box/pull/34), [#35](https://github.com/tomas-kulhanek/czech-data-box/pull/35), [#40](https://github.com/tomas-kulhanek/czech-data-box/pull/40), [#37](https://github.com/tomas-kulhanek/czech-data-box/pull/37), [#38](https://github.com/tomas-kulhanek/czech-data-box/pull/38) a [#39](https://github.com/tomas-kulhanek/czech-data-box/pull/39).
 
 ### ⚠️ Breaking changes
 
-- **Vyžadováno PHP `^8.4`** (dosud `>=8.2`). Knihovna používá typované konstanty tříd, asymetrickou viditelnost a další prvky PHP 8.4; horní mez `^8.4` zároveň brání instalaci na dosud nevydané PHP 9. Aplikace na PHP 8.2 a 8.3 musí nejdřív povýšit runtime.
+- **Vyžadováno PHP `^8.4`** (dosud `>=8.2`). Knihovna používá `array_any()`/`array_all()`, atribut `#[\Deprecated]` a volání na nové instanci bez závorek (`new Foo()->bar()`); vývojový řetězec navíc táhne `phpunit/phpunit ^13.3`, které samo vyžaduje PHP `>=8.4.1`. Horní mez `^8.4` zároveň brání instalaci na dosud nevydané PHP 9. Aplikace na PHP 8.2 a 8.3 musí nejdřív povýšit runtime.
 - **Základní typy DTO přišly o prefix `I`**: `DTO\Request\IRequest` → **`DTO\Request\Request`**, `DTO\Response\IResponse` → **`DTO\Response\Response`**, `DTO\Response\IResponseStatus` → **`DTO\Response\ResponseStatus`**. Šlo o rozhraní, takže se změna projeví jen tam, kde je aplikace jmenuje — typehinty, `instanceof`, vlastní implementace DTO. Chování ani metody se nemění.
 - **Přibalený svazek CA certifikátů `src/cacert.pem.dist` byl odstraněn**, nahradila ho závislost `composer/ca-bundle` (`^1.5`). Třetí parametr konstruktoru obou HTTP providerů se změnil ze `string $caCertPath = __DIR__ . '/../cacert.pem'` na `?string $caCertPath = null`; při `null` se použije systémový svazek (`CaBundle::getSystemCaRootBundlePath()`). Ručně udržovaný soubor v repozitáři stárnul mezi vydáními knihovny, kdežto systémový svazek aktualizuje distribuce. Vlastní cestu lze dál předat stejným parametrem.
 - **Konstruktory `GuzzleClientProvider` a `SymfonyClientProvider` mají novou signaturu.** První dva parametry přijímají rozhraní místo konkrétních tříd (`GuzzleHttp\ClientInterface` místo `GuzzleHttp\Client`, `EndpointProviderInterface` místo `EndpointProvider`), třetí je nově nullable (viz CA bundle výše) a přibyly čtvrtý a pátý parametr `RequestOptionsFactory` a `ResponseSizeLimit`, oba s výchozí instancí. Kdo providery vytváří přes `create()` nebo pozičně prvními dvěma či třemi argumenty, nemusí měnit nic.

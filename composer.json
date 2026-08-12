@@ -1,7 +1,8 @@
 {
   "name": "tomas-kulhanek/czech-data-box",
-  "description": "PHP library for connection to Integrated system of data box (ISDS) in Czech republic",
+  "description": "Modern PHP client for Czech Data Boxes (ISDS): send and receive data messages, large-volume messages (VoDZ), current WSDL 3.11 API",
   "license": "MIT",
+  "homepage": "https://github.com/tomas-kulhanek/czech-data-box",
   "authors": [
     {
       "name": "Tomáš Kulhánek",
@@ -11,14 +12,23 @@
   ],
   "keywords": [
     "isds",
+    "datove-schranky",
+    "datova-schranka",
     "datovky",
+    "data-box",
+    "czech-data-box",
+    "egovernment",
+    "dia",
+    "soap",
+    "vodz",
     "czech"
   ],
   "type": "library",
   "support": {
     "email": "jsem@tomaskulhanek.cz",
     "issues": "https://github.com/tomas-kulhanek/czech-data-box/issues",
-    "source": "https://github.com/tomas-kulhanek/czech-data-box"
+    "source": "https://github.com/tomas-kulhanek/czech-data-box",
+    "docs": "https://github.com/tomas-kulhanek/czech-data-box#readme"
   },
   "require": {
     "php": "^8.4",
