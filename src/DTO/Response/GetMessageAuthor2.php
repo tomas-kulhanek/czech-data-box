@@ -10,6 +10,7 @@ use TomasKulhanek\CzechDataBox\DTO\MessageAuthorItem;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetMessageAuthor2Response')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['authorItems', 'status'])]
 class GetMessageAuthor2 extends DataMessageResponse
 {
     /**

@@ -10,6 +10,14 @@ use TomasKulhanek\CzechDataBox\DTO\DataBoxResult;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'ISDSSearch3Response')]
+#[Serializer\AccessorOrder(order: 'custom', custom: [
+    'totalCount',
+    'currentCount',
+    'position',
+    'lastPage',
+    'result',
+    'status',
+])]
 class ISDSSearch3 extends DataBoxResponse
 {
     #[Serializer\SkipWhenEmpty]

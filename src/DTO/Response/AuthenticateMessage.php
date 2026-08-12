@@ -8,6 +8,7 @@ use JMS\Serializer\Annotation as Serializer;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(name: 'AuthenticateMessageResponse', namespace: 'http://isds.czechpoint.cz/v20')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['authenticated', 'status'])]
 class AuthenticateMessage extends DataMessageResponse
 {
     #[Serializer\Type('bool')]

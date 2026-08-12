@@ -10,6 +10,7 @@ use TomasKulhanek\CzechDataBox\DTO\BigAttachmentDownload;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'DownloadAttachmentResponse')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['file', 'status'])]
 class DownloadAttachment extends DataMessageResponse
 {
     #[Serializer\SkipWhenEmpty]

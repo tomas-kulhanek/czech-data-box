@@ -9,6 +9,7 @@ use JMS\Serializer\Annotation as Serializer;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetPasswordInfoResponse')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['passwordExpiry', 'status'])]
 class GetPasswordInfo extends DataBoxResponse
 {
     #[Serializer\Type("DateTimeImmutable<'Y-m-d\\TH:i:s.uP','Europe/Prague'>")]

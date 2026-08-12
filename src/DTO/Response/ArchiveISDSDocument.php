@@ -10,6 +10,7 @@ use TomasKulhanek\CzechDataBox\Serializer\SplFileInfo;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'ArchiveISDSDocumentResponse')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['resultDocument', 'nextStampTo', 'status'])]
 class ArchiveISDSDocument extends DataMessageResponse
 {
     #[Serializer\SkipWhenEmpty]

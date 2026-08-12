@@ -10,6 +10,7 @@ use TomasKulhanek\CzechDataBox\Serializer\SplFileInfo;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'Re-signISDSDocumentResponse')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['document', 'validTo', 'status'])]
 class ResignISDSDocument extends DataMessageResponse
 {
     #[Serializer\Type('base64File')]

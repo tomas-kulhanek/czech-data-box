@@ -10,6 +10,7 @@ use TomasKulhanek\CzechDataBox\DTO\CreditRecord;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'DataBoxCreditInfoResponse')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['currentCredit', 'notifyEmail', 'records', 'status'])]
 class DataBoxCreditInfo extends DataBoxResponse
 {
     #[Serializer\Type('int')]

@@ -10,6 +10,7 @@ use TomasKulhanek\CzechDataBox\DTO\OwnerInfo;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetOwnerInfoFromLoginResponse')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['ownerInfo', 'status'])]
 class GetOwnerInfoFromLogin extends DataBoxResponse
 {
     #[Serializer\Type(OwnerInfo::class)]

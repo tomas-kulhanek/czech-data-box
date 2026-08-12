@@ -10,6 +10,7 @@ use TomasKulhanek\CzechDataBox\DTO\PDZRecord;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'PDZInfoResponse')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['pdzRecord', 'status'])]
 class PDZInfo extends DataBoxResponse
 {
     /**

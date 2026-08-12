@@ -10,6 +10,7 @@ use TomasKulhanek\CzechDataBox\DTO\Delivery;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetDeliveryInfoResponse')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['delivery', 'status'])]
 class GetDeliveryInfo extends DataMessageResponse
 {
     #[Serializer\Type(Delivery::class)]

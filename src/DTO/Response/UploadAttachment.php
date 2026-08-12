@@ -10,6 +10,7 @@ use TomasKulhanek\CzechDataBox\DTO\AttachmentHash;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'UploadAttachmentResponse')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['attachmentId', 'attachmentHash1', 'attachmentHash2', 'status'])]
 class UploadAttachment extends DataMessageResponse
 {
     #[Serializer\SkipWhenEmpty]

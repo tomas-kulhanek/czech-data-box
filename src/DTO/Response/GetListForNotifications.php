@@ -10,6 +10,7 @@ use TomasKulhanek\CzechDataBox\DTO\NotificationRecord;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetListForNotificationsResponse')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['records', 'listContinues', 'status'])]
 class GetListForNotifications extends DataMessageResponse
 {
     /**

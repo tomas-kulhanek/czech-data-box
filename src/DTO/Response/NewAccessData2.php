@@ -8,6 +8,7 @@ use JMS\Serializer\Annotation as Serializer;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'NewAccessData2Response')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['userId', 'accessDataId', 'status'])]
 class NewAccessData2 extends DataBoxResponse
 {
     #[Serializer\SkipWhenEmpty]

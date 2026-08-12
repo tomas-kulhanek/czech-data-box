@@ -10,6 +10,7 @@ use TomasKulhanek\CzechDataBox\DTO\UserInfo;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetUserInfoFromLoginResponse')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['userInfo', 'status'])]
 class GetUserInfoFromLogin extends DataBoxResponse
 {
     #[Serializer\Type(UserInfo::class)]
