@@ -4,8 +4,8 @@ Tato příručka pomáhá převést existující integraci ISDS z balíčku
 [`dfridrich/czech-data-box`](https://github.com/dfridrich/CzechDataBox) na API
 `tomas-kulhanek/czech-data-box` řady **6.x**.
 
-Obě knihovny jsou udržované a obě umí datové zprávy odesílat i přijímat. Liší se v tom, jak jsou
-postavené a jak široké rozhraní ISDS pokrývají:
+Obě knihovny umožňují datové zprávy odesílat i přijímat, liší se ale architekturou a rozsahem
+podporovaného rozhraní ISDS:
 
 | | `dfridrich/czech-data-box` | `tomas-kulhanek/czech-data-box` 6.x |
 | --- | --- | --- |
