@@ -9,6 +9,7 @@ use TomasKulhanek\CzechDataBox\Serializer\SplFileInfo;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetDataBoxListResponse')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['data', 'status'])]
 class GetDataBoxList extends DataBoxResponse
 {
     #[Serializer\SkipWhenEmpty]

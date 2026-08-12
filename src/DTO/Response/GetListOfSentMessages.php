@@ -10,6 +10,7 @@ use TomasKulhanek\CzechDataBox\DTO\MessageRecord;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetListOfSentMessagesResponse')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['records', 'status'])]
 class GetListOfSentMessages extends DataMessageResponse
 {
     /**

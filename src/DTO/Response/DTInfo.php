@@ -12,6 +12,19 @@ use JMS\Serializer\Annotation as Serializer;
  */
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'DTInfoResponse')]
+#[Serializer\AccessorOrder(order: 'custom', custom: [
+    'actDtType',
+    'actDtCapacity',
+    'actDtFrom',
+    'actDtTo',
+    'actDtCapUsed',
+    'futDtType',
+    'futDtCapacity',
+    'futDtFrom',
+    'futDtTo',
+    'futDtPaid',
+    'status',
+])]
 class DTInfo extends DataBoxResponse
 {
     #[Serializer\SkipWhenEmpty]

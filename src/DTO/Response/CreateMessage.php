@@ -10,7 +10,7 @@ use TomasKulhanek\CzechDataBox\DTO\MessageStatus;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'CreateMultipleMessageResponse')]
-#[Serializer\AccessorOrder(order: 'custom', custom: ['messageStatus', 'status'])]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['multipleStatus', 'status'])]
 class CreateMessage extends DataMessageResponse
 {
     /**

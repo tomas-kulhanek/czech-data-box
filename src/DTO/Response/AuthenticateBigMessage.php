@@ -8,6 +8,7 @@ use JMS\Serializer\Annotation as Serializer;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'AuthenticateBigMessageResponse')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['authResult', 'status'])]
 class AuthenticateBigMessage extends DataMessageResponse
 {
     #[Serializer\SkipWhenEmpty]

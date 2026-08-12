@@ -10,6 +10,7 @@ use TomasKulhanek\CzechDataBox\DTO\OwnerInfoExt2;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'FindDataBox2Response')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['result', 'status'])]
 class FindDataBox2 extends DataBoxResponse
 {
     /**

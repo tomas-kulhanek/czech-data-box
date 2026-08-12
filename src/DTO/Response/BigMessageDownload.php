@@ -10,6 +10,7 @@ use TomasKulhanek\CzechDataBox\DTO\ReturnedMessage;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'BigMessageDownloadResponse')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['returnedMessage', 'status'])]
 class BigMessageDownload extends DataMessageResponse
 {
     #[Serializer\SkipWhenEmpty]

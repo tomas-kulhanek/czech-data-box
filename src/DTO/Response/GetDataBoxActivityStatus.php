@@ -10,6 +10,7 @@ use TomasKulhanek\CzechDataBox\DTO\Period;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetDataBoxActivityStatusResponse')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['dataBoxId', 'period', 'status'])]
 class GetDataBoxActivityStatus extends DataBoxResponse
 {
     #[Serializer\Type('string')]

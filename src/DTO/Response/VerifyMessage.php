@@ -10,6 +10,7 @@ use TomasKulhanek\CzechDataBox\DTO\Hash;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'VerifyMessageResponse')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['hash', 'status'])]
 class VerifyMessage extends DataMessageResponse
 {
     #[Serializer\Type(Hash::class)]

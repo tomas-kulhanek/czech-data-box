@@ -10,6 +10,7 @@ use TomasKulhanek\CzechDataBox\DTO\UserInfoExt2;
 
 #[Serializer\XmlNamespace(uri: 'http://isds.czechpoint.cz/v20', prefix: 'p')]
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'GetDataBoxUsers2Response')]
+#[Serializer\AccessorOrder(order: 'custom', custom: ['users', 'status'])]
 class GetDataBoxUsers2 extends DataBoxResponse
 {
     /**
