@@ -10,7 +10,7 @@ use JMS\Serializer\Annotation as Serializer;
 #[Serializer\XmlRoot(namespace: 'http://isds.czechpoint.cz/v20', name: 'CheckDataBox')]
 class CheckDataBox extends DataBoxRequest
 {
-    #[Serializer\Type('booL')]
+    #[Serializer\Type('bool')]
     #[Serializer\SerializedName('dbApproved')]
     #[Serializer\XmlElement(cdata: false, namespace: 'http://isds.czechpoint.cz/v20')]
     #[Serializer\SkipWhenEmpty]

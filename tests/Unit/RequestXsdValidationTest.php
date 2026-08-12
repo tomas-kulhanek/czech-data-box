@@ -463,6 +463,13 @@ class RequestXsdValidationTest extends TestCase
                     ->setDataBoxId('abcdefg'),
                 self::DB_TYPES,
             ],
+            'CheckDataBoxWithApproval' => [
+                static fn (): CheckDataBox => new CheckDataBox()
+                    ->setDataBoxId('abcdefg')
+                    ->setApproved(true)
+                    ->setExternalRefNumber('cj-42/2026'),
+                self::DB_TYPES,
+            ],
             'DTInfo' => [
                 static fn (): DTInfo => new DTInfo()
                     ->setDataBoxId('abcdefg'),
