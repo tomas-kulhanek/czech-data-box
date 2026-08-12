@@ -4,11 +4,12 @@ Knihovna `tomas-kulhanek/czech-data-box` zpracovává **přihlašovací údaje k
 
 ## Podporované verze
 
-| Verze | Podpora                                            |
-|-------|----------------------------------------------------|
-| 6.x   | ✅ aktivní vývoj, bezpečnostní opravy               |
-| 5.x   | ⚠️ pouze bezpečnostní opravy do vydání stabilní 6.0 |
-| < 5.0 | ❌ bez podpory                                      |
+| Verze | Podpora                                                     |
+|-------|-------------------------------------------------------------|
+| 6.x   | ✅ aktivní vývoj, bezpečnostní opravy                        |
+| < 6.0 | ❌ bez podpory — 5.x skončila vydáním 6.0.0 dne 12. 08. 2026 |
+
+Bezpečnostní opravy vycházejí jen pro řadu 6.x. Používáte-li 5.x, přejděte na 6.0 podle návodu [UPGRADE-6.0.md](UPGRADE-6.0.md); zpětné porty do 5.x se nedělají.
 
 ## Hlášení zranitelnosti
 
