@@ -2,7 +2,7 @@
 
 Formát vychází z [Keep a Changelog](https://keepachangelog.com/cs/1.1.0/), verzování dle [SemVer](https://semver.org/lang/cs/).
 
-## [6.0.0] – zatím nevydáno
+## [6.0.0] – 2026-08-12
 
 Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.11). Podrobnosti v PR [#33](https://github.com/tomas-kulhanek/czech-data-box/pull/33), [#34](https://github.com/tomas-kulhanek/czech-data-box/pull/34), [#35](https://github.com/tomas-kulhanek/czech-data-box/pull/35), [#40](https://github.com/tomas-kulhanek/czech-data-box/pull/40), [#37](https://github.com/tomas-kulhanek/czech-data-box/pull/37), [#38](https://github.com/tomas-kulhanek/czech-data-box/pull/38) a [#39](https://github.com/tomas-kulhanek/czech-data-box/pull/39).
 
