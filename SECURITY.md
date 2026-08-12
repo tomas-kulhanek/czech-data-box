@@ -40,7 +40,7 @@ Po vydání opravy zveřejníme advisory a chybu popíšeme v [CHANGELOG.md](CHA
 
 ## Co do působnosti knihovny nepatří
 
-- **Incidenty a výpadky na straně ISDS** — hlaste na [helpdesk Digitální a informační agentury](https://datovka.gov.cz/info/cs/68.html), nikoli sem.
+- **Incidenty a výpadky na straně ISDS** — hlaste na [infolinku Digitální a informační agentury](https://datovka.gov.cz/info/cs/49.html), nikoli sem.
 - **Zranitelnosti v závislostech** (Guzzle, Symfony HTTP Client, OpenSSL) — hlaste přímo jejich autorům. Pokud jde o způsob, jakým je knihovna používá, hlášení sem patří.
 - **Chybějící ověření dat na straně vaší aplikace** — knihovna validuje jen to, co vyžaduje Provozní řád ISDS.
 

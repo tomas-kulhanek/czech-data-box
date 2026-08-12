@@ -37,7 +37,7 @@ final readonly class WsdlCoverage
         'db_manipulations.wsdl' => 'manipulace s datovou schránkou a její uživatelé',
         'dm_operations.wsdl' => 'odesílání a stahování datových zpráv',
         'dm_info.wsdl' => 'informace o datových zprávách',
-        'dm_VoDZ.wsdl' => 'velkoobjemové datové zprávy (VoDZ, do 100 MB)',
+        'dm_VoDZ.wsdl' => 'velkoobjemové datové zprávy (VoDZ, do 100 MiB)',
         'dm_arch.wsdl' => 'archivace (přerazítkování) ZFO',
     ];
 
@@ -61,12 +61,9 @@ final readonly class WsdlCoverage
         'CreateDataBox2' => 'zřízení datové schránky (jen pro OVM s příslušnou rolí)',
         'DeleteDataBox2' => 'znepřístupnění datové schránky',
         'UpdateDataBoxDescr2' => 'změna popisných údajů schránky',
-        'NewAccessData2' => 'vygenerování nových přístupových údajů uživatele',
         'DisableDataBoxExternally2' => 'znepřístupnění cizí schránky (agenda OVM)',
         'DisableOwnDataBox2' => 'znepřístupnění vlastní schránky',
         'EnableOwnDataBox2' => 'zpřístupnění vlastní schránky',
-        'SetOpenAddressing' => 'zapnutí příjmu poštovních datových zpráv',
-        'ClearOpenAddressing' => 'vypnutí příjmu poštovních datových zpráv',
     ];
 
     private const array OUT_OF_SCOPE = [
@@ -94,10 +91,14 @@ final readonly class WsdlCoverage
         $sections = $this->buildSections();
 
         $lines = [];
+        $lines[] = 'Tabulka ukazuje, které operace rozhraní ISDS knihovna umí — pro každou operaci z WSDL uvádí';
+        $lines[] = 'odpovídající metodu `Connector`, nebo důvod, proč pokrytá není. Slouží jako kontrola před';
+        $lines[] = 'nasazením: než začnete integraci psát, ověříte si v ní, že operace, kterou potřebujete, existuje.';
+        $lines[] = '';
         $lines[] = 'Matici generuje `php tools/wsdl-coverage.php` z WSDL v [`tests/_data/wsdl/`](tests/_data/wsdl)';
         $lines[] = '(příloha 2 Provozního řádu, verze 3.11) a z reflexe třídy';
-        $lines[] = '`TomasKulhanek\CzechDataBox\Connector`. Soulad matice se skutečností hlídá CI';
-        $lines[] = '(`composer check:wsdl-coverage`), matici proto needitujte ručně.';
+        $lines[] = '`TomasKulhanek\CzechDataBox\Connector` — čísla proto nemohou zastarat vůči kódu. Soulad matice';
+        $lines[] = 'se skutečností hlídá CI (`composer check:wsdl-coverage`), matici proto needitujte ručně.';
         $lines[] = '';
         $lines[] = 'Legenda: ✅ implementováno · ⛔ záměrně vynecháno (operaci nahradila novější varianta) ·';
         $lines[] = '❌ neimplementováno (skutečná mezera).';
