@@ -79,6 +79,7 @@ Sjednocení knihovny s Provozním řádem ISDS platným od 26. 06. 2026 (WSDL 3.
 
 ### Opraveno
 
+- `Request\CheckDataBox` měl u prvku `dbApproved` překlep v serializačním typu (`'booL'` místo `'bool'`), takže serializace požadavku s vyplněným `setApproved()` skončila `ReflectionException: Class "booL" does not exist`. XSD test to pole nikdy nenastavoval, takže chyba prošla až do vydání.
 - Události doručenky (`GetDeliveryInfo`) se nikdy nedeserializovaly — překlep `dnEventTime` → `dmEventTime` a chybějící namespace u `dmEvents`.
 - `PersonalOwnerInfo::$adDistrict` bylo mapováno na element `adStreet`.
 - `DTInfo` request posílal `dbID` místo `dbId` (XML je case-sensitive).
