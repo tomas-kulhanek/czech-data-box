@@ -82,6 +82,10 @@ jobs:
       - name: WSDL coverage matrix
         run: composer check:wsdl-coverage
 
+      # Jen soubory a kotvy, tedy bez sítě. Externí URL kontroluje workflow links.yml.
+      - name: Documentation links
+        run: composer check:links
+
   static-analysis:
     name: "Static analysis"
     runs-on: ubuntu-latest

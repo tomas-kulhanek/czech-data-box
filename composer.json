@@ -74,6 +74,7 @@
       "@check:cs",
       "@check:rector",
       "@check:wsdl-coverage",
+      "@check:links",
       "@test:unit"
     ],
     "test:phpunit": "php -d xdebug.mode=off vendor/phpunit/phpunit/phpunit",
@@ -83,6 +84,8 @@
     "check:rector": "php vendor/bin/rector process src tests tools --dry-run",
     "check:cs": "phpcs --extensions=php --standard=PSR12 -n src tests tools",
     "check:wsdl-coverage": "php tools/wsdl-coverage.php --check",
+    "check:links": "php tools/markdown-links.php --local",
+    "check:links-external": "php tools/markdown-links.php --external",
     "fix:cs": "phpcbf --extensions=php --standard=PSR12 -n src tests tools",
     "fix:rector": "php vendor/bin/rector process src tests tools",
     "fix:wsdl-coverage": "php tools/wsdl-coverage.php --write",

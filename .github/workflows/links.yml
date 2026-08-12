@@ -1,0 +1,81 @@
+name: Documentation links
+
+on:
+  # Pondělí 06:00 UTC. Odkazy na weby DIA se stěhují bez ohlášení, týdenní kontrola stačí.
+  schedule:
+    - cron: "0 6 * * MON"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  external-links:
+    name: "External links"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: '8.5'
+          coverage: none
+
+      # Skript nemá závislosti, composer install tu proto není potřeba.
+      - name: Check external links
+        id: check
+        run: |
+          if ! php tools/markdown-links.php --external > links.log 2>&1; then
+            {
+              echo 'problems<<REPORT'
+              cat links.log
+              echo REPORT
+            } >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+          cat links.log
+
+      - name: Report broken links
+        if: failure() && steps.check.outputs.problems != ''
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
+        with:
+          script: |
+            const title = 'Nefunkční odkazy v dokumentaci'
+            const body = [
+              'Naplánovaná kontrola narazila na odkazy, které neodpovídají:',
+              '',
+              '```',
+              process.env.PROBLEMS,
+              '```',
+              '',
+              `Detail běhu: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+            ].join('\n')
+
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'documentation',
+            })
+            const open = existing.data.find((issue) => issue.title === title)
+
+            if (open) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: open.number,
+                body,
+              })
+              return
+            }
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body,
+              labels: ['documentation'],
+            })
+        env:
+          PROBLEMS: ${{ steps.check.outputs.problems }}

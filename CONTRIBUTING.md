@@ -43,12 +43,17 @@ Skript je zkratkou za jednotlivé kontroly, které lze pouštět i samostatně:
 | `composer check:phpstan` | statická analýza PHPStan na levelu `max`            |
 | `composer check:cs`      | kontrola stylu `phpcs` proti PSR-12                 |
 | `composer check:rector`  | Rector v režimu `--dry-run` (sada pravidel PHP 8.4) |
+| `composer check:links`   | odkazy na soubory a kotvy v Markdownu (bez sítě)    |
 | `composer test:unit`     | unit testy (PHPUnit, testsuite `unit`)              |
 
 Automaticky opravitelné nálezy vyřeší `composer fix:all` (Rector + `phpcbf`).
 
 PHPStan běží na nejvyšším levelu. Chybu prosím řešte opravou příčiny, ne potlačením přes
 `@phpstan-ignore` nebo `ignoreErrors`.
+
+Externí URL v dokumentaci `composer check` neověřuje, aby kontroly nepotřebovaly síť — sahá na ně
+až týdenní workflow `links.yml`, který při nálezu založí issue. Ručně je spustíte příkazem
+`composer check:links-external`.
 
 ### Testy
 
