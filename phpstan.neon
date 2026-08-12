@@ -1,5 +1,9 @@
 parameters:
     level: max
+    # rozsah odpovídá constraintu "php": "^8.4" a matici v CI (8.4 a 8.5)
+    phpVersion:
+        min: 80400
+        max: 80599
     paths:
         - src/
         - tests/
