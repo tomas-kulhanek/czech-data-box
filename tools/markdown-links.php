@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 use TomasKulhanek\CzechDataBox\Tools\MarkdownLinks;
 
-require_once __DIR__ . '/../vendor/autoload.php';
+// Bez Composer autoloaderu: workflow links.yml spouští skript bez composer install.
+require_once __DIR__ . '/MarkdownLinks.php';
 
 $links = new MarkdownLinks(dirname(__DIR__));
 $mode = $argv[1] ?? '--local';
