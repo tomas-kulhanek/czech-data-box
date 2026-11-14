@@ -19,7 +19,7 @@ use TomasKulhanek\CzechDataBox\Exception\FileSystemException;
 use TomasKulhanek\CzechDataBox\Exception\MissingRequiredField;
 use TomasKulhanek\CzechDataBox\Exception\SystemExclusion;
 
-readonly class SymfonyClientProvider implements ClientProviderInterface
+readonly class SymfonyClientProvider implements StreamingClientProviderInterface
 {
     private string $caCertPath;
 
@@ -85,6 +85,29 @@ readonly class SymfonyClientProvider implements ClientProviderInterface
         string $xmlBody,
         ?int $maxResponseSize = null
     ): string {
+        return $this->dispatch($account, $serviceType, $xmlBody, null, $maxResponseSize);
+    }
+
+    public function sendStreamedRequest(
+        Account $account,
+        ServiceTypeEnum $serviceType,
+        StreamedRequestBody $body,
+        ?int $maxResponseSize = null
+    ): string {
+        return $this->dispatch($account, $serviceType, $body, $body->getContentLength(), $maxResponseSize);
+    }
+
+    /**
+     * @param string|StreamedRequestBody $requestBody u streamovaného těla musí být známá délka,
+     *        Symfony ji u iterovatelného těla samo nezjistí a jinak by použilo chunked kódování
+     */
+    private function dispatch(
+        Account $account,
+        ServiceTypeEnum $serviceType,
+        string|StreamedRequestBody $requestBody,
+        ?int $contentLength,
+        ?int $maxResponseSize
+    ): string {
         $limit = $this->responseSizeLimit->withMaxBytes($maxResponseSize);
         $requestOptions = [];
         $authentication = $this->requestOptionsFactory->createBasicAuthentication($account);
@@ -129,7 +152,10 @@ readonly class SymfonyClientProvider implements ClientProviderInterface
         }
 
         $requestOptions['headers'] = $this->requestOptionsFactory->createHeaders($serviceType);
-        $requestOptions['body'] = $xmlBody;
+        if ($contentLength !== null) {
+            $requestOptions['headers']['Content-Length'] = (string) $contentLength;
+        }
+        $requestOptions['body'] = $requestBody;
         $requestOptions['buffer'] = false;
         if (is_dir($this->caCertPath)) {
             $requestOptions['capath'] = $this->caCertPath;
