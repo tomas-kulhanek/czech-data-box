@@ -58,14 +58,14 @@
     "symfony/validator": "to validate request DTOs yourself against the #[Assert\\*] constraints shipped with them"
   },
   "require-dev": {
-    "guzzlehttp/guzzle": "^8.0",
+    "guzzlehttp/guzzle": "^8.5",
     "nyholm/psr7": "^1.8",
     "php-http/httplug": "^2.4",
-    "symfony/http-client": "7.*|8.*",
-    "symfony/validator": "^7.0 || ^8.0",
-    "phpstan/phpstan": "^2.2",
-    "phpunit/phpunit": "^13.3",
-    "rector/rector": "^2.6",
+    "symfony/http-client": "^7.4 || ^8.1",
+    "symfony/validator": "^7.4 || ^8.1",
+    "phpstan/phpstan": "^2.3",
+    "phpunit/phpunit": "^13.4",
+    "rector/rector": "^2.8",
     "squizlabs/php_codesniffer": "^4.0"
   },
   "scripts": {
