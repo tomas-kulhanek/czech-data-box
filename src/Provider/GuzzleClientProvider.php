@@ -20,7 +20,7 @@ use TomasKulhanek\CzechDataBox\Exception\FileSystemException;
 use TomasKulhanek\CzechDataBox\Exception\MissingRequiredField;
 use TomasKulhanek\CzechDataBox\Exception\SystemExclusion;
 
-readonly class GuzzleClientProvider implements ClientProviderInterface
+readonly class GuzzleClientProvider implements StreamingClientProviderInterface
 {
     private string $caCertPath;
 
@@ -77,6 +77,24 @@ readonly class GuzzleClientProvider implements ClientProviderInterface
         string $xmlBody,
         ?int $maxResponseSize = null
     ): string {
+        return $this->dispatch($account, $serviceType, $xmlBody, $maxResponseSize);
+    }
+
+    public function sendStreamedRequest(
+        Account $account,
+        ServiceTypeEnum $serviceType,
+        StreamedRequestBody $body,
+        ?int $maxResponseSize = null
+    ): string {
+        return $this->dispatch($account, $serviceType, new StreamedRequestBodyStream($body), $maxResponseSize);
+    }
+
+    private function dispatch(
+        Account $account,
+        ServiceTypeEnum $serviceType,
+        string|StreamInterface $requestBody,
+        ?int $maxResponseSize
+    ): string {
         $limit = $this->responseSizeLimit->withMaxBytes($maxResponseSize);
         $requestOptions = [];
         $authentication = $this->requestOptionsFactory->createBasicAuthentication($account);
@@ -120,7 +138,7 @@ readonly class GuzzleClientProvider implements ClientProviderInterface
         }
 
         $requestOptions[RequestOptions::HEADERS] = $this->requestOptionsFactory->createHeaders($serviceType);
-        $requestOptions[RequestOptions::BODY] = $xmlBody;
+        $requestOptions[RequestOptions::BODY] = $requestBody;
         $requestOptions[RequestOptions::ON_HEADERS] = static function (ResponseInterface $response) use ($limit): void {
             $limit->rejectAnnouncedSize($response->getHeaderLine('Content-Length'));
         };
@@ -149,11 +167,11 @@ readonly class GuzzleClientProvider implements ClientProviderInterface
             }
 
             throw new ConnectionException(self::describe($exception), $statusCode);
-        } catch (ConnectionException $exception) {
+        } catch (ConnectionException | FileSystemException $exception) {
             throw $exception;
         } catch (Throwable $exception) {
             $cause = $exception->getPrevious();
-            if ($cause instanceof ConnectionException) {
+            if ($cause instanceof ConnectionException || $cause instanceof FileSystemException) {
                 throw $cause;
             }
 

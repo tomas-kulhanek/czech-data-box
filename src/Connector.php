@@ -14,6 +14,7 @@ use DOMElement;
 use DOMNode;
 use DOMNodeList;
 use DOMXPath;
+use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
 use TomasKulhanek\CzechDataBox\DTO\ExtFile;
 use TomasKulhanek\CzechDataBox\DTO\BigMessageEnvelope;
@@ -85,6 +86,9 @@ use TomasKulhanek\CzechDataBox\Exception\RecipientCountOverflow;
 use TomasKulhanek\CzechDataBox\Exception\SoapFault;
 use TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface;
 use TomasKulhanek\CzechDataBox\Provider\ResponseSizeLimit;
+use TomasKulhanek\CzechDataBox\Provider\StreamedRequestBody;
+use TomasKulhanek\CzechDataBox\Provider\StreamingClientProviderInterface;
+use TomasKulhanek\CzechDataBox\Serializer\AttachmentCollector;
 use TomasKulhanek\CzechDataBox\Utils\AllowedAttachmentFormats;
 use TomasKulhanek\CzechDataBox\Utils\BinarySuffix;
 
@@ -769,7 +773,17 @@ readonly class Connector
             throw new ConnectionException();
         }
 
-        $body = $this->serializer->serialize($request, 'xml');
+        $streamingProvider = $this->provider instanceof StreamingClientProviderInterface ? $this->provider : null;
+        $collector = null;
+        $context = null;
+        if ($streamingProvider !== null) {
+            // přílohy se do XML nevkládají, jen se označí; base64 se z nich skládá až při odesílání
+            $collector = new AttachmentCollector();
+            $context = SerializationContext::create()
+                ->setAttribute(AttachmentCollector::CONTEXT_ATTRIBUTE, $collector);
+        }
+
+        $body = $this->serializer->serialize($request, 'xml', $context);
         if (str_starts_with($body, '<?')) {
             $declarationEnd = strpos($body, '?>');
             if ($declarationEnd !== false) {
@@ -787,7 +801,18 @@ readonly class Connector
             . '</SOAP-ENV:Body></SOAP-ENV:Envelope>';
         unset($body);
 
-        $response = $this->provider->sendRequest($account, $serviceType, $xmlBody, $this->maxResponseSize);
+        // kolektor existuje právě tehdy, když je provider streamovací; bez příloh není co streamovat
+        if ($streamingProvider !== null && !$collector->isEmpty()) {
+            $response = $streamingProvider->sendStreamedRequest(
+                $account,
+                $serviceType,
+                StreamedRequestBody::create($xmlBody, $collector),
+                $this->maxResponseSize
+            );
+        } else {
+            $response = $this->provider->sendRequest($account, $serviceType, $xmlBody, $this->maxResponseSize);
+        }
+        unset($xmlBody, $collector);
         if (strlen($response) > $this->maxResponseSize) {
             throw new ConnectionException(
                 sprintf(

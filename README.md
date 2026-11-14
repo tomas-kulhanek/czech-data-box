@@ -58,7 +58,7 @@ Povyšujete-li z verze 5.x, řiďte se návodem [UPGRADE-6.0.md](UPGRADE-6.0.md)
 z jiné ISDS knihovny, viz [Přechod z jiné ISDS knihovny](#přechod-z-jiné-isds-knihovny).
 
 Podrobnosti k oběma klientům jsou v sekci [Volba HTTP klienta](#volba-http-klienta).
-V případě využívání vlastního http klienta, stačí implementovat rozhraní `TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface` a předat ho do konstruktoru třídy `TomasKulhanek\CzechDataBox\Connector`. Samozřejmostí je třeba zajistit správné nastavení hlaviček nebo SSL klientských certifikátů. Poslední parametr `sendRequest()` nese maximální velikost odpovědi v bajtech (`null` = výchozí limit implementace); uplatněte ho ještě před načtením celého těla do paměti — hotové počítadlo i kontrolu hlavičky `Content-Length` nabízí `TomasKulhanek\CzechDataBox\Provider\ResponseSizeLimit`.
+V případě využívání vlastního http klienta, stačí implementovat rozhraní `TomasKulhanek\CzechDataBox\Provider\ClientProviderInterface` a předat ho do konstruktoru třídy `TomasKulhanek\CzechDataBox\Connector`. Samozřejmostí je třeba zajistit správné nastavení hlaviček nebo SSL klientských certifikátů. Poslední parametr `sendRequest()` nese maximální velikost odpovědi v bajtech (`null` = výchozí limit implementace); uplatněte ho ještě před načtením celého těla do paměti — hotové počítadlo i kontrolu hlavičky `Content-Length` nabízí `TomasKulhanek\CzechDataBox\Provider\ResponseSizeLimit`. Takový klient dostane celé tělo požadavku jako řetězec; pokud má přílohy odesílat po částech bez načtení do paměti, implementujte navíc `StreamingClientProviderInterface` (viz [Přílohy z dočasného souboru nebo streamu](#přílohy-z-dočasného-souboru-nebo-streamu)).
 
 ### Volitelná validace požadavků
 
@@ -214,6 +214,36 @@ zprávu (metoda `createMultipleMessage()` proto v knihovně neexistuje):
 Před odesláním knihovna sama hlídá limity Provozního řádu: 1–50 příjemců, nejvýše 100 příloh
 (z toho 10 kontejnerových), součet příloh do 20 MiB, povolené formáty dle vyhlášky č. 194/2009 Sb.
 a délky polí obálky. Větší zprávy patří mezi [velkoobjemové (VoDZ)](#velkoobjemové-datové-zprávy-vodz).
+
+### Přílohy z dočasného souboru nebo streamu
+
+Obsah přílohy se do `File::setEncodedContent()` (a `BigAttachment::setEncodedContent()`) předává jako
+`TomasKulhanek\CzechDataBox\Serializer\SplFileInfo`, tedy jako cesta k souboru. Podle toho, odkud obsah máte:
+
+```php
+// soubor na disku — zůstane na místě
+$content = new SplFileInfo('/cesta/zadost.pdf');
+
+// obsah v řetězci — knihovna ho uloží do dočasného souboru a po použití smaže
+$content = SplFileInfo::createInTemp($pdf);
+
+// stream: tmpfile(), fopen(), php://temp i PSR-7 StreamInterface
+$content = SplFileInfo::createFromStream($stream);
+```
+
+`createFromStream()` přečte stream od jeho **aktuální pozice** do konce a po blocích ho zkopíruje do
+dočasného souboru, který se smaže s objektem. Stream zůstává otevřený (zavřít ho musíte sami) a jeho
+pozice po zavolání ukazuje na konec, takže v případě potřeby ho před předáním převiňte (`rewind()`).
+
+Pokud v příkladu s `tmpfile()` použijete rovnou cestu ze `stream_get_meta_data($tmp)['uri']`, držte
+resource `$tmp` naživu až do odeslání — PHP soubor smaže, jakmile se resource uvolní.
+
+**Paměť.** Přibalené klienty (`GuzzleClientProvider`, `SymfonyClientProvider`) přílohy do paměti
+nenačítají: zakódují je do base64 až při zápisu do spojení po blocích a hlavičku `Content-Length`
+spočítají předem, takže špička paměti nezávisí na velikosti příloh (u 60MiB přílohy jednotky MiB).
+Soubor se přitom nesmí měnit, dokud se zpráva odesílá — knihovna to hlídá a odeslání přeruší
+s `FileSystemException`. Vlastní implementace `ClientProviderInterface` dostane tělo celé jako
+řetězec; přílohy streamuje, jen když navíc implementuje `StreamingClientProviderInterface`.
 
 ## Načtení seznamu přijatých zpráv
 

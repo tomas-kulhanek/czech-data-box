@@ -6,6 +6,9 @@ Formát vychází z [Keep a Changelog](https://keepachangelog.com/cs/1.1.0/), ve
 
 ### Přidáno
 
+- **Přílohy ze streamu**: `Serializer\SplFileInfo::createFromStream()` přijme resource streamu (`tmpfile()`, `fopen()`, `php://temp` …) i PSR-7 `StreamInterface`, zkopíruje ho po blocích od aktuální pozice do dočasného souboru a ten po použití smaže. Dosud šlo předat jen cestu k souboru nebo řetězec (`createInTemp()`).
+- **Odesílání příloh po částech**: `GuzzleClientProvider` a `SymfonyClientProvider` posílají přílohy bez načtení do paměti. `Connector` do XML místo base64 obsahu vloží zástupný token (`Serializer\AttachmentCollector`) a `Provider\StreamedRequestBody` ho při zápisu do spojení nahradí obsahem souboru po blocích; `Content-Length` je známá předem, takže se nepoužije chunked kódování. Špička paměti nezávisí na velikosti příloh (60MiB příloha ≈ 6–8 MiB místo trojnásobku velikosti), odeslané bajty jsou shodné s dosavadním bufferovaným tělem. Změní-li se soubor během odesílání, odeslání skončí `FileSystemException`.
+- **`Provider\StreamingClientProviderInterface`** — volitelné rozšíření `ClientProviderInterface` s metodou `sendStreamedRequest()` pro vlastní HTTP klienty. Klient, který ho neimplementuje, funguje beze změny a dál dostává celé tělo jako řetězec přes `sendRequest()`.
 - **Příručka [MIGRATION-FROM-DFRIDRICH.md](MIGRATION-FROM-DFRIDRICH.md)** pro přechod z balíčku `dfridrich/czech-data-box` — mapa API obou knihoven, dva příklady „před → po“ (přihlášení se seznamem přijatých zpráv, odeslání datové zprávy), rozdíly v architektuře a checklist migrace.
 - **README: sekce „Stažení obsahu zprávy“** (`markMessageAsDownloaded()` + `messageDownload()` včetně vytažení příloh) a **„Kompatibilita s ISDS“** s tabulkou prostředí (produkce / test / vlastní doména KIVS).
 

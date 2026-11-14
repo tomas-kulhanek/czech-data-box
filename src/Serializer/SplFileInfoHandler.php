@@ -56,6 +56,12 @@ final class SplFileInfoHandler implements SubscribingHandlerInterface
         array $type,
         Context $context
     ): mixed {
+        $collector = AttachmentCollector::fromContext($context);
+        if ($collector !== null) {
+            // obsah se do požadavku doplní až při odesílání, po blocích (viz StreamedRequestBody)
+            return $visitor->visitString($collector->register($file), $type);
+        }
+
         return $visitor->visitString(base64_encode($file->getContents()), $type);
     }
 
